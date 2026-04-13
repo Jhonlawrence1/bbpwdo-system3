@@ -1,9 +1,9 @@
 services:
   - type: web
     name: bbpwdo-system
-    env: node
-    buildCommand: npm install
-    startCommand: node server.js
+    env: php
+    buildCommand: ""
+    startCommand: "php -S 0.0.0.0:8000 -t web/bbpwdo-system/public"
     autoDeploy: true
     envVars:
       - key: DATABASE_URL
