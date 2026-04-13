@@ -5,4 +5,4 @@ if ($uri !== '/' && file_exists(__DIR__ . '/public' . $uri)) {
     return false;
 }
 
-require __DIR__ . '/public/index.html';
+require __DIR__ . '/index.html';
