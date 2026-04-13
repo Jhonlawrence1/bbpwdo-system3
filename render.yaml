@@ -1,10 +1,7 @@
 services:
   - type: web
     name: bbpwdo-system
-    env: php
-    buildCommand: ""
-    startCommand: "php -S 0.0.0.0:8000 -t web/bbpwdo-system/public"
+    env: docker
+    buildCommand: docker build -t bbpwdo-system .
+    startCommand: ""
     autoDeploy: true
-    envVars:
-      - key: DATABASE_URL
-        value: "mysql://root:tjpgTAzMdXsuvcdnHnxvgclTRTYiVEtv@mysql.railway.internal:3306/railway"
