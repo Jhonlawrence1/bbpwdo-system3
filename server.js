@@ -1,33 +1,38 @@
 const express = require('express');
-const { Pool } = require('pg');
+const mysql = require('mysql2/promise');
 
 const app = express();
 app.use(express.json());
 
-const pool = new Pool({
+const pool = mysql.createPool({
   connectionString: process.env.DATABASE_URL,
 });
 
-pool.query(`
-  CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    name TEXT,
-    email TEXT UNIQUE
-  )
-`);
+async function initDB() => {
+  const conn = await pool.getConnection();
+  await conn.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name TEXT,
+      email TEXT UNIQUE
+    )
+  `);
+  conn.release();
+}
+initDB().catch(console.error);
 
 app.get('/api/users', async (req, res) => {
-  const { rows } = await pool.query('SELECT * FROM users');
+  const [rows] = await pool.query('SELECT * FROM users');
   res.json(rows);
 });
 
 app.post('/api/users', async (req, res) => {
   const { name, email } = req.body;
-  const { rows } = await pool.query(
-    'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
+  const [result] = await pool.query(
+    'INSERT INTO users (name, email) VALUES (?, ?)',
     [name, email]
   );
-  res.json(rows[0]);
+  res.json({ id: result.insertId, name, email });
 });
 
 const PORT = process.env.PORT || 3000;

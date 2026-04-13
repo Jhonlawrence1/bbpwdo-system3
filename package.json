@@ -3,7 +3,7 @@
     "@supabase/supabase-js": "^2.103.0",
     "better-sqlite3": "^12.9.0",
     "express": "^5.2.1",
-    "pg": "^8.20.0"
+    "mysql2": "^3.6.0"
   },
   "name": "httml",
   "version": "1.0.0",
