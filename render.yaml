@@ -7,4 +7,4 @@ services:
     autoDeploy: true
     envVars:
       - key: DATABASE_URL
-        value: "mysql://root:tjpgTAzMdXsuvcdnHnxvgclTRTYiVEtv@YOUR_RAILWAY_HOST:3306/railway"
+        value: "mysql://root:tjpgTAzMdXsuvcdnHnxvgclTRTYiVEtv@mysql.railway.internal:3306/railway"
