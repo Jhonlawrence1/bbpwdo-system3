@@ -5,6 +5,3 @@ services:
     buildCommand: ""
     startCommand: ""
     autoDeploy: true
-    envVars:
-      - key: DATABASE_URL
-        value: "mysql://root:tjpgTAzMdXsuvcdnHnxvgclTRTYiVEtv@YOUR_RAILWAY_HOST:3306/railway"
