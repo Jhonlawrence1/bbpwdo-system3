@@ -1,5 +1,28 @@
 {
   "dependencies": {
-    "@supabase/supabase-js": "^2.103.0"
-  }
+    "@supabase/supabase-js": "^2.103.0",
+    "better-sqlite3": "^12.9.0",
+    "express": "^5.2.1",
+    "pg": "^8.20.0"
+  },
+  "name": "httml",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jhonlawrence1/bbpwdo-system3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Jhonlawrence1/bbpwdo-system3/issues"
+  },
+  "homepage": "https://github.com/Jhonlawrence1/bbpwdo-system3#readme"
 }
