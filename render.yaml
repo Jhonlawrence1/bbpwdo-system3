@@ -1,12 +1,10 @@
 services:
   - type: web
-    name: bbpwdo-api
-    env: node
-    buildCommand: npm install
-    startCommand: node server.js
+    name: bbpwdo-system
+    env: php
+    buildCommand: ""
+    startCommand: ""
     autoDeploy: true
     envVars:
       - key: DATABASE_URL
         value: "mysql://root:tjpgTAzMdXsuvcdnHnxvgclTRTYiVEtv@YOUR_RAILWAY_HOST:3306/railway"
-      - key: PORT
-        value: "3000"
