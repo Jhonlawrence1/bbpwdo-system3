@@ -1,7 +1,10 @@
 services:
   - type: web
     name: bbpwdo-system
-    env: php
-    buildCommand: ""
-    startCommand: "php -S 0.0.0.0:8000 -t public"
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
     autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        value: "mysql://root:tjpgTAzMdXsuvcdnHnxvgclTRTYiVEtv@YOUR_RAILWAY_HOST:3306/railway"
