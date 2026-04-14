@@ -23,6 +23,8 @@ if ($method === 'GET') {
         
         $search = htmlspecialchars(trim($_GET['search'] ?? ''));
         $status = htmlspecialchars(trim($_GET['status'] ?? ''));
+        $employment = htmlspecialchars(trim($_GET['employment'] ?? ''));
+        $disability = htmlspecialchars(trim($_GET['disability'] ?? ''));
         $view = intval($_GET['view'] ?? 0);
         
         $where = '';
@@ -32,7 +34,10 @@ if ($method === 'GET') {
             $conditions = [];
             $conditions[] = "last_name LIKE :search";
             $conditions[] = "first_name LIKE :search";
+            $conditions[] = "middle_name LIKE :search";
             $conditions[] = "pwd_id_number LIKE :search";
+            $conditions[] = "disability_type LIKE :search";
+            $conditions[] = "address LIKE :search";
             $where .= "WHERE (" . implode(" OR ", $conditions) . ")";
             $params[':search'] = "%$search%";
         }
@@ -41,6 +46,18 @@ if ($method === 'GET') {
             $where .= $where ? " AND " : "WHERE ";
             $where .= "is_registered = :status";
             $params[':status'] = $status;
+        }
+        
+        if ($employment) {
+            $where .= $where ? " AND " : "WHERE ";
+            $where .= "employment_status = :employment";
+            $params[':employment'] = $employment;
+        }
+        
+        if ($disability) {
+            $where .= $where ? " AND " : "WHERE ";
+            $where .= "disability_type LIKE :disability";
+            $params[':disability'] = "%$disability%";
         }
         
         $countSql = "SELECT COUNT(*) as total FROM pwd_records $where";

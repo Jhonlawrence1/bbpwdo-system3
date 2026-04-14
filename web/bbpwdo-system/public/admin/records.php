@@ -392,7 +392,14 @@ require_once '../backend/db.php';
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) renderTable(data.data);
-                    else document.getElementById('recordsBody').innerHTML = '<tr><td colspan="9" style="text-align: center;">Error loading data</td></tr>';
+                    else {
+                        console.error('Error:', data.message);
+                        document.getElementById('recordsBody').innerHTML = '<tr><td colspan="9" style="text-align: center;">Error loading data: ' + (data.message || 'Unknown error') + '</td></tr>';
+                    }
+                })
+                .catch(err => {
+                    console.error('Fetch error:', err);
+                    document.getElementById('recordsBody').innerHTML = '<tr><td colspan="9" style="text-align: center;">Error loading data</td></tr>';
                 });
         }
         

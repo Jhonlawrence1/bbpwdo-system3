@@ -21,6 +21,8 @@ if ($method === 'GET') {
         $limit = intval($_GET['limit'] ?? 10);
         $offset = ($page - 1) * $limit;
         $status = htmlspecialchars(trim($_GET['status'] ?? ''));
+        $employment = htmlspecialchars(trim($_GET['employment'] ?? ''));
+        $disability = htmlspecialchars(trim($_GET['disability'] ?? ''));
         
         $where = '';
         $params = [];
@@ -41,6 +43,18 @@ if ($method === 'GET') {
             $where .= $where ? " AND " : "WHERE ";
             $where .= "is_registered = :status";
             $params[':status'] = $status;
+        }
+        
+        if ($employment) {
+            $where .= $where ? " AND " : "WHERE ";
+            $where .= "employment_status = :employment";
+            $params[':employment'] = $employment;
+        }
+        
+        if ($disability) {
+            $where .= $where ? " AND " : "WHERE ";
+            $where .= "disability_type LIKE :disability";
+            $params[':disability'] = "%$disability%";
         }
         
         $countSql = "SELECT COUNT(*) as total FROM pwd_records $where";
