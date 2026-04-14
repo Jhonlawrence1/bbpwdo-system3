@@ -944,6 +944,12 @@ footer {
     gap: 8px;
 }
 
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
 .checkbox-category .checkbox-item {
     display: flex;
     align-items: center;
@@ -954,7 +960,7 @@ footer {
     cursor: pointer;
     transition: all 0.3s;
     border: 1px solid var(--border);
-    margin-bottom: 8px;
+    margin-bottom: 0;
 }
 
 .checkbox-category .checkbox-item:hover {
