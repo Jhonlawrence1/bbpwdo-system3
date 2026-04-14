@@ -35,13 +35,36 @@ $tables = [
         pwd_id_number VARCHAR(50),
         issued_date DATE,
         expiry_date DATE,
-        disability_type VARCHAR(100),
-        cause_of_disability VARCHAR(100),
+        disability_type TEXT,
+        assistive_device TEXT,
+        employment_status VARCHAR(50),
+        employment_type VARCHAR(50),
         employer_name VARCHAR(100),
         employer_address TEXT,
-        employment_status VARCHAR(50),
+        education_elementary VARCHAR(100),
+        education_highschool VARCHAR(100),
+        education_college VARCHAR(100),
+        education_vocational VARCHAR(100),
+        guardian_name VARCHAR(100),
+        guardian_relationship VARCHAR(50),
+        guardian_contact VARCHAR(20),
+        guardian_address TEXT,
+        skills TEXT,
+        trainings TEXT,
+        is_registered VARCHAR(10) DEFAULT 'No',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        is_registered VARCHAR(10) DEFAULT 'No'
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )",
+    
+    'family_members' => "CREATE TABLE IF NOT EXISTS family_members (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        pwd_id INT NOT NULL,
+        name VARCHAR(100),
+        age INT,
+        civil_status VARCHAR(30),
+        relationship VARCHAR(50),
+        occupation VARCHAR(100),
+        FOREIGN KEY (pwd_id) REFERENCES pwd_records(id) ON DELETE CASCADE
     )",
     
     'team_cards' => "CREATE TABLE IF NOT EXISTS team_cards (
@@ -55,6 +78,8 @@ $tables = [
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
         email VARCHAR(100) NOT NULL,
+        phone VARCHAR(20),
+        subject VARCHAR(100),
         message TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )"

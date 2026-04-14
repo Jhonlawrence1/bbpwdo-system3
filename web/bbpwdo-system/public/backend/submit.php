@@ -43,6 +43,18 @@ if (isset($_POST['subject']) || isset($_POST['message'])) {
 }
 
 try {
+    // Auto-create tables if they don't exist
+    $pdo->exec("CREATE TABLE IF NOT EXISTS family_members (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        pwd_id INT NOT NULL,
+        name VARCHAR(100),
+        age INT,
+        civil_status VARCHAR(30),
+        relationship VARCHAR(50),
+        occupation VARCHAR(100),
+        FOREIGN KEY (pwd_id) REFERENCES pwd_records(id) ON DELETE CASCADE
+    )");
+    
     $last_name = $_POST['lastName'] ?? '';
     $first_name = $_POST['firstName'] ?? '';
     $sex = $_POST['sex'] ?? '';
