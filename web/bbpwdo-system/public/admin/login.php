@@ -12,7 +12,9 @@ $success = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once '../backend/db.php';
     
-    if (isset($_POST['login'])) {
+    if ($pdo === null) {
+        $error = 'Database connection failed. Please try again later.';
+    } elseif (isset($_POST['login'])) {
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
         

@@ -3,7 +3,8 @@
  * Unified MySQL PDO Connection
  */
 function getPdo() {
-    $dbUrl = getenv('DATABASE_URL');
+    // Try different environment variable names for database connection
+    $dbUrl = getenv('DATABASE_URL') ?: getenv('MYSQL_URL') ?: getenv('JAWSDB_MARIA_URL');
     
     if ($dbUrl && strpos($dbUrl, 'mysql://') === 0) {
         $url = parse_url($dbUrl);
@@ -14,11 +15,11 @@ function getPdo() {
         $pass = $url['pass'] ?? '';
         $dsn = "mysql:host=$host;port=$port;dbname=$dbName;charset=utf8mb4";
     } else {
-        $host = getenv('DB_HOST') ?: 'localhost';
-        $port = getenv('DB_PORT') ?: 3306;
-        $dbName = getenv('DB_NAME') ?: 'bbpwdo';
-        $user = getenv('DB_USER') ?: 'root';
-        $pass = getenv('DB_PASS') ?: '';
+        $host = getenv('DB_HOST') ?: getenv('MYSQL_HOST') ?: 'localhost';
+        $port = getenv('DB_PORT') ?: getenv('MYSQL_PORT') ?: 3306;
+        $dbName = getenv('DB_NAME') ?: getenv('MYSQL_DB') ?: 'railway';
+        $user = getenv('DB_USER') ?: getenv('MYSQL_USER') ?: 'root';
+        $pass = getenv('DB_PASS') ?: getenv('MYSQL_PASSWORD') ?: '';
         $dsn = "mysql:host=$host;port=$port;dbname=$dbName;charset=utf8mb4";
     }
     
