@@ -80,7 +80,90 @@ require_once '../backend/db.php';
             background: white; border-radius: 12px; overflow: hidden;
             box-shadow: 0 2px 15px rgba(0,0,0,0.05);
         }
-        .table-scroll { overflow-x: auto; }
+        .table-scroll { 
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch;
+        }
+        .table-scroll table {
+            min-width: 900px;
+        }
+        
+        @media (max-width: 768px) {
+            .table-scroll { 
+                overflow-x: auto;
+                margin: 0 -20px;
+                padding: 0 20px;
+            }
+            .records-table {
+                font-size: 13px;
+            }
+            .records-table th, .records-table td {
+                padding: 10px 8px;
+                white-space: nowrap;
+            }
+            .badge {
+                padding: 4px 8px;
+                font-size: 0.7rem;
+            }
+            .action-btns button {
+                width: 28px;
+                height: 28px;
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .table-scroll {
+                overflow: visible;
+                margin: 0;
+                padding: 0;
+            }
+            .records-table table {
+                min-width: auto;
+                display: block;
+            }
+            .records-table thead {
+                display: none;
+            }
+            .records-table tbody, .records-table tr, .records-table td {
+                display: block;
+                width: 100%;
+            }
+            .records-table tr {
+                margin-bottom: 15px;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                padding: 10px;
+                background: #f9fafb;
+            }
+            .records-table td {
+                padding: 8px 10px;
+                border: none;
+                text-align: left;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .records-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #6b7280;
+                margin-right: 10px;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+            }
+            .records-table td:empty {
+                display: none;
+            }
+            .records-table .action-btns {
+                justify-content: center;
+                padding-top: 10px;
+                border-top: 1px solid #e5e7eb;
+            }
+            .records-table .action-btns::before {
+                display: none;
+            }
+        }
         
         table { width: 100%; border-collapse: collapse; }
         th {
@@ -411,15 +494,15 @@ require_once '../backend/db.php';
             }
             tbody.innerHTML = records.map(r => `
                 <tr>
-                    <td>${r.id}</td>
-                    <td>${r.last_name}, ${r.first_name}</td>
-                    <td>${r.age}</td>
-                    <td><span class="badge badge-${r.sex === 'Male' ? 'male' : 'female'}">${r.sex}</span></td>
-                    <td>${r.disability_type || '-'}</td>
-                    <td>${r.pwd_id_number || '-'}</td>
-                    <td><span class="badge ${r.is_registered === 'Yes' ? 'badge-success' : 'badge-warning'}">${r.is_registered}</span></td>
-                    <td>${r.employment_status || '-'}</td>
-                    <td class="action-btns">
+                    <td data-label="ID">${r.id}</td>
+                    <td data-label="Name">${r.last_name}, ${r.first_name}</td>
+                    <td data-label="Age">${r.age}</td>
+                    <td data-label="Sex"><span class="badge badge-${r.sex === 'Male' ? 'male' : 'female'}">${r.sex}</span></td>
+                    <td data-label="Disability">${r.disability_type || '-'}</td>
+                    <td data-label="PWD ID">${r.pwd_id_number || '-'}</td>
+                    <td data-label="Registered"><span class="badge ${r.is_registered === 'Yes' ? 'badge-success' : 'badge-warning'}">${r.is_registered}</span></td>
+                    <td data-label="Employment">${r.employment_status || '-'}</td>
+                    <td class="action-btns" data-label="Actions">
                         <button class="btn-view" onclick="viewRecord(${r.id})"><i class="fa-solid fa-eye"></i></button>
                         <button class="btn-edit" onclick="editRecord(${r.id})"><i class="fa-solid fa-edit"></i></button>
                         <button class="btn-delete" onclick="deleteRecord(${r.id})"><i class="fa-solid fa-trash"></i></button>
