@@ -563,33 +563,16 @@ $physical = $stmt->fetch()['total'];
                                         <div class="detail-card"><h4>Trainings</h4><p>${r.trainings || '-'}</p></div>
                                     </div>
                                 </div>
-                                ${r.family_members && r.family_members.length > 0 ? `
-                                <div style="grid-column: 1 / -1;">
-                                    <h3 style="color: #4f46e5; margin-bottom: 15px; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">Family Members</h3>
-                                    <table class="family-table" style="width: 100%;">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Age</th>
-                                                <th>Civil Status</th>
-                                                <th>Relationship</th>
-                                                <th>Occupation</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            ${r.family_members.map(m => `
-                                                <tr>
-                                                    <td>${m.name || '-'}</td>
-                                                    <td>${m.age || '-'}</td>
-                                                    <td>${m.civil_status || '-'}</td>
-                                                    <td>${m.relationship || '-'}</td>
-                                                    <td>${m.occupation || '-'}</td>
-                                                </tr>
-                                            `).join('')}
-                                        </tbody>
-                                    </table>
+                                <div>
+                                    <h3 style="color: #4f46e5; margin-bottom: 15px; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">Guardian & Assistive Device</h3>
+                                    <div class="detail-grid">
+                                        <div class="detail-card"><h4>Guardian Name</h4><p>${r.guardian_name || '-'}</p></div>
+                                        <div class="detail-card"><h4>Relationship</h4><p>${r.guardian_relationship || '-'}</p></div>
+                                        <div class="detail-card"><h4>Guardian Contact</h4><p>${r.guardian_contact || '-'}</p></div>
+                                        <div class="detail-card"><h4>Guardian Address</h4><p>${r.guardian_address || '-'}</p></div>
+                                        <div class="detail-card"><h4>Assistive Device</h4><p>${r.assistive_device || 'None'}</p></div>
+                                    </div>
                                 </div>
-                                ` : ''}
                             </div>
                         `;
                         document.getElementById('viewModal').classList.add('active');
