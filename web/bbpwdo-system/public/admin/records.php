@@ -90,78 +90,26 @@ require_once '../backend/db.php';
         
         @media (max-width: 768px) {
             .table-scroll { 
-                overflow-x: auto;
-                margin: 0 -20px;
-                padding: 0 20px;
+                overflow-x: auto; 
+            }
+            .table-scroll table {
+                min-width: 800px;
             }
             .records-table {
-                font-size: 13px;
+                font-size: 12px;
             }
             .records-table th, .records-table td {
-                padding: 10px 8px;
+                padding: 8px 6px;
                 white-space: nowrap;
             }
             .badge {
-                padding: 4px 8px;
-                font-size: 0.7rem;
+                padding: 3px 6px;
+                font-size: 0.65rem;
             }
             .action-btns button {
-                width: 28px;
-                height: 28px;
-                font-size: 0.8rem;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .table-scroll {
-                overflow: visible;
-                margin: 0;
-                padding: 0;
-            }
-            .records-table table {
-                min-width: auto;
-                display: block;
-            }
-            .records-table thead {
-                display: none;
-            }
-            .records-table tbody, .records-table tr, .records-table td {
-                display: block;
-                width: 100%;
-            }
-            .records-table tr {
-                margin-bottom: 15px;
-                border: 1px solid #e5e7eb;
-                border-radius: 8px;
-                padding: 10px;
-                background: #f9fafb;
-            }
-            .records-table td {
-                padding: 8px 10px;
-                border: none;
-                text-align: left;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-            .records-table td::before {
-                content: attr(data-label);
-                font-weight: 600;
-                color: #6b7280;
-                margin-right: 10px;
-                font-size: 0.75rem;
-                text-transform: uppercase;
-            }
-            .records-table td:empty {
-                display: none;
-            }
-            .records-table .action-btns {
-                justify-content: center;
-                padding-top: 10px;
-                border-top: 1px solid #e5e7eb;
-            }
-            .records-table .action-btns::before {
-                display: none;
+                width: 24px;
+                height: 24px;
+                font-size: 0.7rem;
             }
         }
         
