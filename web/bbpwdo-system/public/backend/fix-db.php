@@ -12,18 +12,9 @@ try {
     $dsn = "mysql:host=" . $url['host'] . ";port=" . $url['port'] . ";dbname=" . ltrim($url['path'], '/');
     $pdo = new PDO($dsn, $url['user'], $url['pass'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     
-    $pdo->exec("DROP TABLE IF EXISTS contact_messages");
-    $pdo->exec("CREATE TABLE contact_messages (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(100) NOT NULL,
-        email VARCHAR(100) NOT NULL,
-        phone VARCHAR(50),
-        subject VARCHAR(200),
-        message TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )");
-    
     $pdo->exec("DROP TABLE IF EXISTS pwd_records");
+    $pdo->exec("DROP TABLE IF EXISTS contact_messages");
+    
     $pdo->exec("CREATE TABLE pwd_records (
         id INT AUTO_INCREMENT PRIMARY KEY,
         last_name VARCHAR(100) NOT NULL,
@@ -57,6 +48,14 @@ try {
         guardian_address TEXT,
         skills TEXT,
         trainings TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )");
+    
+    $pdo->exec("CREATE TABLE contact_messages (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(100) NOT NULL,
+        message TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )");
     

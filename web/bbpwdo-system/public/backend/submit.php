@@ -53,16 +53,23 @@ try {
         exit;
     }
     
+    $dateFields = ['birthdate', 'issued_date', 'expiry_date'];
+    
     $fields = [
         'last_name', 'first_name', 'middle_name', 'suffix', 'sex', 'age', 'birthdate',
         'blood_type', 'civil_status', 'contact_number', 'address', 'pwd_id_number',
-        'issued_date', 'expiry_date', 'is_registered'
+        'issued_date', 'expiry_date', 'is_registered',
+        'disability_type', 'assistive_device',
+        'employment_status', 'employment_type', 'employer_name', 'employer_address',
+        'education_elementary', 'education_highschool', 'education_college', 'education_vocational',
+        'guardian_name', 'guardian_relationship', 'guardian_contact', 'guardian_address',
+        'skills', 'trainings'
     ];
     
     $data = [];
     foreach ($fields as $f) {
         $val = $_POST[$f] ?? '';
-        if (in_array($f, ['birthdate', 'issued_date', 'expiry_date'])) {
+        if (in_array($f, $dateFields)) {
             $data[$f] = !empty($val) ? $val : null;
         } else {
             $data[$f] = $val;
