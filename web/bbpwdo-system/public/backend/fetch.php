@@ -29,7 +29,10 @@ if ($method === 'GET') {
             $conditions = [];
             $conditions[] = "last_name LIKE :search";
             $conditions[] = "first_name LIKE :search";
+            $conditions[] = "middle_name LIKE :search";
             $conditions[] = "pwd_id_number LIKE :search";
+            $conditions[] = "disability_type LIKE :search";
+            $conditions[] = "address LIKE :search";
             $where .= "WHERE (" . implode(" OR ", $conditions) . ")";
             $params[':search'] = "%$search%";
         }
@@ -49,6 +52,30 @@ if ($method === 'GET') {
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
         $records = $stmt->fetchAll();
+        
+        // Fetch family members for each record
+        if (!empty($records)) {
+            try {
+                $pdo->exec("CREATE TABLE IF NOT EXISTS family_members (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    pwd_id INT NOT NULL,
+                    name VARCHAR(100),
+                    age INT,
+                    civil_status VARCHAR(30),
+                    relationship VARCHAR(50),
+                    occupation VARCHAR(100),
+                    FOREIGN KEY (pwd_id) REFERENCES pwd_records(id) ON DELETE CASCADE
+                )");
+                
+                $famStmt = $pdo->prepare("SELECT * FROM family_members WHERE pwd_id = :pwd_id");
+                foreach ($records as &$record) {
+                    $famStmt->execute([':pwd_id' => $record['id']]);
+                    $record['family_members'] = $famStmt->fetchAll();
+                }
+            } catch (Exception $e) {
+                // Family members table might not exist yet
+            }
+        }
         
         echo json_encode([
             'success' => true,
