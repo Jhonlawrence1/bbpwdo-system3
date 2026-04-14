@@ -44,7 +44,7 @@ try {
     $last_name = $_POST['lastName'] ?? '';
     $first_name = $_POST['firstName'] ?? '';
     $sex = $_POST['sex'] ?? '';
-    $age = $_POST['age'] ?? 0;
+    $age = intval($_POST['age'] ?? 0);
     $birthdate = $_POST['birthdate'] ?? '';
     $address = $_POST['address'] ?? '';
     
@@ -61,7 +61,12 @@ try {
     
     $data = [];
     foreach ($fields as $f) {
-        $data[$f] = $_POST[$f] ?? '';
+        $val = $_POST[$f] ?? '';
+        if (in_array($f, ['birthdate', 'issued_date', 'expiry_date'])) {
+            $data[$f] = !empty($val) ? $val : null;
+        } else {
+            $data[$f] = $val;
+        }
     }
     
     $cols = implode(', ', array_keys($data));
