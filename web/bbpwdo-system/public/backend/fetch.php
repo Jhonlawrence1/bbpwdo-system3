@@ -77,7 +77,13 @@ if ($method === 'GET') {
         $record = $stmt->fetch();
         
         if ($record) {
-            echo json_encode(['success' => true, 'data' => $record]);
+            // Fetch family members
+            $famStmt = $pdo->prepare("SELECT * FROM family_members WHERE pwd_id = :pwd_id");
+            $famStmt->execute([':pwd_id' => $id]);
+            $family_members = $famStmt->fetchAll();
+            
+            $record['family_members'] = $family_members;
+            echo json_encode(['success' => true, 'data' => [$record]]);
         } else {
             echo json_encode(['success' => false, 'message' => 'Record not found']);
         }
