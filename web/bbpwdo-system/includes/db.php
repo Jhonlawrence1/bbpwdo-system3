@@ -8,7 +8,6 @@ function getPdo() {
     $dbUrl = getenv('DATABASE_URL');
     
     if ($dbUrl && strpos($dbUrl, 'mysql://') === 0) {
-        // Deployed: parse DATABASE_URL
         $url = parse_url($dbUrl);
         $host = $url['host'] ?? 'localhost';
         $port = $url['port'] ?? 3306;
@@ -18,7 +17,6 @@ function getPdo() {
         
         $dsn = "mysql:host=$host;port=$port;dbname=$dbName;charset=utf8mb4";
     } else {
-        // Local XAMPP fallback
         $host = getenv('DB_HOST') ?: 'localhost';
         $port = getenv('DB_PORT') ?: 3306;
         $dbName = getenv('DB_NAME') ?: 'bbpwdo';
@@ -29,19 +27,16 @@ function getPdo() {
     }
     
     try {
-        $pdo = new PDO($dsn, $user, $pass);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $pdo = new PDO($dsn, $user, $pass, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ]);
         return $pdo;
     } catch (PDOException $e) {
-        http_response_code(500);
-        echo json_encode(['success' => false, 'message' => 'DB Connection Failed: ' . $e->getMessage()]);
-        exit;
+        return null;
     }
 }
 
-// Global $pdo for backward compat
 $pdo = getPdo();
 ?>
-
