@@ -57,6 +57,9 @@ try {
     
     $dateFields = ['birthdate', 'issued_date', 'expiry_date'];
     
+    $disabilityTypes = isset($_POST['disabilityType']) ? implode(', ', (array)$_POST['disabilityType']) : '';
+    $assistiveDevices = isset($_POST['assistiveDevice']) ? implode(', ', (array)$_POST['assistiveDevice']) : '';
+    
     $fields = [
         'last_name', 'first_name', 'middle_name', 'suffix', 'sex', 'age', 'birthdate',
         'blood_type', 'civil_status', 'contact_number', 'address', 'pwd_id_number',
@@ -70,11 +73,17 @@ try {
     
     $data = [];
     foreach ($fields as $f) {
-        $val = $_POST[$f] ?? '';
-        if (in_array($f, $dateFields)) {
-            $data[$f] = !empty($val) ? $val : null;
+        if ($f === 'disability_type') {
+            $data[$f] = $disabilityTypes;
+        } elseif ($f === 'assistive_device') {
+            $data[$f] = $assistiveDevices;
         } else {
-            $data[$f] = $val;
+            $val = $_POST[$f] ?? '';
+            if (in_array($f, $dateFields)) {
+                $data[$f] = !empty($val) ? $val : null;
+            } else {
+                $data[$f] = $val;
+            }
         }
     }
     
