@@ -6,17 +6,17 @@ require_once 'jwt.php';
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = htmlspecialchars(trim($_POST['username'] ?? ''));
+    $username = htmlspecialchars(trim($_POST['username'] ?? $_POST['email'] ?? ''));
     $password = $_POST['password'] ?? '';
     
     if (empty($username) || empty($password)) {
-        echo json_encode(['success' => false, 'message' => 'Please enter username and password']);
+        echo json_encode(['success' => false, 'message' => 'Please enter username/email and password']);
         exit;
     }
     
     try {
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username");
-        $stmt->execute([':username' => $username]);
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :login OR email = :login");
+        $stmt->execute([':login' => $username]);
         $user = $stmt->fetch();
         
         if ($user && password_verify($password, $user['password'])) {
