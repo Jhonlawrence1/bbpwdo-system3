@@ -74,4 +74,3 @@ function getPdo() {
 // Global $pdo for backward compat
 $pdo = getPdo();
 ?>
-
