@@ -212,6 +212,13 @@ $physical = $stmt->fetch()['total'];
             box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
         }
         
+        .sidebar-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 999;
+        }
+        .sidebar-overlay.active { display: block; }
+        
         body.dark .mobile-menu-btn { background: #4f46e5; }
         
         body.dark { background: #0f172a; }
@@ -293,6 +300,7 @@ $physical = $stmt->fetch()['total'];
     </style>
 </head>
 <body>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <button class="mobile-menu-btn" onclick="toggleSidebar()">
         <i class="fa-solid fa-bars"></i>
     </button>
@@ -437,15 +445,19 @@ $physical = $stmt->fetch()['total'];
         
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar-fixed');
+            const overlay = document.getElementById('sidebarOverlay');
             sidebar.classList.toggle('active');
+            if (overlay) overlay.classList.toggle('active');
         }
         
         document.addEventListener('click', function(e) {
             const sidebar = document.querySelector('.sidebar-fixed');
+            const overlay = document.getElementById('sidebarOverlay');
             const menuBtn = document.querySelector('.mobile-menu-btn');
             if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
                 if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
                     sidebar.classList.remove('active');
+                    if (overlay) overlay.classList.remove('active');
                 }
             }
         });

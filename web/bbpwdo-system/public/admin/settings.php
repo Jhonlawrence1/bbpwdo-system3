@@ -203,6 +203,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 10px; color: white; font-size: 1.3rem; cursor: pointer;
             box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
         }
+        
+        .sidebar-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 999;
+        }
+        .sidebar-overlay.active { display: block; }
 
         @media (max-width: 768px) {
             .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
@@ -221,6 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <button class="mobile-menu-btn" onclick="toggleSidebar()">
         <i class="fa-solid fa-bars"></i>
     </button>
@@ -435,15 +443,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar-fixed');
+            const overlay = document.getElementById('sidebarOverlay');
             sidebar.classList.toggle('active');
+            if (overlay) overlay.classList.toggle('active');
         }
 
         document.addEventListener('click', function(e) {
             const sidebar = document.querySelector('.sidebar-fixed');
+            const overlay = document.getElementById('sidebarOverlay');
             const menuBtn = document.querySelector('.mobile-menu-btn');
             if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
                 if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
                     sidebar.classList.remove('active');
+                    if (overlay) overlay.classList.remove('active');
                 }
             }
         });
