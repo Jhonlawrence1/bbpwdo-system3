@@ -13,29 +13,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once '../backend/db.php';
     
     if (isset($_POST['login'])) {
-        $email = htmlspecialchars(trim($_POST['email'] ?? ''));
+        $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
         
         if (empty($email) || empty($password)) {
             $error = 'Please enter email and password';
         } else {
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-            $stmt->execute([$email]);
-            $user = $stmt->fetch();
-            
-            if ($user && password_verify($password, $user['password'])) {
-                $_SESSION['admin_id'] = $user['id'];
-                $_SESSION['admin_username'] = $user['username'];
-                header('Location: dashboard.php');
-                exit;
-            } else {
-                $error = 'Invalid email or password';
+            try {
+                $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+                $stmt->execute([$email]);
+                $user = $stmt->fetch();
+                
+                if ($user && password_verify($password, $user['password'])) {
+                    $_SESSION['admin_id'] = $user['id'];
+                    $_SESSION['admin_username'] = $user['username'] ?? $user['email'];
+                    $_SESSION['admin_email'] = $user['email'];
+                    header('Location: dashboard.php');
+                    exit;
+                } else {
+                    $error = 'Invalid email or password';
+                }
+            } catch (Exception $e) {
+                $error = 'Error: ' . $e->getMessage();
             }
         }
     }
 
     if (isset($_POST['forgot'])) {
-        $email = htmlspecialchars(trim($_POST['email'] ?? ''));
+        $email = trim($_POST['email'] ?? '');
         
         if (empty($email)) {
             $error = 'Please enter your email';
@@ -49,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $code = rand(100000, 999999);
                     $_SESSION['reset_code'] = $code;
                     $_SESSION['reset_email'] = $email;
-                    
                     $success = "Your verification code is: <strong style='font-size:1.5rem;'>$code</strong><br><small>Enter this code to reset your password.</small>";
                 } else {
                     $error = 'Email not found';
@@ -72,13 +76,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif (strlen($newPassword) < 6) {
             $error = 'Password must be at least 6 characters';
         } else {
-            $email = $_SESSION['reset_email'] ?? '';
-            $hash = password_hash($newPassword, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE email = ?");
-            $stmt->execute([$hash, $email]);
-            
-            unset($_SESSION['reset_code'], $_SESSION['reset_email']);
-            $success = "Password has been reset successfully!";
+            try {
+                $email = $_SESSION['reset_email'] ?? '';
+                $hash = password_hash($newPassword, PASSWORD_DEFAULT);
+                $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE email = ?");
+                $stmt->execute([$hash, $email]);
+                
+                unset($_SESSION['reset_code'], $_SESSION['reset_email']);
+                $success = "Password has been reset successfully!";
+            } catch (Exception $e) {
+                $error = 'Error: ' . $e->getMessage();
+            }
         }
     }
 }
@@ -134,10 +142,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="auth-logo">
                 <i class="fa-solid fa-universal-access"></i>
                 <h1>BBPWDO Admin</h1>
-            </div>
-            
-            <div class="auth-tabs">
-                <button class="active" onclick="switchTab('login')">Login</button>
             </div>
             
             <?php if ($error): ?>
@@ -205,7 +209,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     
-    </script>
     <script>
     function showForgot() {
         document.getElementById('loginForm').style.display = 'none';
