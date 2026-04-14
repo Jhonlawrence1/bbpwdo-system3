@@ -55,7 +55,14 @@ $records = $stmt->fetchAll();
 echo "BBPWDO PWD Records\n";
 echo "Generated: " . date('Y-m-d H:i:s') . "\n\n";
 
-echo "ID\tLast Name\tFirst Name\tMiddle Name\tSuffix\tSex\tAge\tBirthdate\tBlood Type\tCivil Status\tContact Number\tAddress\tPWD ID Number\tIssued Date\tExpiry Date\tRegistered\tEmployment Status\tEmployment Type\tElementary\tHigh School\tCollege\tVocational\tDisability Type\tAssistive Device\tGuardian Name\tGuardian Relationship\tGuardian Contact\tGuardian Address\tSkills\tTrainings\n";
+$headers = [
+    'ID', 'Last Name', 'First Name', 'Middle Name', 'Suffix', 'Sex', 'Age', 'Birthdate',
+    'Blood Type', 'Civil Status', 'Contact Number', 'Address', 'PWD ID Number',
+    'Issued Date', 'Expiry Date', 'Registered', 'Employment Status', 'Employment Type',
+    'Elementary', 'High School', 'College', 'Vocational', 'Disability Type',
+    'Assistive Device', 'Skills', 'Trainings'
+];
+echo implode("\t", $headers) . "\n";
 
 foreach ($records as $r) {
     echo $r['id'] . "\t";
@@ -82,10 +89,6 @@ foreach ($records as $r) {
     echo ($r['education_vocational'] ?? '') . "\t";
     echo ($r['disability_type'] ?? '') . "\t";
     echo ($r['assistive_device'] ?? '') . "\t";
-    echo ($r['guardian_name'] ?? '') . "\t";
-    echo ($r['guardian_relationship'] ?? '') . "\t";
-    echo ($r['guardian_contact'] ?? '') . "\t";
-    echo ($r['guardian_address'] ?? '') . "\t";
     echo ($r['skills'] ?? '') . "\t";
     echo ($r['trainings'] ?? '') . "\n";
 }

@@ -60,8 +60,7 @@ $headers = [
     'Blood Type', 'Civil Status', 'Contact Number', 'Address', 'PWD ID Number',
     'Issued Date', 'Expiry Date', 'Registered', 'Employment Status', 'Employment Type',
     'Elementary', 'High School', 'College', 'Vocational', 'Disability Type',
-    'Assistive Device', 'Guardian Name', 'Guardian Relationship', 'Guardian Contact',
-    'Guardian Address', 'Skills', 'Trainings'
+    'Assistive Device', 'Skills', 'Trainings'
 ];
 echo implode("\t", $headers) . "\n";
 
@@ -90,10 +89,6 @@ foreach ($records as $r) {
     echo ($r['education_vocational'] ?? '') . "\t";
     echo ($r['disability_type'] ?? '') . "\t";
     echo ($r['assistive_device'] ?? '') . "\t";
-    echo ($r['guardian_name'] ?? '') . "\t";
-    echo ($r['guardian_relationship'] ?? '') . "\t";
-    echo ($r['guardian_contact'] ?? '') . "\t";
-    echo ($r['guardian_address'] ?? '') . "\t";
     echo ($r['skills'] ?? '') . "\t";
     echo ($r['trainings'] ?? '') . "\n";
 }
