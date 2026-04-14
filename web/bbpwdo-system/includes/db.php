@@ -1,9 +1,7 @@
 <?php
 /**
- * Unified MySQL PDO Connection - Local XAMPP + Deployment (Railway/Render)
- * Supports DATABASE_URL parsing + local fallback
+ * Unified MySQL PDO Connection
  */
-
 function getPdo() {
     $dbUrl = getenv('DATABASE_URL');
     
@@ -14,7 +12,6 @@ function getPdo() {
         $dbName = ltrim($url['path'] ?? '/bbpwdo', '/');
         $user = $url['user'] ?? 'root';
         $pass = $url['pass'] ?? '';
-        
         $dsn = "mysql:host=$host;port=$port;dbname=$dbName;charset=utf8mb4";
     } else {
         $host = getenv('DB_HOST') ?: 'localhost';
@@ -22,7 +19,6 @@ function getPdo() {
         $dbName = getenv('DB_NAME') ?: 'bbpwdo';
         $user = getenv('DB_USER') ?: 'root';
         $pass = getenv('DB_PASS') ?: '';
-        
         $dsn = "mysql:host=$host;port=$port;dbname=$dbName;charset=utf8mb4";
     }
     
@@ -39,4 +35,3 @@ function getPdo() {
 }
 
 $pdo = getPdo();
-?>
