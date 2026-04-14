@@ -7,7 +7,7 @@
 function getPdo() {
     $dbUrl = getenv('DATABASE_URL');
     
-    if ($dbUrl && strpos($dbUrl, 'mysql:') === 0) {
+    if ($dbUrl && strpos($dbUrl, 'mysql://') === 0) {
         // Deployed: parse DATABASE_URL
         $url = parse_url($dbUrl);
         $host = $url['host'] ?? 'localhost';
