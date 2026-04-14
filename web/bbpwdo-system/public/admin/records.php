@@ -113,75 +113,7 @@ require_once '../backend/db.php';
             }
         }
         
-        @media (max-width: 768px) {
-            .search-filter {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
-            .search-filter input,
-            .search-filter select {
-                width: 100%;
-            }
-            
-            .records-table {
-                display: block;
-                border: none;
-            }
-            .records-table thead {
-                display: none;
-            }
-            .records-table tbody {
-                display: flex;
-                flex-direction: column;
-                gap: 15px;
-            }
-            .records-table tr {
-                display: flex;
-                flex-direction: column;
-                background: #f9fafb;
-                margin-bottom: 0;
-                padding: 15px;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            }
-            .records-table td {
-                border: none;
-                padding: 6px 0;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-            .records-table td::before {
-                content: attr(data-label);
-                font-weight: 600;
-                color: #6b7280;
-                font-size: 0.75rem;
-                text-transform: uppercase;
-            }
-            .records-table td:empty {
-                display: none;
-            }
-            .records-table .action-btns {
-                flex-direction: column;
-                gap: 10px;
-                padding-top: 10px;
-                border-top: 1px solid #e5e7eb;
-                margin-top: 8px;
-            }
-            .records-table .action-btns::before {
-                display: none;
-            }
-            .records-table .btn-view,
-            .records-table .btn-edit,
-            .records-table .btn-delete {
-                width: 100%;
-                text-align: center;
-                padding: 8px;
-            }
-        }
-        
-        table { width: 100%; border-collapse: collapse; }
+        .table-scroll table {
         th {
             padding: 16px; text-align: left; font-weight: 600; color: #6b7280;
             background: #f9fafb; font-size: 0.8rem; text-transform: uppercase;
@@ -278,10 +210,99 @@ require_once '../backend/db.php';
         body.dark .detail-card p { color: #e2e8f0; }
         body.dark .form-group label { color: #94a3b8; }
         body.dark .form-group input, body.dark .form-group select { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+        
+        .mobile-menu-btn {
+            display: none;
+            position: fixed; top: 15px; left: 15px; z-index: 200;
+            width: 45px; height: 45px; background: #4f46e5; border: none;
+            border-radius: 10px; color: white; font-size: 1.3rem; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+            .sidebar-fixed {
+                position: fixed; left: -260px; top: 0; bottom: 0;
+                width: 260px; z-index: 1000;
+                transition: left 0.3s ease;
+            }
+            .sidebar-fixed.active { left: 0; }
+            .main-content { margin-left: 0; padding: 70px 15px 20px 15px; width: 100%; }
+            
+            .search-filter {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .search-filter input,
+            .search-filter select {
+                width: 100%;
+            }
+            
+            .records-table {
+                display: block;
+                border: none;
+            }
+            .records-table thead {
+                display: none;
+            }
+            .records-table tbody {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            .records-table tr {
+                display: flex;
+                flex-direction: column;
+                background: #f9fafb;
+                margin-bottom: 0;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            }
+            .records-table td {
+                border: none;
+                padding: 6px 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .records-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #6b7280;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+            }
+            .records-table td:empty {
+                display: none;
+            }
+            .records-table .action-btns {
+                flex-direction: column;
+                gap: 10px;
+                padding-top: 10px;
+                border-top: 1px solid #e5e7eb;
+                margin-top: 8px;
+            }
+            .records-table .action-btns::before {
+                display: none;
+            }
+            .records-table .btn-view,
+            .records-table .btn-edit,
+            .records-table .btn-delete {
+                width: 100%;
+                text-align: center;
+                padding: 8px;
+            }
+        }
     </style>
 </head>
 <body>
-    <aside class="sidebar-fixed">
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    
+    <aside class="sidebar-fixed" id="sidebar">
         <div class="sidebar-logo">
             <i class="fa-solid fa-universal-access"></i>
             <span>BBPWDO</span>
@@ -466,6 +487,21 @@ require_once '../backend/db.php';
                 btn.innerHTML = '<i class="fa-solid fa-moon"></i>';
             }
         }
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar-fixed');
+            sidebar.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const sidebar = document.querySelector('.sidebar-fixed');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
+                if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
         
         let currentPage = 1;
         

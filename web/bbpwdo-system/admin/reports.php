@@ -118,10 +118,26 @@ require_once '../backend/db.php';
             .chart-grid { grid-template-columns: 1fr; }
             .export-options { grid-template-columns: repeat(2, 1fr); }
         }
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed; top: 15px; left: 15px; z-index: 200;
+            width: 45px; height: 45px; background: #4f46e5; border: none;
+            border-radius: 10px; color: white; font-size: 1.3rem; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        }
+
         @media (max-width: 768px) {
-            .sidebar-fixed { width: 70px; }
-            .sidebar-logo span, .sidebar-menu a span { display: none; }
-            .main-content { margin-left: 70px; }
+            .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+            .sidebar-fixed {
+                position: fixed; left: -260px; top: 0; bottom: 0;
+                width: 260px; z-index: 1000;
+                transition: left 0.3s ease;
+            }
+            .sidebar-fixed.active { left: 0; }
+            .sidebar-logo span, .sidebar-menu a span { display: inline; }
+            .sidebar-menu a { justify-content: flex-start; }
+            .main-content { margin-left: 0; padding: 70px 15px 20px 15px; width: 100%; }
             .summary-grid { grid-template-columns: 1fr; }
             .export-options { grid-template-columns: 1fr; }
         }
@@ -150,7 +166,11 @@ require_once '../backend/db.php';
     </style>
 </head>
 <body>
-    <aside class="sidebar-fixed">
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    
+    <aside class="sidebar-fixed" id="sidebar">
         <div class="sidebar-logo">
             <i class="fa-solid fa-universal-access"></i>
             <span>BBPWDO</span>
@@ -260,6 +280,21 @@ require_once '../backend/db.php';
                 btn.innerHTML = '<i class="fa-solid fa-moon"></i>';
             }
         }
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar-fixed');
+            sidebar.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const sidebar = document.querySelector('.sidebar-fixed');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
+                if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
         
         function exportData(format) {
             if (format === 'pdf') {

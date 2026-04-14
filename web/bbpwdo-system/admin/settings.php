@@ -157,12 +157,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .data-stat {
             background: #f9fafb; padding: 20px; border-radius: 12px; text-align: center;
         }
-        .data-stat h4 { font-size: 1.8rem; color: #4f46e5; }
+.data-stat h4 { font-size: 1.8rem; color: #4f46e5; }
         .data-stat p { font-size: 0.85rem; color: #6b7280; margin-top: 5px; }
-        
-@media (max-width: 1024px) {
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed; top: 15px; left: 15px; z-index: 200;
+            width: 45px; height: 45px; background: #4f46e5; border: none;
+            border-radius: 10px; color: white; font-size: 1.3rem; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        }
+
+        @media (max-width: 1024px) {
             .settings-grid { grid-template-columns: 1fr; }
             .settings-card:nth-child(3) { grid-column: span 1; }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+            .sidebar-fixed {
+                position: fixed; left: -260px; top: 0; bottom: 0;
+                width: 260px; z-index: 1000;
+                transition: left 0.3s ease;
+            }
+            .sidebar-fixed.active { left: 0; }
+            .sidebar-logo span, .sidebar-menu a span { display: inline; }
+            .sidebar-menu a { justify-content: flex-start; }
+            .main-content { margin-left: 0; padding: 70px 15px 20px 15px; width: 100%; }
+            .form-grid { grid-template-columns: 1fr; }
         }
         
         .theme-toggle {
@@ -198,7 +220,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-    <aside class="sidebar-fixed">
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    
+    <aside class="sidebar-fixed" id="sidebar">
         <div class="sidebar-logo">
             <i class="fa-solid fa-universal-access"></i>
             <span>BBPWDO</span>
@@ -405,6 +431,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 btn.innerHTML = '<i class="fa-solid fa-moon"></i>';
             }
         }
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar-fixed');
+            sidebar.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const sidebar = document.querySelector('.sidebar-fixed');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
+                if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
         
         function addAdmin() {
         const username = document.getElementById('newAdminUsername').value;
