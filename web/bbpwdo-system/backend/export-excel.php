@@ -89,4 +89,21 @@ foreach ($records as $r) {
     echo ($r['skills'] ?? '') . "\t";
     echo ($r['trainings'] ?? '') . "\n";
 }
+
+$famStmt = $pdo->prepare("SELECT * FROM family_members WHERE pwd_id = :pwd_id");
+foreach ($records as $r) {
+    $famStmt->execute([':pwd_id' => $r['id']]);
+    $family = $famStmt->fetchAll();
+    if (!empty($family)) {
+        echo "\n--- Family Members for PWD ID " . $r['id'] . " (" . $r['last_name'] . ", " . $r['first_name'] . ") ---\n";
+        echo "Name\tAge\tCivil Status\tRelationship\tOccupation\n";
+        foreach ($family as $f) {
+            echo ($f['name'] ?? '') . "\t";
+            echo ($f['age'] ?? '') . "\t";
+            echo ($f['civil_status'] ?? '') . "\t";
+            echo ($f['relationship'] ?? '') . "\t";
+            echo ($f['occupation'] ?? '') . "\n";
+        }
+    }
+}
 ?>
