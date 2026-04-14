@@ -5,3 +5,6 @@ services:
     buildCommand: docker build -t bbpwdo-system .
     startCommand: ""
     autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        value: "mysql://root:pzdNeueBLTcXStUoORVFzhwxtAgJUDtO@monorail.proxy.rlwy.net:22047/railway"
