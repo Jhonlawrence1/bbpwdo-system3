@@ -134,7 +134,7 @@
                             <input type="date" id="expiryDate" name="expiryDate">
                         </div>
                         <div class="form-group">
-                            <label for="isRegistered">Registered with City/Municipality?</label>
+                            <label for="isRegistered">Registered with Barangay?</label>
                             <select id="isRegistered" name="isRegistered">
                                 <option value="No">No</option>
                                 <option value="Yes">Yes</option>
@@ -198,36 +198,116 @@
                         <div class="form-group full-width">
                             <label>Type of Disability <span class="required">*</span></label>
                             <div class="checkbox-group">
-                                <label class="checkbox-item">
-                                    <input type="checkbox" name="disabilityType[]" value="Physical">
-                                    <span class="checkmark"></span>
-                                    <i class="fa-solid fa-person-walking"></i> Physical
-                                </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" name="disabilityType[]" value="Visual">
-                                    <span class="checkmark"></span>
-                                    <i class="fa-solid fa-eye"></i> Visual
-                                </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" name="disabilityType[]" value="Hearing">
-                                    <span class="checkmark"></span>
-                                    <i class="fa-solid fa-ear-listen"></i> Hearing
-                                </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" name="disabilityType[]" value="Mental">
-                                    <span class="checkmark"></span>
-                                    <i class="fa-solid fa-brain"></i> Mental
-                                </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" name="disabilityType[]" value="Intellectual">
-                                    <span class="checkmark"></span>
-                                    <i class="fa-solid fa-lightbulb"></i> Intellectual
-                                </label>
-                                <label class="checkbox-item">
-                                    <input type="checkbox" name="disabilityType[]" value="Multiple">
-                                    <span class="checkmark"></span>
-                                    <i class="fa-solid fa-layer-group"></i> Multiple
-                                </label>
+                                <div class="checkbox-category">
+                                    <h4><i class="fa-solid fa-person-walking"></i> Physical</h4>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Physical - Stroke/Paralyzed">
+                                        <span class="checkmark"></span> Stroke / Paralyzed
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Physical - CKD">
+                                        <span class="checkmark"></span> CKD
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Physical - Orthopedic">
+                                        <span class="checkmark"></span> Orthopedic
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Physical - Amputee">
+                                        <span class="checkmark"></span> Amputee
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Physical - Fracture">
+                                        <span class="checkmark"></span> Fracture
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Physical - Polio">
+                                        <span class="checkmark"></span> Polio
+                                    </label>
+                                </div>
+                                <div class="checkbox-category">
+                                    <h4><i class="fa-solid fa-eye"></i> Visual</h4>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Visual - Total Blind">
+                                        <span class="checkmark"></span> Total Blind
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Visual - Partial Blind">
+                                        <span class="checkmark"></span> Partial Blind
+                                    </label>
+                                </div>
+                                <div class="checkbox-category">
+                                    <h4><i class="fa-solid fa-ear-listen"></i> Hearing</h4>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Hearing - Deaf">
+                                        <span class="checkmark"></span> Deaf
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Hearing - Hard of Hearing">
+                                        <span class="checkmark"></span> Hard of Hearing
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Hearing - Cleft Palate">
+                                        <span class="checkmark"></span> Cleft Palate
+                                    </label>
+                                </div>
+                                <div class="checkbox-category">
+                                    <h4><i class="fa-solid fa-brain"></i> Learning</h4>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Learning - ASD/Autism">
+                                        <span class="checkmark"></span> ASD / Autism
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Learning - Intellectual">
+                                        <span class="checkmark"></span> Intellectual
+                                    </label>
+                                </div>
+                                <div class="checkbox-category">
+                                    <h4><i class="fa-solid fa-layer-group"></i> Multiple</h4>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Multiple - COD">
+                                        <span class="checkmark"></span> COD
+                                    </label>
+                                </div>
+                                <div class="checkbox-category">
+                                    <h4><i class="fa-solid fa-heart-pulse"></i> Mental</h4>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Mental - Epilepsy">
+                                        <span class="checkmark"></span> Epilepsy
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Mental - Eye Seizure Disorder">
+                                        <span class="checkmark"></span> Eye Seizure Disorder
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Mental - Cerebral Palsy">
+                                        <span class="checkmark"></span> Cerebral Palsy
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Mental - Psychosocial">
+                                        <span class="checkmark"></span> Psychosocial
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Mental - Schizophrenia">
+                                        <span class="checkmark"></span> Schizophrenia
+                                    </label>
+                                </div>
+                                <div class="checkbox-category">
+                                    <h4><i class="fa-solid fa-ellipsis"></i> Others</h4>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Others - Cancer">
+                                        <span class="checkmark"></span> Cancer
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Others - Heart Disease">
+                                        <span class="checkmark"></span> Heart Disease
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="disabilityType[]" value="Others -">
+                                        <span class="checkmark"></span> Others (specify)
+                                    </label>
+                                    <input type="text" name="otherDisability" class="other-input" placeholder="Specify other disability">
+                                </div>
                             </div>
                         </div>
                         <div class="form-group full-width">
@@ -269,33 +349,25 @@
                 </div>
 
                 <div class="form-section">
-                    <h2><i class="fa-solid fa-user-shield"></i> Guardian/Parent Information</h2>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="guardianName">Full Name</label>
-                            <input type="text" id="guardianName" name="guardianName">
-                        </div>
-                        <div class="form-group">
-                            <label for="guardianRelationship">Relationship</label>
-                            <select id="guardianRelationship" name="guardianRelationship">
-                                <option value="">Select</option>
-                                <option value="Parent">Parent</option>
-                                <option value="Spouse">Spouse</option>
-                                <option value="Sibling">Sibling</option>
-                                <option value="Child">Child</option>
-                                <option value="Relative">Relative</option>
-                                <option value="Friend">Friend</option>
-                                <option value="Caregiver">Caregiver</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="guardianContact">Contact Number</label>
-                            <input type="tel" id="guardianContact" name="guardianContact" placeholder="09XXXXXXXXX">
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="guardianAddress">Address</label>
-                            <input type="text" id="guardianAddress" name="guardianAddress">
-                        </div>
+                    <h2><i class="fa-solid fa-users"></i> Family Members Information</h2>
+                    <div class="family-table-wrapper">
+                        <table id="familyTable" class="family-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Civil Status</th>
+                                    <th>Relationship</th>
+                                    <th>Occupation</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-secondary" onclick="addFamilyRow()">
+                            <i class="fa-solid fa-plus"></i> Add Family Member
+                        </button>
                     </div>
                 </div>
 

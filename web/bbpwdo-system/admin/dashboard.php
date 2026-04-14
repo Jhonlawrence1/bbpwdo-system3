@@ -186,6 +186,7 @@ $physical = $stmt->fetch()['total'];
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .charts-section { grid-template-columns: 1fr; }
         }
+        
         .theme-toggle {
             width: 40px; height: 40px; border-radius: 10px; border: none;
             background: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
@@ -193,6 +194,25 @@ $physical = $stmt->fetch()['total'];
         }
         .theme-toggle:hover { transform: scale(1.1); }
         .theme-toggle i { font-size: 1.2rem; color: #1e1b4b; }
+        
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 200;
+            width: 45px;
+            height: 45px;
+            background: #4f46e5;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        }
+        
+        body.dark .mobile-menu-btn { background: #4f46e5; }
         
         body.dark { background: #0f172a; }
         body.dark .sidebar-fixed { background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); }
@@ -229,17 +249,51 @@ $physical = $stmt->fetch()['total'];
         body.dark .pagination button.active { background: #4f46e5; }
         
         @media (max-width: 768px) {
-            .sidebar-fixed { width: 70px; padding: 20px 10px; }
-            .sidebar-logo span, .sidebar-menu a span { display: none; }
-            .sidebar-menu a { justify-content: center; padding: 14px; }
-            .main-content { margin-left: 70px; }
+            .sidebar-fixed {
+                width: 260px;
+                left: -260px;
+                transition: left 0.3s ease;
+            }
+            .sidebar-fixed.active {
+                left: 0;
+            }
+            .sidebar-logo span, .sidebar-menu a span { display: inline; }
+            .sidebar-menu a { justify-content: flex-start; padding: 14px 16px; }
+            .main-content { margin-left: 0; padding: 70px 15px 20px 15px; }
             .stats-grid { grid-template-columns: 1fr; }
-            .table-search { flex-direction: column; }
+            .table-search { flex-direction: column; width: 100%; }
+            .table-search input, .table-search select { width: 100%; }
+            .top-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+            .top-header h1 { font-size: 1.4rem; }
+            .header-actions { width: 100%; justify-content: space-between; }
+            .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+            .user-profile { padding: 8px 12px; }
+            .user-profile span { display: none; }
+            .data-table { display: block; overflow-x: auto; }
+            .form-grid { grid-template-columns: 1fr; }
+            .modal-content { width: 95%; padding: 20px; margin: 10px; }
+            .charts-section { grid-template-columns: 1fr; }
+            .table-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid { gap: 15px; }
+            .stat-card { padding: 16px; flex-direction: column; text-align: center; }
+            .stat-icon { width: 50px; height: 50px; font-size: 1.2rem; }
+            .stat-info h3 { font-size: 1.4rem; }
+            .top-header h1 { font-size: 1.2rem; }
+            .user-avatar { width: 35px; height: 35px; font-size: 0.9rem; }
+            .action-btns { flex-direction: column; }
+            .action-btns button { width: 28px; height: 28px; font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
-    <aside class="sidebar-fixed">
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    
+    <aside class="sidebar-fixed" id="sidebar">
         <div class="sidebar-logo">
             <i class="fa-solid fa-universal-access"></i>
             <span>BBPWDO</span>
@@ -377,6 +431,21 @@ $physical = $stmt->fetch()['total'];
             }
         }
         
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar-fixed');
+            sidebar.classList.toggle('active');
+        }
+        
+        document.addEventListener('click', function(e) {
+            const sidebar = document.querySelector('.sidebar-fixed');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
+                if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
+        
         let currentPage = 1;
         
         document.addEventListener('DOMContentLoaded', function() {
@@ -441,21 +510,85 @@ $physical = $stmt->fetch()['total'];
                     if (data.success && data.data.length > 0) {
                         const r = data.data[0];
                         document.getElementById('viewContent').innerHTML = `
-                            <div class="form-section">
-                                <h3>Personal Info</h3>
-                                <div class="form-grid">
-                                    <div class="form-group"><label>Name</label><p>${r.last_name}, ${r.first_name} ${r.middle_name || ''}</p></div>
-                                    <div class="form-group"><label>Age</label><p>${r.age}</p></div>
-                                    <div class="form-group"><label>Sex</label><p>${r.sex}</p></div>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;">
+                                <div>
+                                    <h3 style="color: #4f46e5; margin-bottom: 15px; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">Personal Information</h3>
+                                    <div class="detail-grid">
+                                        <div class="detail-card"><h4>Full Name</h4><p>${r.last_name}, ${r.first_name} ${r.middle_name || ''} ${r.suffix || ''}</p></div>
+                                        <div class="detail-card"><h4>Age</h4><p>${r.age}</p></div>
+                                        <div class="detail-card"><h4>Sex</h4><p>${r.sex || '-'}</p></div>
+                                        <div class="detail-card"><h4>Birthdate</h4><p>${r.birthdate || '-'}</p></div>
+                                        <div class="detail-card"><h4>Blood Type</h4><p>${r.blood_type || '-'}</p></div>
+                                        <div class="detail-card"><h4>Civil Status</h4><p>${r.civil_status || '-'}</p></div>
+                                        <div class="detail-card"><h4>Contact Number</h4><p>${r.contact_number || '-'}</p></div>
+                                        <div class="detail-card"><h4>Address</h4><p>${r.address || '-'}</p></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-section">
-                                <h3>PWD Info</h3>
-                                <div class="form-grid">
-                                    <div class="form-group"><label>PWD ID</label><p>${r.pwd_id_number || '-'}</p></div>
-                                    <div class="form-group"><label>Registered</label><p>${r.is_registered}</p></div>
-                                    <div class="form-group"><label>Disability</label><p>${r.disability_type || '-'}</p></div>
+                                <div>
+                                    <h3 style="color: #4f46e5; margin-bottom: 15px; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">PWD Information</h3>
+                                    <div class="detail-grid">
+                                        <div class="detail-card"><h4>PWD ID Number</h4><p>${r.pwd_id_number || '-'}</p></div>
+                                        <div class="detail-card"><h4>Date Issued</h4><p>${r.issued_date || '-'}</p></div>
+                                        <div class="detail-card"><h4>Expiry Date</h4><p>${r.expiry_date || '-'}</p></div>
+                                        <div class="detail-card"><h4>Registered</h4><p>${r.is_registered}</p></div>
+                                    </div>
                                 </div>
+                                <div>
+                                    <h3 style="color: #4f46e5; margin-bottom: 15px; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">Employment & Education</h3>
+                                    <div class="detail-grid">
+                                        <div class="detail-card"><h4>Employment Status</h4><p>${r.employment_status || '-'}</p></div>
+                                        <div class="detail-card"><h4>Employment Type</h4><p>${r.employment_type || '-'}</p></div>
+                                        <div class="detail-card"><h4>Elementary</h4><p>${r.education_elementary || '-'}</p></div>
+                                        <div class="detail-card"><h4>High School</h4><p>${r.education_highschool || '-'}</p></div>
+                                        <div class="detail-card"><h4>College</h4><p>${r.education_college || '-'}</p></div>
+                                        <div class="detail-card"><h4>Vocational</h4><p>${r.education_vocational || '-'}</p></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 style="color: #4f46e5; margin-bottom: 15px; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">Disability & Guardian</h3>
+                                    <div class="detail-grid">
+                                        <div class="detail-card"><h4>Disability Type</h4><p>${r.disability_type || '-'}</p></div>
+                                        <div class="detail-card"><h4>Assistive Device</h4><p>${r.assistive_device || '-'}</p></div>
+                                        <div class="detail-card"><h4>Guardian Name</h4><p>${r.guardian_name || '-'}</p></div>
+                                        <div class="detail-card"><h4>Relationship</h4><p>${r.guardian_relationship || '-'}</p></div>
+                                        <div class="detail-card"><h4>Guardian Contact</h4><p>${r.guardian_contact || '-'}</p></div>
+                                        <div class="detail-card"><h4>Guardian Address</h4><p>${r.guardian_address || '-'}</p></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 style="color: #4f46e5; margin-bottom: 15px; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">Skills & Trainings</h3>
+                                    <div class="detail-grid">
+                                        <div class="detail-card"><h4>Skills</h4><p>${r.skills || '-'}</p></div>
+                                        <div class="detail-card"><h4>Trainings</h4><p>${r.trainings || '-'}</p></div>
+                                    </div>
+                                </div>
+                                ${r.family_members && r.family_members.length > 0 ? `
+                                <div style="grid-column: 1 / -1;">
+                                    <h3 style="color: #4f46e5; margin-bottom: 15px; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">Family Members</h3>
+                                    <table class="family-table" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Age</th>
+                                                <th>Civil Status</th>
+                                                <th>Relationship</th>
+                                                <th>Occupation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${r.family_members.map(m => `
+                                                <tr>
+                                                    <td>${m.name || '-'}</td>
+                                                    <td>${m.age || '-'}</td>
+                                                    <td>${m.civil_status || '-'}</td>
+                                                    <td>${m.relationship || '-'}</td>
+                                                    <td>${m.occupation || '-'}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                ` : ''}
                             </div>
                         `;
                         document.getElementById('viewModal').classList.add('active');

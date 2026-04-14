@@ -243,8 +243,10 @@ require_once '../backend/db.php';
                     <option value="Physical">Physical</option>
                     <option value="Visual">Visual</option>
                     <option value="Hearing">Hearing</option>
+                    <option value="Learning">Learning</option>
+                    <option value="Multiple">Multiple</option>
                     <option value="Mental">Mental</option>
-                    <option value="Intellectual">Intellectual</option>
+                    <option value="Others">Others</option>
                 </select>
             </div>
         </div>
@@ -478,6 +480,33 @@ require_once '../backend/db.php';
                                         <div class="detail-card"><h4>Trainings</h4><p>${r.trainings || '-'}</p></div>
                                     </div>
                                 </div>
+                                ${r.family_members && r.family_members.length > 0 ? `
+                                <div style="grid-column: 1 / -1;">
+                                    <h3 style="color: #4f46e5; margin-bottom: 15px; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">Family Members</h3>
+                                    <table class="family-table" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Age</th>
+                                                <th>Civil Status</th>
+                                                <th>Relationship</th>
+                                                <th>Occupation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${r.family_members.map(m => `
+                                                <tr>
+                                                    <td>${m.name || '-'}</td>
+                                                    <td>${m.age || '-'}</td>
+                                                    <td>${m.civil_status || '-'}</td>
+                                                    <td>${m.relationship || '-'}</td>
+                                                    <td>${m.occupation || '-'}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                ` : ''}
                             </div>
                         `;
                         document.getElementById('viewModal').classList.add('active');

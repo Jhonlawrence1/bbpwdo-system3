@@ -64,6 +64,11 @@ try {
         }
     }
     
+    $otherDisability = htmlspecialchars(trim($_POST['otherDisability'] ?? ''));
+    if (!empty($otherDisability)) {
+        $disabilityTypes = str_replace('Others -', 'Others - ' . $otherDisability, $disabilityTypes);
+    }
+    
     $assistiveDevices = '';
     if (isset($_POST['assistiveDevice'])) {
         if (is_array($_POST['assistiveDevice'])) {
@@ -113,6 +118,32 @@ try {
     $sql = "INSERT INTO pwd_records ($cols) VALUES ($placeholders)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(array_values($data));
+    
+    $pwd_id = $pdo->lastInsertId();
+    
+    $family_members = [];
+    if (isset($_POST['family_members'])) {
+        $family_members = json_decode($_POST['family_members'], true) ?? [];
+    }
+    
+    if (!empty($family_members) && is_array($family_members)) {
+        $famSQL = "INSERT INTO family_members (pwd_id, name, age, civil_status, relationship, occupation) 
+                   VALUES (:pwd_id, :name, :age, :civil_status, :relationship, :occupation)";
+        $famStmt = $pdo->prepare($famSQL);
+        
+        foreach ($family_members as $member) {
+            if (!empty($member['name'])) {
+                $famStmt->execute([
+                    ':pwd_id' => $pwd_id,
+                    ':name' => htmlspecialchars(trim($member['name'])),
+                    ':age' => intval($member['age']),
+                    ':civil_status' => htmlspecialchars(trim($member['civil_status'])),
+                    ':relationship' => htmlspecialchars(trim($member['relationship'])),
+                    ':occupation' => htmlspecialchars(trim($member['occupation']))
+                ]);
+            }
+        }
+    }
     
     echo json_encode(['success' => true, 'message' => 'Registration submitted successfully']);
     

@@ -56,6 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $education_vocational = htmlspecialchars(trim($_POST['educationVocational'] ?? ''));
         
         $disability_type = isset($_POST['disabilityType']) ? implode(', ', $_POST['disabilityType']) : '';
+        
+        $otherDisability = htmlspecialchars(trim($_POST['otherDisability'] ?? ''));
+        if (!empty($otherDisability)) {
+            $disability_type = str_replace('Others -', 'Others - ' . $otherDisability, $disability_type);
+        }
+        
         $assistive_device = isset($_POST['assistiveDevice']) ? implode(', ', $_POST['assistiveDevice']) : '';
         
         $guardian_name = htmlspecialchars(trim($_POST['guardianName'] ?? ''));
