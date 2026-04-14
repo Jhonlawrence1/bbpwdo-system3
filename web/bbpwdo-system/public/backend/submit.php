@@ -55,37 +55,57 @@ try {
         exit;
     }
     
-    $dateFields = ['birthdate', 'issued_date', 'expiry_date'];
-    
-    $disabilityTypes = isset($_POST['disabilityType']) ? implode(', ', (array)$_POST['disabilityType']) : '';
-    $assistiveDevices = isset($_POST['assistiveDevice']) ? implode(', ', (array)$_POST['assistiveDevice']) : '';
-    
-    $fields = [
-        'last_name', 'first_name', 'middle_name', 'suffix', 'sex', 'age', 'birthdate',
-        'blood_type', 'civil_status', 'contact_number', 'address', 'pwd_id_number',
-        'issued_date', 'expiry_date', 'is_registered',
-        'disability_type', 'assistive_device',
-        'employment_status', 'employment_type', 'employer_name', 'employer_address',
-        'education_elementary', 'education_highschool', 'education_college', 'education_vocational',
-        'guardian_name', 'guardian_relationship', 'guardian_contact', 'guardian_address',
-        'skills', 'trainings'
-    ];
-    
-    $data = [];
-    foreach ($fields as $f) {
-        if ($f === 'disability_type') {
-            $data[$f] = $disabilityTypes;
-        } elseif ($f === 'assistive_device') {
-            $data[$f] = $assistiveDevices;
+    $disabilityTypes = '';
+    if (isset($_POST['disabilityType'])) {
+        if (is_array($_POST['disabilityType'])) {
+            $disabilityTypes = implode(', ', $_POST['disabilityType']);
         } else {
-            $val = $_POST[$f] ?? '';
-            if (in_array($f, $dateFields)) {
-                $data[$f] = !empty($val) ? $val : null;
-            } else {
-                $data[$f] = $val;
-            }
+            $disabilityTypes = $_POST['disabilityType'];
         }
     }
+    
+    $assistiveDevices = '';
+    if (isset($_POST['assistiveDevice'])) {
+        if (is_array($_POST['assistiveDevice'])) {
+            $assistiveDevices = implode(', ', $_POST['assistiveDevice']);
+        } else {
+            $assistiveDevices = $_POST['assistiveDevice'];
+        }
+    }
+    
+    $data = [
+        'last_name' => $last_name,
+        'first_name' => $first_name,
+        'middle_name' => $_POST['middleName'] ?? '',
+        'suffix' => $_POST['suffix'] ?? '',
+        'sex' => $sex,
+        'age' => $age,
+        'birthdate' => !empty($birthdate) ? $birthdate : null,
+        'blood_type' => $_POST['bloodType'] ?? '',
+        'civil_status' => $_POST['civilStatus'] ?? '',
+        'contact_number' => $_POST['contactNumber'] ?? '',
+        'address' => $address,
+        'pwd_id_number' => $_POST['pwdIdNumber'] ?? '',
+        'issued_date' => !empty($_POST['issuedDate']) ? $_POST['issuedDate'] : null,
+        'expiry_date' => !empty($_POST['expiryDate']) ? $_POST['expiryDate'] : null,
+        'is_registered' => $_POST['isRegistered'] ?? 'No',
+        'disability_type' => $disabilityTypes,
+        'assistive_device' => $assistiveDevices,
+        'employment_status' => $_POST['employmentStatus'] ?? '',
+        'employment_type' => $_POST['employmentType'] ?? '',
+        'employer_name' => $_POST['employerName'] ?? '',
+        'employer_address' => $_POST['employerAddress'] ?? '',
+        'education_elementary' => $_POST['educationElementary'] ?? '',
+        'education_highschool' => $_POST['educationHighschool'] ?? '',
+        'education_college' => $_POST['educationCollege'] ?? '',
+        'education_vocational' => $_POST['educationVocational'] ?? '',
+        'guardian_name' => $_POST['guardianName'] ?? '',
+        'guardian_relationship' => $_POST['guardianRelationship'] ?? '',
+        'guardian_contact' => $_POST['guardianContact'] ?? '',
+        'guardian_address' => $_POST['guardianAddress'] ?? '',
+        'skills' => $_POST['skills'] ?? '',
+        'trainings' => $_POST['trainings'] ?? ''
+    ];
     
     $cols = implode(', ', array_keys($data));
     $placeholders = implode(', ', array_fill(0, count($data), '?'));
