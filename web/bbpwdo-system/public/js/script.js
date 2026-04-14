@@ -150,6 +150,7 @@ function initPWDForm() {
         const formData = new FormData(this);
         
         const familyMembers = getFamilyMembersData();
+        console.log('Family Members Data:', familyMembers);
         formData.append('family_members', JSON.stringify(familyMembers));
         
         fetch('backend/submit.php', {
