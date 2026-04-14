@@ -562,16 +562,6 @@ $physical = $stmt->fetch()['total'];
                                         <div class="detail-card"><h4>Trainings</h4><p>${r.trainings || '-'}</p></div>
                                     </div>
                                 </div>
-                                <div>
-                                    <h3 style="color: #4f46e5; margin-bottom: 15px; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">Guardian & Assistive Device</h3>
-                                    <div class="detail-grid">
-                                        <div class="detail-card"><h4>Guardian Name</h4><p>${r.guardian_name || '-'}</p></div>
-                                        <div class="detail-card"><h4>Relationship</h4><p>${r.guardian_relationship || '-'}</p></div>
-                                        <div class="detail-card"><h4>Guardian Contact</h4><p>${r.guardian_contact || '-'}</p></div>
-                                        <div class="detail-card"><h4>Guardian Address</h4><p>${r.guardian_address || '-'}</p></div>
-                                        <div class="detail-card"><h4>Assistive Device</h4><p>${r.assistive_device || 'None'}</p></div>
-                                    </div>
-                                </div>
                             </div>
                         `;
                         document.getElementById('viewModal').classList.add('active');
