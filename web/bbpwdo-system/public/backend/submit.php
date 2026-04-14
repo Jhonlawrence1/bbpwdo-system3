@@ -23,6 +23,8 @@ if (isset($_POST['subject']) || isset($_POST['message'])) {
     try {
         $name = htmlspecialchars(trim($_POST['name'] ?? ''));
         $email = htmlspecialchars(trim($_POST['email'] ?? ''));
+        $phone = htmlspecialchars(trim($_POST['phone'] ?? ''));
+        $subject = htmlspecialchars(trim($_POST['subject'] ?? ''));
         $message = htmlspecialchars(trim($_POST['message'] ?? ''));
         
         if (empty($name) || empty($email) || empty($message)) {
@@ -30,8 +32,8 @@ if (isset($_POST['subject']) || isset($_POST['message'])) {
             exit;
         }
         
-        $stmt = $pdo->prepare("INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)");
-        $stmt->execute([$name, $email, $message]);
+        $stmt = $pdo->prepare("INSERT INTO contact_messages (name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$name, $email, $phone, $subject, $message]);
         
         echo json_encode(['success' => true, 'message' => 'Message sent successfully!']);
     } catch (PDOException $e) {
