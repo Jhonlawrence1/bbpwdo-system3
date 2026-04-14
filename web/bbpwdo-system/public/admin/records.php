@@ -179,13 +179,6 @@ require_once '../backend/db.php';
                 text-align: center;
                 padding: 8px;
             }
-            .records-table .btn-view,
-            .records-table .btn-edit,
-            .records-table .btn-delete {
-                width: 36px;
-                height: 36px;
-                font-size: 0.9rem;
-            }
         }
         
         table { width: 100%; border-collapse: collapse; }
