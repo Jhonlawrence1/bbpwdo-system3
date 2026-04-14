@@ -143,8 +143,50 @@ require_once '../backend/db.php';
         .detail-card p { font-weight: 500; color: #1e1b4b; }
         
 @media (max-width: 768px) {
-            .sidebar-fixed { width: 70px; }
-        }
+    .sidebar-fixed { width: 70px; }
+
+    .records-table {
+        display: block;
+        border: none;
+    }
+
+    .records-table thead {
+        display: none;
+    }
+
+    .records-table tr {
+        display: flex;
+        flex-direction: column;
+        background: white;
+        margin-bottom: 15px;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .records-table td {
+        border: none;
+        padding: 8px 0;
+    }
+
+    .records-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #6b7280;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .records-table .action-btns {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .records-table .btn-sm {
+        width: 100%;
+        text-align: center;
+    }
+}
         
         .theme-toggle {
             width: 40px; height: 40px; border-radius: 10px; border: none;
@@ -179,6 +221,8 @@ require_once '../backend/db.php';
         body.dark .detail-card p { color: #e2e8f0; }
         body.dark .form-group label { color: #94a3b8; }
         body.dark .form-group input, body.dark .form-group select { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+        body.dark .records-table tr { background: #1e293b; }
+        body.dark .records-table td::before { color: #94a3b8; }
     </style>
 </head>
 <body>

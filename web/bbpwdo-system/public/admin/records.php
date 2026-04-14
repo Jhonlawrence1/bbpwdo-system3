@@ -163,15 +163,21 @@ require_once '../backend/db.php';
                 display: none;
             }
             .records-table .action-btns {
-                flex-direction: row;
-                justify-content: center;
-                gap: 8px;
+                flex-direction: column;
+                gap: 10px;
                 padding-top: 10px;
                 border-top: 1px solid #e5e7eb;
                 margin-top: 8px;
             }
             .records-table .action-btns::before {
                 display: none;
+            }
+            .records-table .btn-view,
+            .records-table .btn-edit,
+            .records-table .btn-delete {
+                width: 100%;
+                text-align: center;
+                padding: 8px;
             }
             .records-table .btn-view,
             .records-table .btn-edit,
