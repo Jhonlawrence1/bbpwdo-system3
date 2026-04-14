@@ -113,6 +113,75 @@ require_once '../backend/db.php';
             }
         }
         
+        @media (max-width: 768px) {
+            .search-filter {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .search-filter input,
+            .search-filter select {
+                width: 100%;
+            }
+            
+            .records-table {
+                display: block;
+                border: none;
+            }
+            .records-table thead {
+                display: none;
+            }
+            .records-table tbody {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            .records-table tr {
+                display: flex;
+                flex-direction: column;
+                background: #f9fafb;
+                margin-bottom: 0;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            }
+            .records-table td {
+                border: none;
+                padding: 6px 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .records-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #6b7280;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+            }
+            .records-table td:empty {
+                display: none;
+            }
+            .records-table .action-btns {
+                flex-direction: row;
+                justify-content: center;
+                gap: 8px;
+                padding-top: 10px;
+                border-top: 1px solid #e5e7eb;
+                margin-top: 8px;
+            }
+            .records-table .action-btns::before {
+                display: none;
+            }
+            .records-table .btn-view,
+            .records-table .btn-edit,
+            .records-table .btn-delete {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+        }
+        
         table { width: 100%; border-collapse: collapse; }
         th {
             padding: 16px; text-align: left; font-weight: 600; color: #6b7280;
