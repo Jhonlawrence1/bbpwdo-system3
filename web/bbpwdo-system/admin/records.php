@@ -140,93 +140,77 @@ require_once '../backend/db.php';
             font-size: 0.75rem; color: #6b7280; text-transform: uppercase;
             margin-bottom: 8px;
         }
-        .detail-card p { font-weight: 500; color: #1e1b4b; }
-        
-@media (max-width: 768px) {
-    .sidebar-fixed { width: 70px; }
-
-    .records-table {
-        display: block;
-        border: none;
-    }
-
-    .records-table thead {
-        display: none;
-    }
-
-    .records-table tr {
-        display: flex;
-        flex-direction: column;
-        background: white;
-        margin-bottom: 15px;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .records-table td {
-        border: none;
-        padding: 8px 0;
-    }
-
-    .records-table td::before {
-        content: attr(data-label);
-        font-weight: 600;
-        color: #6b7280;
-        display: block;
-        margin-bottom: 4px;
-    }
-
-    .records-table .action-btns {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .records-table .btn-sm {
-        width: 100%;
-        text-align: center;
-    }
-}
-        
-        .theme-toggle {
-            width: 40px; height: 40px; border-radius: 10px; border: none;
-            background: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-right: 10px;
+.detail-card p { font-weight: 500; color: #1e1b4b; }
+         
+        .mobile-menu-btn {
+            display: none;
+            position: fixed; top: 15px; left: 15px; z-index: 200;
+            width: 45px; height: 45px; background: #4f46e5; border: none;
+            border-radius: 10px; color: white; font-size: 1.3rem; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
         }
-        .theme-toggle i { font-size: 1.2rem; color: #1e1b4b; }
         
-        body.dark { background: #0f172a; }
-        body.dark .sidebar-fixed { background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); }
-        body.dark .sidebar-logo { color: #f1f5f9; }
-        body.dark .sidebar-menu a { color: #94a3b8; }
-        body.dark .sidebar-menu a:hover, body.dark .sidebar-menu a.active { background: rgba(255,255,255,0.1); color: white; }
-        body.dark .top-header h1 { color: #f1f5f9; }
-        body.dark .records-table { background: #1e293b; }
-        body.dark .data-table th { background: #0f172a; color: #94a3b8; }
-        body.dark .data-table td { border-bottom: 1px solid #334155; color: #e2e8f0; }
-        body.dark .data-table tr:hover { background: #0f172a; }
-        body.dark .filters-bar { background: #1e293b; }
-        body.dark .filters-bar label { color: #94a3b8; }
-        body.dark input, body.dark select { background: #0f172a; border-color: #334155; color: #e2e8f0; }
-        body.dark .badge-success { background: #064e3b; color: #6ee7b7; }
-        body.dark .badge-warning { background: #78350f; color: #fcd34d; }
-        body.dark .badge-male { background: #312e81; color: #a5b4fc; }
-        body.dark .badge-female { background: #831843; color: #f9a8d4; }
-        body.dark .btn-secondary { background: #334155; color: #e2e8f0; }
-        body.dark .btn-primary { background: #4f46e5; }
-        body.dark .modal-content { background: #1e293b; }
-        body.dark .modal-header h2 { color: #f1f5f9; }
-        body.dark .detail-card { background: #0f172a; }
-        body.dark .detail-card h4 { color: #94a3b8; }
-        body.dark .detail-card p { color: #e2e8f0; }
-        body.dark .form-group label { color: #94a3b8; }
-        body.dark .form-group input, body.dark .form-group select { background: #0f172a; border-color: #334155; color: #e2e8f0; }
-        body.dark .records-table tr { background: #1e293b; }
-        body.dark .records-table td::before { color: #94a3b8; }
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+            .sidebar-fixed {
+                position: fixed; left: -260px; top: 0; bottom: 0;
+                width: 260px; z-index: 1000;
+                transition: left 0.3s ease;
+            }
+            .sidebar-fixed.active {
+                left: 0;
+            }
+
+            .records-table {
+                display: block;
+                border: none;
+            }
+
+            .records-table thead {
+                display: none;
+            }
+
+            .records-table tr {
+                display: flex;
+                flex-direction: column;
+                background: white;
+                margin-bottom: 15px;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+
+            .records-table td {
+                border: none;
+                padding: 8px 0;
+            }
+
+            .records-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #6b7280;
+                display: block;
+                margin-bottom: 4px;
+            }
+
+            .records-table .action-btns {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .records-table .btn-sm {
+                width: 100%;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
-    <aside class="sidebar-fixed">
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    
+    <aside class="sidebar-fixed" id="sidebar">
         <div class="sidebar-logo">
             <i class="fa-solid fa-universal-access"></i>
             <span>BBPWDO</span>
@@ -411,6 +395,21 @@ require_once '../backend/db.php';
                 btn.innerHTML = '<i class="fa-solid fa-moon"></i>';
             }
         }
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar-fixed');
+            sidebar.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const sidebar = document.querySelector('.sidebar-fixed');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
+                if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
         
         let currentPage = 1;
         

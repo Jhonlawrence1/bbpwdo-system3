@@ -36,14 +36,9 @@ $physical = $stmt->fetch()['total'];
         body { font-family: 'Inter', sans-serif; background: #f5f7fa; }
         
         .sidebar-fixed {
-            position: fixed; left: -100%; top: 0; bottom: 0;
+            position: fixed; left: 0; top: 0; bottom: 0;
             width: 260px; background: linear-gradient(180deg, #1e1b4b 0%, #312e81 100%);
             padding: 25px 20px; z-index: 100;
-            transition: left 0.3s ease;
-            z-index: 1000;
-        }
-        .sidebar-fixed.active {
-            left: 0;
         }
         .sidebar-logo {
             display: flex; align-items: center; gap: 12px;
@@ -255,7 +250,9 @@ $physical = $stmt->fetch()['total'];
         
         @media (max-width: 768px) {
             .sidebar-fixed {
-                width: 260px;
+                position: fixed; left: -260px; top: 0; bottom: 0;
+                width: 260px; z-index: 1000;
+                transition: left 0.3s ease;
             }
             .sidebar-fixed.active {
                 left: 0;
