@@ -1,8 +1,5 @@
 <?php
 /**
- * Public Backend DB - Uses unified includes/db.php (MySQL deployment-ready)
- * Relative path from public/backend/
+ * Public Backend DB - Uses unified includes/db.php
  */
 require_once __DIR__ . '/../../includes/db.php';
-?>
-
