@@ -23,8 +23,7 @@ try {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )");
     
-    echo "✅ contact_messages table recreated with all columns!";
-    echo "<br>Columns: id, name, email, phone, subject, message, created_at";
+    echo "✅ contact_messages table recreated with subject column!";
     
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
