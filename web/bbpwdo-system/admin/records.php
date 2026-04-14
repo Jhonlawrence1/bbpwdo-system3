@@ -490,7 +490,7 @@ require_once '../backend/db.php';
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            ${r.family_members.map(m => `
+                                            ${(r.family_members || []).map(m => `
                                                 <tr>
                                                     <td>${m.name || '-'}</td>
                                                     <td>${m.age || '-'}</td>
