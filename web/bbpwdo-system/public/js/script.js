@@ -147,12 +147,6 @@ function initPWDForm() {
     pwdForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        const disabilityCheckboxes = document.querySelectorAll('input[name="disabilityType[]"]:checked');
-        if (disabilityCheckboxes.length === 0) {
-            alert('Please select at least one type of disability.');
-            return;
-        }
-        
         const formData = new FormData(this);
         
         const familyMembers = getFamilyMembersData();
@@ -162,8 +156,12 @@ function initPWDForm() {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+        })
         .then(data => {
+            console.log('Response:', data);
             if (data.success) {
                 showModal();
                 pwdForm.reset();
@@ -174,7 +172,7 @@ function initPWDForm() {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('An error occurred. Please try again.');
+            alert('An error occurred. Please try again. ' + error.message);
         });
     });
 }
