@@ -17,6 +17,8 @@ try {
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
         email VARCHAR(100) NOT NULL,
+        phone VARCHAR(50),
+        subject VARCHAR(200),
         message TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )");
@@ -39,12 +41,26 @@ try {
         issued_date DATE,
         expiry_date DATE,
         is_registered VARCHAR(10) DEFAULT 'No',
+        disability_type VARCHAR(255),
+        assistive_device VARCHAR(255),
+        employment_status VARCHAR(50),
+        employment_type VARCHAR(50),
+        employer_name VARCHAR(100),
+        employer_address TEXT,
+        education_elementary VARCHAR(100),
+        education_highschool VARCHAR(100),
+        education_college VARCHAR(100),
+        education_vocational VARCHAR(100),
+        guardian_name VARCHAR(100),
+        guardian_relationship VARCHAR(50),
+        guardian_contact VARCHAR(20),
+        guardian_address TEXT,
+        skills TEXT,
+        trainings TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )");
     
-    echo "✅ Tables recreated with basic columns only!";
-    echo "<br><br>contact_messages: id, name, email, message, created_at";
-    echo "<br>pwd_records: id, last_name, first_name, middle_name, suffix, sex, age, birthdate, blood_type, civil_status, contact_number, address, pwd_id_number, issued_date, expiry_date, is_registered, created_at";
+    echo "✅ Tables recreated with ALL columns!";
     
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
