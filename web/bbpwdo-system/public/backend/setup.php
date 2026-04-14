@@ -15,65 +15,80 @@ try {
     $pdo = new PDO($dsn, $url['user'], $url['pass'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     echo "✅ Connected!<br><br>";
     
-    $tables = [
-        "CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(50) NOT NULL UNIQUE,
-            email VARCHAR(100),
-            password VARCHAR(255) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )",
-        "CREATE TABLE IF NOT EXISTS pwd_records (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            last_name VARCHAR(100) NOT NULL,
-            first_name VARCHAR(100) NOT NULL,
-            middle_name VARCHAR(100),
-            suffix VARCHAR(20),
-            sex VARCHAR(20),
-            age INT,
-            birthdate DATE,
-            blood_type VARCHAR(10),
-            civil_status VARCHAR(30),
-            contact_number VARCHAR(20),
-            address TEXT,
-            pwd_id_number VARCHAR(50),
-            issued_date DATE,
-            expiry_date DATE,
-            disability_type VARCHAR(100),
-            cause_of_disability VARCHAR(100),
-            employer_name VARCHAR(100),
-            employer_address TEXT,
-            employment_status VARCHAR(50),
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            is_registered VARCHAR(10) DEFAULT 'No'
-        )",
-        "CREATE TABLE IF NOT EXISTS homepage_stats (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            stat_key VARCHAR(50) NOT NULL UNIQUE,
-            stat_value INT DEFAULT 0,
-            stat_label VARCHAR(100),
-            stat_icon VARCHAR(50),
-            sort_order INT DEFAULT 0
-        )",
-        "CREATE TABLE IF NOT EXISTS team_cards (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            card_key VARCHAR(50) NOT NULL UNIQUE,
-            name VARCHAR(100),
-            position VARCHAR(100)
-        )",
-        "CREATE TABLE IF NOT EXISTS contact_messages (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(100) NOT NULL,
-            email VARCHAR(100) NOT NULL,
-            message TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )"
-    ];
+    $pdo->exec("DROP TABLE IF EXISTS pwd_records");
+    $pdo->exec("DROP TABLE IF EXISTS contact_messages");
     
-    foreach ($tables as $sql) {
-        $pdo->exec($sql);
-    }
-    echo "✅ All tables created!<br>";
+    $pdo->exec("CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(50) NOT NULL UNIQUE,
+        email VARCHAR(100),
+        password VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )");
+    
+    $pdo->exec("CREATE TABLE IF NOT EXISTS pwd_records (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        last_name VARCHAR(100) NOT NULL,
+        first_name VARCHAR(100) NOT NULL,
+        middle_name VARCHAR(100),
+        suffix VARCHAR(20),
+        sex VARCHAR(20),
+        age INT,
+        birthdate DATE,
+        blood_type VARCHAR(10),
+        civil_status VARCHAR(30),
+        contact_number VARCHAR(20),
+        address TEXT,
+        pwd_id_number VARCHAR(50),
+        issued_date DATE,
+        expiry_date DATE,
+        is_registered VARCHAR(10) DEFAULT 'No',
+        disability_type VARCHAR(255),
+        assistive_device VARCHAR(255),
+        employment_status VARCHAR(50),
+        employment_type VARCHAR(50),
+        employer_name VARCHAR(100),
+        employer_address TEXT,
+        education_elementary VARCHAR(100),
+        education_highschool VARCHAR(100),
+        education_college VARCHAR(100),
+        education_vocational VARCHAR(100),
+        guardian_name VARCHAR(100),
+        guardian_relationship VARCHAR(50),
+        guardian_contact VARCHAR(20),
+        guardian_address TEXT,
+        skills TEXT,
+        trainings TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )");
+    
+    $pdo->exec("CREATE TABLE IF NOT EXISTS homepage_stats (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        stat_key VARCHAR(50) NOT NULL UNIQUE,
+        stat_value INT DEFAULT 0,
+        stat_label VARCHAR(100),
+        stat_icon VARCHAR(50),
+        sort_order INT DEFAULT 0
+    )");
+    
+    $pdo->exec("CREATE TABLE IF NOT EXISTS team_cards (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        card_key VARCHAR(50) NOT NULL UNIQUE,
+        name VARCHAR(100),
+        position VARCHAR(100)
+    )");
+    
+    $pdo->exec("CREATE TABLE IF NOT EXISTS contact_messages (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(100) NOT NULL,
+        phone VARCHAR(50),
+        subject VARCHAR(200),
+        message TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )");
+    
+    echo "✅ All tables created with full columns!<br><br>";
     
     $hash = password_hash('1985', PASSWORD_DEFAULT);
     $pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE password = ?")
@@ -106,6 +121,7 @@ try {
     echo "✅ Team data added<br><br>";
     
     echo "<strong>✅ SETUP COMPLETE!</strong><br><br>";
+    echo "All columns added to pwd_records and contact_messages!<br>";
     echo "Login at: <a href='/admin/login.php'>/admin/login.php</a><br>";
     echo "Email: rcabolbol@gmail.com<br>";
     echo "Password: 1985";
