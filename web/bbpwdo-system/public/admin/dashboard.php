@@ -253,13 +253,14 @@ $physical = $stmt->fetch()['total'];
                 width: 260px;
                 left: -260px;
                 transition: left 0.3s ease;
+                z-index: 1000;
             }
             .sidebar-fixed.active {
                 left: 0;
             }
             .sidebar-logo span, .sidebar-menu a span { display: inline; }
             .sidebar-menu a { justify-content: flex-start; padding: 14px 16px; }
-            .main-content { margin-left: 0; padding: 70px 15px 20px 15px; }
+            .main-content { margin-left: 0; padding: 70px 15px 20px 15px; width: 100%; }
             .stats-grid { grid-template-columns: 1fr; }
             .table-search { flex-direction: column; width: 100%; }
             .table-search input, .table-search select { width: 100%; }
@@ -274,6 +275,8 @@ $physical = $stmt->fetch()['total'];
             .modal-content { width: 95%; padding: 20px; margin: 10px; }
             .charts-section { grid-template-columns: 1fr; }
             .table-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+            .detail-grid { grid-template-columns: 1fr !important; }
+            .viewContent > div { grid-column: 1 / -1 !important; }
         }
         
         @media (max-width: 480px) {
@@ -285,6 +288,8 @@ $physical = $stmt->fetch()['total'];
             .user-avatar { width: 35px; height: 35px; font-size: 0.9rem; }
             .action-btns { flex-direction: column; }
             .action-btns button { width: 28px; height: 28px; font-size: 0.8rem; }
+            .records-table { font-size: 12px; }
+            .records-table th, .records-table td { padding: 8px 4px; }
         }
     </style>
 </head>

@@ -16,52 +16,52 @@ $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
 if ($method === 'GET') {
     try {
-        $search = htmlspecialchars(trim($_GET['search'] ?? ''));
+        $search = trim($_GET['search'] ?? '');
         $page = intval($_GET['page'] ?? 1);
         $limit = intval($_GET['limit'] ?? 10);
         $offset = ($page - 1) * $limit;
         
-        $search = htmlspecialchars(trim($_GET['search'] ?? ''));
-        $status = htmlspecialchars(trim($_GET['status'] ?? ''));
-        $employment = htmlspecialchars(trim($_GET['employment'] ?? ''));
-        $disability = htmlspecialchars(trim($_GET['disability'] ?? ''));
+        $status = trim($_GET['status'] ?? '');
+        $employment = trim($_GET['employment'] ?? '');
+        $disability = trim($_GET['disability'] ?? '');
         $view = intval($_GET['view'] ?? 0);
         
         $where = '';
-        $params = [];
+        $conditions = [];
+        $searchParam = $search ? "%$search%" : null;
         
         if ($search) {
-            $conditions = [];
-            $conditions[] = "last_name LIKE :search";
-            $conditions[] = "first_name LIKE :search";
-            $conditions[] = "middle_name LIKE :search";
-            $conditions[] = "pwd_id_number LIKE :search";
-            $conditions[] = "disability_type LIKE :search";
-            $conditions[] = "address LIKE :search";
-            $where .= "WHERE (" . implode(" OR ", $conditions) . ")";
-            $params[':search'] = "%$search%";
+            $conditions[] = "(last_name LIKE ? OR first_name LIKE ? OR middle_name LIKE ? OR pwd_id_number LIKE ? OR disability_type LIKE ? OR address LIKE ?)";
         }
         
         if ($status) {
-            $where .= $where ? " AND " : "WHERE ";
-            $where .= "is_registered = :status";
-            $params[':status'] = $status;
+            $conditions[] = "is_registered = ?";
         }
         
         if ($employment) {
-            $where .= $where ? " AND " : "WHERE ";
-            $where .= "employment_status = :employment";
-            $params[':employment'] = $employment;
+            $conditions[] = "employment_status = ?";
         }
         
         if ($disability) {
-            $where .= $where ? " AND " : "WHERE ";
-            $where .= "disability_type LIKE :disability";
-            $params[':disability'] = "%$disability%";
+            $conditions[] = "disability_type LIKE ?";
         }
+        
+        if (!empty($conditions)) {
+            $where = "WHERE " . implode(" AND ", $conditions);
+        }
+        
+        $params = [];
+        if ($search) {
+            for ($i = 0; $i < 6; $i++) $params[] = $searchParam;
+        }
+        if ($status) $params[] = $status;
+        if ($employment) $params[] = $employment;
+        if ($disability) $params[] = "%$disability%";
         
         $countSql = "SELECT COUNT(*) as total FROM pwd_records $where";
         $countStmt = $pdo->prepare($countSql);
+        $countStmt->execute($params);
+        $total = $countStmt->fetch()['total'];
         $countStmt->execute($params);
         $total = $countStmt->fetch()['total'];
         
