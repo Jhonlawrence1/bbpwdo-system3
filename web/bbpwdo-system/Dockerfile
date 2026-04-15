@@ -18,4 +18,4 @@ RUN chmod -R 755 /var/www/html/ \
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "php -S 0.0.0.0:8000 -t /var/www/html"]
+CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8000} -t /var/www/html"]
