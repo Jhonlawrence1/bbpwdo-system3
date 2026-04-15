@@ -6,6 +6,6 @@ WORKDIR /var/www/html
 
 COPY . .
 
-EXPOSE 8080
+EXPOSE 8000
 
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "web/bbpwdo-system/public"]
+CMD ["sh", "-c", "php -S 0.0.0.0:8000 -t web/bbpwdo-system/public"]

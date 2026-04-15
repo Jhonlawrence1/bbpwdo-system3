@@ -16,6 +16,6 @@ COPY public/ /var/www/html/
 RUN chmod -R 755 /var/www/html/ \
     && chmod -R 777 /var/www/html/backend/
 
-EXPOSE 80
+EXPOSE 8000
 
-CMD ["apache2-foreground"]
+CMD ["sh", "-c", "php -S 0.0.0.0:8000 -t /var/www/html"]
