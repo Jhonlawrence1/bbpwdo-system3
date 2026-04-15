@@ -31,6 +31,7 @@ function getPdo() {
         ]);
         return $pdo;
     } catch (PDOException $e) {
+        error_log("Database connection failed: " . $e->getMessage());
         return null;
     }
 }
