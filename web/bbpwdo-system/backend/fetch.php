@@ -28,35 +28,41 @@ if ($method === 'GET') {
         
         $where = '';
         $conditions = [];
-        $searchParam = $search ? "%$search%" : null;
+        $params = [];
         
-        if ($search) {
-            $conditions[] = "(last_name LIKE ? OR first_name LIKE ? OR middle_name LIKE ? OR pwd_id_number LIKE ? OR disability_type LIKE ? OR address LIKE ?)";
-        }
-        
-        if ($status) {
-            $conditions[] = "is_registered = ?";
-        }
-        
-        if ($employment) {
-            $conditions[] = "employment_status = ?";
-        }
-        
-        if ($disability) {
-            $conditions[] = "disability_type LIKE ?";
+        if ($view > 0) {
+            $conditions[] = "id = ?";
+            $params[] = $view;
+        } else {
+            $searchParam = $search ? "%$search%" : null;
+            
+            if ($search) {
+                $conditions[] = "(last_name LIKE ? OR first_name LIKE ? OR middle_name LIKE ? OR pwd_id_number LIKE ? OR disability_type LIKE ? OR address LIKE ?)";
+            }
+            
+            if ($status) {
+                $conditions[] = "is_registered = ?";
+            }
+            
+            if ($employment) {
+                $conditions[] = "employment_status = ?";
+            }
+            
+            if ($disability) {
+                $conditions[] = "disability_type LIKE ?";
+            }
+            
+            if ($search) {
+                for ($i = 0; $i < 6; $i++) $params[] = $searchParam;
+            }
+            if ($status) $params[] = $status;
+            if ($employment) $params[] = $employment;
+            if ($disability) $params[] = "%$disability%";
         }
         
         if (!empty($conditions)) {
             $where = "WHERE " . implode(" AND ", $conditions);
         }
-        
-        $params = [];
-        if ($search) {
-            for ($i = 0; $i < 6; $i++) $params[] = $searchParam;
-        }
-        if ($status) $params[] = $status;
-        if ($employment) $params[] = $employment;
-        if ($disability) $params[] = "%$disability%";
         
         $countSql = "SELECT COUNT(*) as total FROM pwd_records $where";
         $countStmt = $pdo->prepare($countSql);
