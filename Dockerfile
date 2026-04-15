@@ -4,6 +4,8 @@ RUN docker-php-ext-install pdo_mysql mysqli
 
 COPY . /var/www/html/
 
+RUN echo "Listen 8000" >> /etc/apache2/ports.conf
+
 EXPOSE 8000
 
-CMD ["sh", "-c", "sed -i 's/Listen 80/Listen 8000/g' /etc/apache2/ports.conf && apache2-foreground"]
+CMD ["apache2-foreground"]
