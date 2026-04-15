@@ -32,6 +32,8 @@ if ($method === 'GET') {
         if ($view > 0) {
             $conditions[] = "id = ?";
             $params[] = $view;
+            $offset = 0;
+            $limit = 1;
         } else {
             $searchParam = $search ? "%$search%" : null;
             

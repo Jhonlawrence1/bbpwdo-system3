@@ -33,6 +33,8 @@ if ($method === 'GET') {
         if ($view > 0) {
             $conditions[] = "id = ?";
             $params[] = $view;
+            $offset = 0;
+            $limit = 1;
         } else {
             $searchParam = $search ? "%$search%" : null;
             
@@ -66,8 +68,6 @@ if ($method === 'GET') {
         
         $countSql = "SELECT COUNT(*) as total FROM pwd_records $where";
         $countStmt = $pdo->prepare($countSql);
-        $countStmt->execute($params);
-        $total = $countStmt->fetch()['total'];
         $countStmt->execute($params);
         $total = $countStmt->fetch()['total'];
         
