@@ -83,13 +83,6 @@ $messages = $stmt->fetchAll();
         }
         .empty-state i { font-size: 3rem; margin-bottom: 20px; }
         
-        @media (max-width: 768px) {
-            .sidebar-fixed { width: 70px; }
-            .sidebar-logo span, .sidebar-menu a span { display: none; }
-            .main-content { margin-left: 70px; }
-            .message-info { grid-template-columns: 1fr; }
-        }
-        
         .theme-toggle {
             width: 40px; height: 40px; border-radius: 10px; border: none;
             background: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
@@ -134,7 +127,7 @@ $messages = $stmt->fetchAll();
             }
             .sidebar-fixed.active { left: 0; }
             .sidebar-logo span, .sidebar-menu a span { display: inline; }
-            .sidebar-menu a { justify-content: flex-start; }
+            .sidebar-menu a { justify-content: flex-start; padding: 14px 16px; }
             .main-content { margin-left: 0; padding: 70px 15px 20px 15px; width: 100%; }
         }
     </style>

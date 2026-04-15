@@ -220,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             .sidebar-fixed.active { left: 0; }
             .sidebar-logo span, .sidebar-menu a span { display: inline; }
-            .sidebar-menu a { justify-content: flex-start; }
+            .sidebar-menu a { justify-content: flex-start; padding: 14px 16px; }
             .main-content { margin-left: 0; padding: 70px 15px 20px 15px; width: 100%; }
             .settings-grid { grid-template-columns: 1fr; }
             .form-grid { grid-template-columns: 1fr; }

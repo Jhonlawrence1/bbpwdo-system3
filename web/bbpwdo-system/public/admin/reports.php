@@ -118,14 +118,6 @@ require_once '../backend/db.php';
             .chart-grid { grid-template-columns: 1fr; }
             .export-options { grid-template-columns: repeat(2, 1fr); }
         }
-        @media (max-width: 768px) {
-            .sidebar-fixed { width: 70px; }
-            .sidebar-logo span, .sidebar-menu a span { display: none; }
-            .main-content { margin-left: 70px; }
-            .summary-grid { grid-template-columns: 1fr; }
-            .export-options { grid-template-columns: 1fr; }
-        }
-        
         .theme-toggle {
             width: 40px; height: 40px; border-radius: 10px; border: none;
             background: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
@@ -172,7 +164,7 @@ require_once '../backend/db.php';
             }
             .sidebar-fixed.active { left: 0; }
             .sidebar-logo span, .sidebar-menu a span { display: inline; }
-            .sidebar-menu a { justify-content: flex-start; }
+            .sidebar-menu a { justify-content: flex-start; padding: 14px 16px; }
             .main-content { margin-left: 0; padding: 70px 15px 20px 15px; width: 100%; }
             .summary-grid { grid-template-columns: 1fr; }
             .export-options { grid-template-columns: 1fr; }

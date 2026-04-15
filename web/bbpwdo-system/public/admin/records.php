@@ -113,14 +113,13 @@ require_once '../backend/db.php';
             }
         }
         
-        .table-scroll table {
-        th {
+        .table-scroll table th {
             padding: 16px; text-align: left; font-weight: 600; color: #6b7280;
             background: #f9fafb; font-size: 0.8rem; text-transform: uppercase;
             border-bottom: 2px solid #e5e7eb;
         }
-        td { padding: 16px; border-bottom: 1px solid #f3f4f6; }
-        tr:hover { background: #f9fafb; }
+        .table-scroll table td { padding: 16px; border-bottom: 1px solid #f3f4f6; }
+        .table-scroll table tr:hover { background: #f9fafb; }
         
         .badge {
             padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500;
@@ -172,10 +171,6 @@ require_once '../backend/db.php';
             margin-bottom: 8px;
         }
         .detail-card p { font-weight: 500; color: #1e1b4b; }
-        
-@media (max-width: 768px) {
-            .sidebar-fixed { width: 70px; }
-        }
         
         .theme-toggle {
             width: 40px; height: 40px; border-radius: 10px; border: none;
@@ -234,6 +229,8 @@ require_once '../backend/db.php';
                 transition: left 0.3s ease;
             }
             .sidebar-fixed.active { left: 0; }
+            .sidebar-logo span, .sidebar-menu a span { display: inline; }
+            .sidebar-menu a { justify-content: flex-start; padding: 14px 16px; }
             .main-content { margin-left: 0; padding: 70px 15px 20px 15px; width: 100%; }
             
             .search-filter {
