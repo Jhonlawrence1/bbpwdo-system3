@@ -1,7 +1,10 @@
 .git
-.gitignore
 .vscode
 node_modules
+*.md
+Dockerfile
+railway.json
 package.json
 package-lock.json
-*.md
+server.js
+render.yaml
