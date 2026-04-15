@@ -10,11 +10,11 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo_mysql mysqli gd zip
 
-COPY web/bbpwdo-system/public/ /var/www/html/
+COPY web/bbpwdo-system/ /var/www/html/
 
 RUN chmod -R 755 /var/www/html/ \
     && chmod -R 777 /var/www/html/backend/ 2>/dev/null || true
 
-EXPOSE 8000
+EXPOSE 80
 
 CMD ["apache2-foreground"]
