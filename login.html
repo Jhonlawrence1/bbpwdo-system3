@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PWD Center - Login</title>
+  <link rel="stylesheet" href="loginform.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="473272238_122103207818723961_8786608800743349044_n.jpg">
+</head>
+<body>
+  <div class="login-form">
+    <h1></h1>
+    <div class="container">
+      <div class="main">
+        <div class="content">
+          <h2>Login</h2>
+          <form id="loginForm">
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <button class="btn login-btn" type="submit">Login</button>
+            <button class="btn forget-btn" type="button" onclick="window.location.href='signup.html'">Sign Up</button>
+          </form>
+          <p class="account">Don't have an account? <a href="signup.html">Sign up</a></p>
+          <div class="back">
+            <a href="index.html">Back to home</a>
+          </div>
+        </div>
+        <div class="form-img">
+          <img src="7933.jpg" alt="Health Center">
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    const socket = io();
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if (data.success) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('username', data.username);
+        localStorage.setItem('role', data.role);
+        if (data.role === 'admin') {
+          window.location.href = 'admindashboard.html';
+        } else {
+          window.location.href = 'index.html';
+        }
+      } else {
+        alert(data.message || 'Login failed');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Baranagay Bulua PWD</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" type="image/png" href="473272238_122103207818723961_8786608800743349044_n.jpg">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-logo">
+     <img src="473272238_122103207818723961_8786608800743349044_n.jpg" alt="PWD Center Logo">
+    <span class="nav-logo-text">BULUA ORGANIZATION (BBPWDO) </span>
+    </div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About us</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#appointment">Register</a></li>
+      <li><a href="#contact">Contact us</a></li>
+      <li><a href="login.html">Admin</a></li>
+    </ul>
+  </nav>
+
+  <section id="home">
+    <div class="hero">
+    <img src="473591227_122103208562723961_463016926726078178_n.jpg" alt="Hero Image">
+      <div class="hero-overlay">
+        <h1>Empowering Every Individual</h1>
+        <p>Dedicated to Support and Inclusion</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="about-section">
+      <div class="about-text">
+        <h2 class="section-title">About</h2>
+        <hr class="section-divider" />
+        <p>
+          The Bulua Organization (BBPWDDO) is dedicated to providing support, resources, and services
+          to all persons with disabilities in our community. We believe that
+          every individual deserves equal opportunities and a fulfilling life.
+        </p>
+        <p>
+          Our team of dedicated professionals works tirelessly to ensure
+          that every PWD receives the assistance they need. From registration
+          to employment programs, we are here for you.
+        </p>
+        <p>
+          We are committed to promoting inclusion and empowerment in the community
+          through education, advocacy, and responsive support services.
+        </p>
+        <hr class="section-divider" style="margin-top:20px;" />
+      </div>
+      <div class="about-image">
+        <img src="7933.jpg" alt="Image of PWD Center Building">
+      </div>
+    </div>
+  </section>
+
+ <section id="services">
+  <div class="services-section">
+    <h2 class="section-title">Our Services</h2>
+    <hr class="section-divider" />
+    <p class="services-subtitle">Empowering Persons With Disabilities</p>
+    <div class="services-grid">
+      
+      <div class="service-card">
+        <div class="service-card-header">
+          <span class="service-icon">📋</span>
+          <h3>PWD Registration</h3>
+        </div>
+        <p class="service-description">Register and get your PWD ID card. Verification and processing of disability benefits.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-card-header">
+          <span class="service-icon">💊</span>
+          <h3>Medical Assistance</h3>
+        </div>
+        <p class="service-description">Free medicines, assistive devices, and healthcare support for PWDs.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-card-header">
+          <span class="service-icon">♿</span>
+          <h3>Assistive Devices</h3>
+        </div>
+        <p class="service-description">Wheelchairs, hearing aids, prosthetics, and other mobility aids.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-card-header">
+          <span class="service-icon">🎓</span>
+          <h3>Educational Support</h3>
+        </div>
+        <p class="service-description">Scholarships, training programs, and educational assistance for PWDs.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-card-header">
+          <span class="service-icon">💼</span>
+          <h3>Employment Programs</h3>
+        </div>
+        <p class="service-description">Job placement, vocational training, and livelihood programs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+ <section id="appointment">
+    <div class="appointment-section">
+      <h2>PWD Registration</h2>
+      <p class="appointment-subtitle">Fill out the form below to register as a Person with Disability</p>
+      <div class="appointment-form-wrapper">
+        
+        <div class="form-top">
+          <h3>Personal Information</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Last Name*</label>
+              <input type="text" id="lastName" placeholder="Enter last name" required />
+            </div>
+            <div class="form-group">
+              <label>First Name*</label>
+              <input type="text" id="firstName" placeholder="Enter first name" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Middle Name</label>
+              <input type="text" id="middleName" placeholder="Enter middle name" />
+            </div>
+            <div class="form-group">
+              <label>Suffix</label>
+              <input type="text" id="suffix" placeholder="e.g., Jr., Sr., III" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date of Birth*</label>
+              <input type="date" id="dob" required />
+            </div>
+            <div class="form-group">
+              <label>Blood Type</label>
+              <input type="text" id="bloodType" placeholder="Enter blood type" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Sex*</label>
+              <select id="sex" required>
+                <option value="" disabled selected>Select Sex</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="LGBTQIA+">LGBTQIA+</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Civil Status*</label>
+              <select id="civilStatus" required>
+                <option value="" disabled selected>Select Status</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+                <option value="Widowed">Widowed</option>
+                <option value="Separated">Separated</option>
+                <option value="Cohabiting">Cohabiting</option>
+              </select>
+            </div>
+          </div>
+          
+          <h3>Membership & Assistive Device</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Membership</label>
+              <select id="membership">
+                <option value="" disabled selected>Select Membership</option>
+                <option value="4Ps">4Ps</option>
+                <option value="SP">SP</option>
+                <option value="PAIL">PAIL</option>
+                <option value="Others">Others</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Assistive Device (Specify)</label>
+              <input type="text" id="assistiveDevice" placeholder="Enter assistive device if any" />
+            </div>
+          </div>
+          
+          <h3>Residence Address</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>House Number/Street</label>
+              <input type="text" id="houseNumber" placeholder="Enter house number/street" />
+            </div>
+            <div class="form-group">
+              <label>Barangay*</label>
+              <input type="text" id="barangay" placeholder="Enter barangay" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Municipality*</label>
+              <input type="text" id="municipality" placeholder="Enter municipality" required />
+            </div>
+            <div class="form-group">
+              <label>Province*</label>
+              <input type="text" id="province" placeholder="Enter province" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Region*</label>
+            <input type="text" id="region" placeholder="Enter region" required />
+          </div>
+        </div>
+        
+        <div class="form-bottom">
+          <h3>Type of Disability*</h3>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="disability" value="Deaf/Hard of Hearing"> Deaf or Hard of Hearing</label>
+            <label><input type="checkbox" name="disability" value="Psychosocial"> Psychosocial Disability</label>
+            <label><input type="checkbox" name="disability" value="Intellectual"> Intellectual Disability</label>
+            <label><input type="checkbox" name="disability" value="Speech/Language"> Speech and Language Impairment</label>
+            <label><input type="checkbox" name="disability" value="Learning"> Learning Disability</label>
+            <label><input type="checkbox" name="disability" value="Visual"> Visual Disability</label>
+            <label><input type="checkbox" name="disability" value="Mental"> Mental Disability</label>
+            <label><input type="checkbox" name="disability" value="Cancer"> Cancer (RA11215)</label>
+            <label><input type="checkbox" name="disability" value="Orthopedic"> Orthopedic (Musculoskeletal) Disability</label>
+            <label><input type="checkbox" name="disability" value="Autism"> Autism</label>
+            <label><input type="checkbox" name="disability" value="Down Syndrome"> Down Syndrome</label>
+            <label><input type="checkbox" name="disability" value="Cerebral Palsy"> Cerebral Palsy</label>
+            <label><input type="checkbox" name="disability" value="Epilepsy"> Epilepsy</label>
+            <label><input type="checkbox" name="disability" value="Brain Injury"> Brain Injury</label>
+            <label><input type="checkbox" name="disability" value="Stroke"> Stroke (Paralyzed)</label>
+            <label><input type="checkbox" name="disability" value="Polio"> Polio</label>
+            <label><input type="checkbox" name="disability" value="Chronic Illness"> Chronic Illness (Specify)</label>
+            <label><input type="checkbox" name="disability" value="Multiple Impairment"> Multiple Impairment</label>
+            <label><input type="checkbox" name="disability" value="Totally Blind"> Totally Blind</label>
+            <label><input type="checkbox" name="disability" value="Low Vision"> Low Vision</label>
+            <label><input type="checkbox" name="disability" value="Others"> Others (Specify)</label>
+          </div>
+          <div class="form-group">
+            <label>If Others, please specify:</label>
+            <input type="text" id="otherDisability" placeholder="Enter other disability" />
+          </div>
+          
+          <div class="form-group">
+            <label>Cause of Disability*</label>
+            <select id="causeOfDisability" required>
+              <option value="" disabled selected>Select Cause</option>
+              <option value="Congenital/Inborn">Congenital/Inborn</option>
+              <option value="Illness">Illness</option>
+              <option value="Injury">Injury</option>
+              <option value="Aging">Aging</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Specify Cause (if Illness/Injury/Other)</label>
+            <input type="text" id="causeDetails" placeholder="e.g., Diabetes, Car accident, Stroke, etc." />
+          </div>
+          
+          <h3>Educational & Employment Information</h3>
+          <div class="form-group">
+            <label>Educational Attainment*</label>
+            <select id="education" required>
+              <option value="" disabled selected>Select Level</option>
+              <option value="No Formal Education">No Formal Education</option>
+              <option value="Elementary">Elementary</option>
+              <option value="High School">High School</option>
+              <option value="College">College</option>
+              <option value="Vocational">Vocational</option>
+              <option value="Post Graduate">Post Graduate</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Employment Status*</label>
+            <select id="employmentStatus" required>
+              <option value="" disabled selected>Select Status</option>
+              <option value="Employed">Employed</option>
+              <option value="Unemployed">Unemployed</option>
+              <option value="Displaced Worker">Displaced Worker</option>
+              <option value="Resigned">Resigned</option>
+              <option value="Retired">Retired</option>
+              <option value="OFW">OFW (Overseas Filipino Worker)</option>
+            </select>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nature of Employer</label>
+              <select id="employerNature">
+                <option value="" disabled selected>Select</option>
+                <option value="Private">Private</option>
+                <option value="Government">Government</option>
+                <option value="None">None</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Type of Employment</label>
+              <select id="employmentType">
+                <option value="" disabled selected>Select</option>
+                <option value="Permanent">Permanent</option>
+                <option value="Contractual">Contractual</option>
+                <option value="Self-employed">Self-employed</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Occupation</label>
+            <input type="text" id="occupation" placeholder="Enter your occupation" />
+          </div>
+          
+          <h3>Skills</h3>
+          <div class="form-group">
+            <input type="text" id="skill1" placeholder="Skill 1" />
+            <input type="text" id="skill2" placeholder="Skill 2" />
+            <input type="text" id="skill3" placeholder="Skill 3" />
+          </div>
+          
+          <h3>Trainings</h3>
+          <div class="form-group">
+            <input type="text" id="training1" placeholder="Training 1" />
+            <input type="text" id="training2" placeholder="Training 2" />
+            <input type="text" id="training3" placeholder="Training 3" />
+          </div>
+          
+          <h3>Family Background</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Father's Name</label>
+              <input type="text" id="fatherName" placeholder="Enter father's name" />
+            </div>
+            <div class="form-group">
+              <label>Mother's Name</label>
+              <input type="text" id="motherName" placeholder="Enter mother's name" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Guardian's Name</label>
+            <input type="text" id="guardianName" placeholder="Enter guardian's name (if applicable)" />
+          </div>
+          
+          <h3>Accomplished By</h3>
+          <div class="form-group">
+            <label>Name of Person Filling Out Form*</label>
+            <input type="text" id="accomplishedBy" placeholder="Enter your name" required />
+          </div>
+          
+          <button type="button" class="submit-btn" onclick="submitRegistration()">Submit Registration</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+   <section class="contact-section " id="contact">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="section-content">
+                <ul class="contact-info-list">
+                    <li class="contact-info">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <p>Barangay, Bulua BCPC OFFICE</p>
+                    </li>
+                    <li class="contact-info">
+                        <i class="fa-regular fa-envelope"></i>
+                        <p>rcabolbol@gmail.com</p>
+                    </li>
+                    <li class="contact-info">
+                        <i class="fa-solid fa-phone"></i>
+                        <p>(+63) 09700-486-3491</p>
+                    </li>
+                   
+                    <li class="contact-info">
+                        <i class="fa-solid fa-clock"></i>
+                        <p>Monday - Friday: 8:00 AM - 5:00 PM</p>
+                    </li>
+                    <li class="contact-info">
+                        <i class="fa-solid fa-clock"></i>
+                        <p>Saturday - Sunday: Closed</p>
+                    </li>
+                </ul>
+                
+                <form id="contactForm" class="contact-form">
+                    <input type="text" id="contactName" placeholder="Your name" class="form-input" required>
+                    <input type="email" id="contactEmail" placeholder="Your email" class="form-input" required>
+                    <textarea id="contactMessage" placeholder="Your message" class="form-input" required></textarea>
+                    <button type="submit" class="submit-button">Submit</button>
+                </form>
+            </div>
+        </section>
+
+    <footer>
+    &copy; 2026 PWD Center. All rights reserved.
+  </footer>
+  
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="homepage.js"></script>
+  <script>
+    const socket = io();
+    const username = localStorage.getItem('username');
+    if (username) {
+      document.getElementById('navLinks').innerHTML += '<li><a href="#" onclick="toggleChat()"><i class="fas fa-comments"></i> Chat</a></li>';
+      document.getElementById('navLinks').innerHTML += '<li><a href="#" onclick="logout()">Logout (' + username + ')</a></li>';
+      document.getElementById('chatWidget').style.display = 'block';
+    }
+    
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+    
+    function toggleChat() {
+      const chat = document.getElementById('chatWidget');
+      chat.style.display = chat.style.display === 'none' ? 'block' : 'none';
+    }
+    
+    function sendChat() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text || !username) return;
+      socket.emit('chat', { user: username, text });
+      input.value = '';
+    }
+    
+    socket.on('chat', (msg) => {
+      const list = document.getElementById('chatList');
+      if (list) {
+        list.innerHTML += '<div class="chat-msg"><strong>' + msg.user + ':</strong> ' + msg.text + '</div>';
+        const chat = document.getElementById('chatWidget');
+        chat.scrollTop = chat.scrollHeight;
+      }
+    });
+    
+    async function submitRegistration() {
+      const checkboxes = document.querySelectorAll('input[name="disability"]:checked');
+      const disabilityTypes = Array.from(checkboxes).map(cb => cb.value);
+      
+      // Collect skills
+      const skills = [];
+      if (document.getElementById('skill1')?.value) skills.push(document.getElementById('skill1').value);
+      if (document.getElementById('skill2')?.value) skills.push(document.getElementById('skill2').value);
+      if (document.getElementById('skill3')?.value) skills.push(document.getElementById('skill3').value);
+      
+      // Collect trainings
+      const trainings = [];
+      if (document.getElementById('training1')?.value) trainings.push(document.getElementById('training1').value);
+      if (document.getElementById('training2')?.value) trainings.push(document.getElementById('training2').value);
+      if (document.getElementById('training3')?.value) trainings.push(document.getElementById('training3').value);
+      
+      const data = {
+        lastName: document.getElementById('lastName').value,
+        firstName: document.getElementById('firstName').value,
+        middleName: document.getElementById('middleName')?.value || '',
+        suffix: document.getElementById('suffix')?.value || '',
+        dob: document.getElementById('dob')?.value || '',
+        bloodType: document.getElementById('bloodType')?.value || '',
+        sex: document.getElementById('sex')?.value || '',
+        civilStatus: document.getElementById('civilStatus')?.value || '',
+        membership: document.getElementById('membership')?.value || '',
+        assistiveDevice: document.getElementById('assistiveDevice')?.value || '',
+        houseNumber: document.getElementById('houseNumber')?.value || '',
+        barangay: document.getElementById('barangay')?.value || '',
+        municipality: document.getElementById('municipality')?.value || '',
+        province: document.getElementById('province')?.value || '',
+        region: document.getElementById('region')?.value || '',
+        disabilityType: disabilityTypes.join(', '),
+        cause: document.getElementById('causeOfDisability')?.value || '',
+        causeDetails: document.getElementById('causeDetails')?.value || '',
+        otherDisability: document.getElementById('otherDisability')?.value || '',
+        education: document.getElementById('education')?.value || '',
+        employmentType: document.getElementById('employmentStatus')?.value || '',
+        employerNature: document.getElementById('employerNature')?.value || '',
+        occupation: document.getElementById('occupation')?.value || '',
+        skills: skills.join(', '),
+        trainings: trainings.join(', '),
+        fatherName: document.getElementById('fatherName')?.value || '',
+        motherName: document.getElementById('motherName')?.value || '',
+        guardianName: document.getElementById('guardianName')?.value || '',
+        accomplishedBy: document.getElementById('accomplishedBy')?.value || '',
+        status: 'Pending'
+      };
+      
+      console.log('Submitting registration:', JSON.stringify(data, null, 2));
+      
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      console.log('Response:', result);
+      if (result.success) {
+        alert('Registration submitted successfully! Reference: ' + result.reference + '\nAdmin will review and contact you.');
+        window.location.href = '#home';
+      } else {
+        alert('Registration failed. Please try again.');
+      }
+    }
+    
+    document.getElementById('contactForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('contactName').value;
+      const email = document.getElementById('contactEmail').value;
+      const message = document.getElementById('contactMessage').value;
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message, type: 'contact' })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('Message sent to admin!');
+        document.getElementById('contactForm').reset();
+      }
+    });
+  </script>
+  <div id="chatWidget" class="chat-widget">
+    <div class="chat-header" onclick="toggleChat()">Live Chat <span style="float:right">✕</span></div>
+    <div id="chatList" class="chat-body"></div>
+    <div class="chat-footer">
+      <input type="text" id="chatInput" placeholder="Message..." onkeypress="if(event.key==='Enter')sendChat()">
+      <button onclick="sendChat()">➤</button>
+    </div>
+  </div>
+</body>
+</html>

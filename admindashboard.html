@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - PWD Center</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" type="image/png" href="473272238_122103207818723961_8786608800743349044_n.jpg">
+  <link rel="stylesheet" href="admindashboard.css">
+</head>
+<body>
+  <!-- Hidden Checkboxes for Navigation -->
+  <input type="radio" id="dashboard-nav" name="nav-section" class="nav-radio" checked>
+  <input type="radio" id="appointments-nav" name="nav-section" class="nav-radio">
+  <input type="radio" id="patients-nav" name="nav-section" class="nav-radio">
+  <input type="radio" id="services-nav" name="nav-section" class="nav-radio">
+  <input type="radio" id="staff-nav" name="nav-section" class="nav-radio">
+  <input type="radio" id="reports-nav" name="nav-section" class="nav-radio">
+  <input type="radio" id="settings-nav" name="nav-section" class="nav-radio">
+  <input type="radio" id="activity-nav" name="nav-section" class="nav-radio">
+
+  <!-- Mobile Menu Toggle -->
+  <div class="mobile-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </div>
+
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-close" onclick="toggleSidebar()">
+        <i class="fas fa-times"></i>
+      </div>
+      <div class="sidebar-header">
+        <div class="nav-logo">
+          <img src="473272238_122103207818723961_8786608800743349044_n.jpg" alt="Logo">
+          <span class="nav-logo-text">PWD CENTER</span>
+        </div>
+      </div>
+      
+      <ul class="sidebar-menu">
+        <li>
+          <label for="dashboard-nav" class="nav-link active">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+          </label>
+        </li>
+        <li>
+          <label for="appointments-nav" class="nav-link">
+            <i class="fas fa-id-card"></i> Registrations
+          </label>
+        </li>
+        <li>
+          <label for="patients-nav" class="nav-link">
+            <i class="fas fa-users"></i> PWD Directory
+          </label>
+        </li>
+        <li>
+          <label for="services-nav" class="nav-link">
+            <i class="fas fa-hand-holding-heart"></i> Services
+          </label>
+        </li>
+        <li>
+          <label for="staff-nav" class="nav-link">
+            <i class="fas fa-user-tie"></i> Staff
+          </label>
+        </li>
+        <li>
+          <label for="reports-nav" class="nav-link">
+            <i class="fas fa-chart-bar"></i> Reports
+          </label>
+        </li>
+        <li>
+          <label for="activity-nav" class="nav-link">
+            <i class="fas fa-history"></i> Activity Log
+          </label>
+        </li>
+        <li>
+          <label for="settings-nav" class="nav-link">
+            <i class="fas fa-cog"></i> Settings
+          </label>
+        </li>
+        <li><a href="index.html" class="nav-link logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Dashboard Section -->
+      <section id="dashboard" class="content-section">
+        <!-- Header -->
+        <div class="header">
+          <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+          <div class="user-profile">
+            <div class="user-avatar">AD</div>
+            <div>
+              <div class="user-name">Admin</div>
+              <div class="user-email">admin@pwdcenter.gov.ph</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon patients">
+              <i class="fas fa-id-card"></i>
+            </div>
+            <div class="stat-number" id="totalPWDs">0</div>
+            <div class="stat-label">Total Registered PWDs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon appointments">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="stat-number" id="newRegistrations">0</div>
+            <div class="stat-label">New Registrations</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon services">
+              <i class="fas fa-wheelchair"></i>
+            </div>
+            <div class="stat-number" id="devicesIssued">0</div>
+            <div class="stat-label">Assistive Devices Issued</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon revenue">
+              <i class="fas fa-hand-holding-heart"></i>
+            </div>
+            <div class="stat-number" id="servicesProvided">0</div>
+            <div class="stat-label">Services Provided</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <a href="#appointments" class="action-card" onclick="document.getElementById('appointments-nav').checked = true">
+            <div class="action-icon">
+              <i class="fas fa-user-plus"></i>
+            </div>
+            <h3>New Registration</h3>
+            <p>Register new PWD</p>
+          </a>
+          <a href="#appointments" class="action-card" onclick="document.getElementById('appointments-nav').checked = true">
+            <div class="action-icon">
+              <i class="fas fa-id-card"></i>
+            </div>
+            <h3>View All PWDs</h3>
+            <p>View all registered PWDs</p>
+          </a>
+          <a href="#reports" class="action-card" onclick="document.getElementById('reports-nav').checked = true">
+            <div class="action-icon">
+              <i class="fas fa-file-export"></i>
+            </div>
+            <h3>Generate Report</h3>
+            <p>Create monthly reports</p>
+          </a>
+          <a href="#settings" class="action-card" onclick="document.getElementById('settings-nav').checked = true">
+            <div class="action-icon">
+              <i class="fas fa-users-cog"></i>
+            </div>
+            <h3>Manage Staff</h3>
+            <p>Update staff information</p>
+          </a>
+        </div>
+      </section>
+
+      <!-- PWD Registrations Section -->
+      <section id="appointments" class="content-section">
+        <div class="header">
+          <h1><i class="fas fa-id-card"></i> PWD Registrations</h1>
+          <div class="page-actions">
+            <button class="btn-primary" onclick="generateReport()"><i class="fas fa-file-pdf"></i> Generate Report</button>
+          </div>
+        </div>
+        
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search by name..." onkeyup="searchPWD()">
+          <select id="filterStatus" onchange="filterPWD()">
+            <option value="">All Status</option>
+            <option value="Verified">Verified</option>
+            <option value="Pending">Pending</option>
+          </select>
+        </div>
+        
+        <div class="table-container">
+          <div class="table-header">
+            <h3>All PWD Registrations</h3>
+            <span id="totalCount">Loading...</span>
+          </div>
+          <table id="pwdTable">
+            <thead>
+              <tr>
+                <th>Reference</th>
+                <th>Name</th>
+                <th>Disability Type</th>
+                <th>Date Registered</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="registrationsTable">
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PWD Directory Section -->
+      <section id="patients" class="content-section">
+        <div class="header">
+          <h1><i class="fas fa-users"></i> PWD Directory</h1>
+          <div class="page-actions">
+            <button class="btn-primary" onclick="showAddPWDModal()"><i class="fas fa-user-plus"></i> Add PWD</button>
+          </div>
+        </div>
+        
+        <div class="search-bar">
+          <input type="text" id="searchDirectory" placeholder="Search by name..." onkeyup="searchDirectory()">
+          <select id="filterDisability" onchange="filterDirectory()">
+            <option value="">All Disability Types</option>
+            <option value="Physical Disability">Physical Disability</option>
+            <option value="Visual Impairment">Visual Impairment</option>
+            <option value="Hearing Impairment">Hearing Impairment</option>
+            <option value="Intellectual Disability">Intellectual Disability</option>
+            <option value="Mental Health Condition">Mental Health Condition</option>
+            <option value="Multiple Disability">Multiple Disability</option>
+          </select>
+        </div>
+        
+        <div class="table-container">
+          <div class="table-header">
+            <h3>Registered PWDs</h3>
+            <span id="directoryCount">Loading...</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Reference</th>
+                <th>Name</th>
+                <th>Disability Type</th>
+                <th>Address</th>
+                <th>Date Registered</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="directoryTable">
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Add PWD Modal -->
+      <div id="addPWDModal" class="modal">
+        <div class="modal-content">
+          <span class="modal-close" onclick="closeAddPWDModal()">&times;</span>
+          <h2>Add New PWD</h2>
+          <form id="addPWDForm" onsubmit="submitNewPWD(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>First Name *</label>
+                <input type="text" name="firstName" required>
+              </div>
+              <div class="form-group">
+                <label>Middle Name</label>
+                <input type="text" name="middleName">
+              </div>
+              <div class="form-group">
+                <label>Last Name *</label>
+                <input type="text" name="lastName" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Suffix</label>
+                <select name="suffix">
+                  <option value="">N/A</option>
+                  <option value="Sr">Sr</option>
+                  <option value="Jr">Jr</option>
+                  <option value="III">III</option>
+                  <option value="IV">IV</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Date of Birth *</label>
+                <input type="date" name="dob" required>
+              </div>
+              <div class="form-group">
+                <label>Sex *</label>
+                <select name="sex" required>
+                  <option value="">Select</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Blood Type</label>
+                <select name="bloodType">
+                  <option value="">Select</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="AB">AB</option>
+                  <option value="O">O</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Civil Status</label>
+                <select name="civilStatus">
+                  <option value="Single">Single</option>
+                  <option value="Married">Married</option>
+                  <option value="Widowed">Widowed</option>
+                  <option value="Separated">Separated</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Region</label>
+                <input type="text" name="region" value="X">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Province</label>
+                <input type="text" name="province">
+              </div>
+              <div class="form-group">
+                <label>Municipality</label>
+                <input type="text" name="municipality">
+              </div>
+              <div class="form-group">
+                <label>Barangay</label>
+                <input type="text" name="barangay">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>House Number/Street</label>
+                <input type="text" name="houseNumber">
+              </div>
+              <div class="form-group">
+                <label>Disability Type *</label>
+                <select name="disabilityType" required>
+                  <option value="">Select</option>
+                  <option value="Physical Disability">Physical Disability</option>
+                  <option value="Visual Impairment">Visual Impairment</option>
+                  <option value="Hearing Impairment">Hearing Impairment</option>
+                  <option value="Intellectual Disability">Intellectual Disability</option>
+                  <option value="Mental Health Condition">Mental Health Condition</option>
+                  <option value="Multiple Disability">Multiple Disability</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn-primary" style="margin-top: 15px;">Submit</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- View PWD Modal -->
+      <div id="viewPWDModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+          <span class="modal-close" onclick="closeViewPWDModal()">&times;</span>
+          <h2>PWD Details</h2>
+          <div id="pwdDetailsContent"></div>
+        </div>
+      </div>
+
+      <!-- Services Section -->
+      <section id="services" class="content-section">
+        <div class="header">
+          <h1><i class="fas fa-clinic-medical"></i> Services</h1>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card full-width">
+            <h3>Available Services</h3>
+            <div class="service-list">
+              <div class="service-item">
+                <i class="fas fa-id-card"></i>
+                <span>PWD Registration</span>
+                <small>ID card processing</small>
+              </div>
+              <div class="service-item">
+                <i class="fas fa-pills"></i>
+                <span>Medical Assistance</span>
+                <small>Free medicines</small>
+              </div>
+              <div class="service-item">
+                <i class="fas fa-wheelchair"></i>
+                <span>Assistive Devices</span>
+                <small>Wheelchairs & aids</small>
+              </div>
+              <div class="service-item">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Educational Support</span>
+                <small>Scholarships</small>
+              </div>
+              <div class="service-item">
+                <i class="fas fa-briefcase"></i>
+                <span>Employment Programs</span>
+                <small>Job placement</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Staff Section -->
+      <section id="staff" class="content-section">
+        <div class="header">
+          <h1><i class="fas fa-user-tie"></i> Staff</h1>
+          <div class="page-actions">
+            <button type="button" class="btn-primary" onclick="document.getElementById('addStaffModal').classList.add('show')"><i class="fas fa-user-plus"></i> Add Staff</button>
+          </div>
+        </div>
+        
+        <div class="search-bar">
+          <input type="text" id="searchStaff" placeholder="Search staff..." onkeyup="searchStaff()">
+        </div>
+        
+        <div class="table-container">
+          <div class="table-header">
+            <h3>Staff Directory</h3>
+            <span id="staffCount">Loading...</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="staffTable">
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Add Staff Modal -->
+      <div id="addStaffModal" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+          <span class="modal-close" onclick="closeAddStaffModal()">&times;</span>
+          <h2>Add New Staff</h2>
+          <form id="addStaffForm" onsubmit="submitStaff(event)">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" name="name" required>
+            </div>
+            <div class="form-group">
+              <label>Role *</label>
+              <select name="role" required>
+                <option value="">Select Role</option>
+                <option value="PWD Coordinator">PWD Coordinator</option>
+                <option value="Social Worker">Social Worker</option>
+                <option value="Medical Officer">Medical Officer</option>
+                <option value="Nurse">Nurse</option>
+                <option value="Admin Staff">Admin Staff</option>
+                <option value="Encoder">Encoder</option>
+                <option value="Driver">Driver</option>
+                <option value="Security">Security</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Contact Number *</label>
+              <input type="text" name="contact" required placeholder="0912-345-6789">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" name="email">
+            </div>
+            <div class="form-group">
+              <label>Address</label>
+              <input type="text" name="address">
+            </div>
+            <button type="submit" class="btn-primary" style="margin-top: 15px;">Add Staff</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Edit Staff Modal -->
+      <div id="editStaffModal" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+          <span class="modal-close" onclick="closeEditStaffModal()">&times;</span>
+          <h2>Edit Staff</h2>
+          <form id="editStaffForm" onsubmit="updateStaff(event)">
+            <input type="hidden" name="id" id="editStaffId">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" name="name" id="editStaffName" required>
+            </div>
+            <div class="form-group">
+              <label>Role *</label>
+              <select name="role" id="editStaffRole" required>
+                <option value="PWD Coordinator">PWD Coordinator</option>
+                <option value="Social Worker">Social Worker</option>
+                <option value="Medical Officer">Medical Officer</option>
+                <option value="Nurse">Nurse</option>
+                <option value="Admin Staff">Admin Staff</option>
+                <option value="Encoder">Encoder</option>
+                <option value="Driver">Driver</option>
+                <option value="Security">Security</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Contact Number *</label>
+              <input type="text" name="contact" id="editStaffContact" required>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" name="email" id="editStaffEmail">
+            </div>
+            <div class="form-group">
+              <label>Address</label>
+              <input type="text" name="address" id="editStaffAddress">
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select name="status" id="editStaffStatus">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-primary" style="margin-top: 15px;">Update Staff</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Reports Section -->
+      <section id="reports" class="content-section">
+        <div class="header">
+          <h1><i class="fas fa-chart-bar"></i> Reports</h1>
+          <div class="page-actions">
+            <button class="btn-primary"><i class="fas fa-download"></i> Generate Report</button>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon reports">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="stat-number">Monthly</div>
+            <div class="stat-label">PWD Registration Report</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon reports">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-number">Weekly</div>
+            <div class="stat-label">Services Report</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon reports">
+              <i class="fas fa-calendar-week"></i>
+            </div>
+            <div class="stat-number">Daily</div>
+            <div class="stat-label">Summary Report</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Activity Log Section -->
+      <section id="activity" class="content-section">
+        <div class="header">
+          <h1><i class="fas fa-history"></i> Activity Log</h1>
+          <div class="page-actions">
+            <button class="btn-primary" onclick="showAddActivityModal()"><i class="fas fa-plus"></i> Add Activity</button>
+          </div>
+        </div>
+        
+        <div class="search-bar">
+          <input type="text" id="searchActivity" placeholder="Search activities..." onkeyup="searchActivity()">
+          <select id="filterActivityType" onchange="filterActivity()">
+            <option value="">All Types</option>
+            <option value="registration">Registration</option>
+            <option value="login">Login</option>
+            <option value="signup">Signup</option>
+            <option value="update_registration">Update</option>
+            <option value="delete_registration">Delete</option>
+          </select>
+        </div>
+        
+        <div class="activity-log">
+          <div id="activityList"></div>
+        </div>
+      </section>
+
+      <!-- Add Activity Modal -->
+      <div id="addActivityModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+          <span class="modal-close" onclick="closeAddActivityModal()">&times;</span>
+          <h2>Add Activity</h2>
+          <form id="addActivityForm" onsubmit="submitActivity(event)">
+            <div class="form-group">
+              <label>Activity Type *</label>
+              <select name="type" required>
+                <option value="">Select Type</option>
+                <option value="registration">Registration</option>
+                <option value="login">Login</option>
+                <option value="meeting">Meeting</option>
+                <option value="assessment">Assessment</option>
+                <option value="device_issued">Device Issued</option>
+                <option value="service_rendered">Service Rendered</option>
+                <option value="follow_up">Follow Up</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Description *</label>
+              <textarea name="details" rows="3" required placeholder="Enter activity description..."></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="margin-top: 15px;">Add Activity</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Settings Section -->
+      <section id="settings" class="content-section">
+        <div class="header">
+          <h1><i class="fas fa-cog"></i> Settings</h1>
+        </div>
+        <div class="settings-grid">
+          <div class="setting-card">
+            <h3>System Settings</h3>
+            <p>Configure working hours, holidays, and clinic information.</p>
+            <button class="btn-primary">Edit Settings</button>
+          </div>
+          <div class="setting-card">
+            <h3>Backup Data</h3>
+            <p>Download patient records and appointment data for backup.</p>
+            <button class="btn-primary" onclick="backupData()">Download Backup</button>
+          </div>
+          <div class="setting-card">
+            <h3>User Management</h3>
+            <p>Manage admin accounts and permissions.</p>
+            <button class="btn-primary">Manage Users</button>
+          </div>
+          <div class="setting-card">
+            <h3>Reset All Data</h3>
+            <p>Clear all registrations and activities. This cannot be undone.</p>
+            <button class="btn-danger" onclick="resetAllData()">Reset Data</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="dashboard.js"></script>
+  <script>
+    const socket = io();
+    let role = localStorage.getItem('role');
+    if (role !== 'admin') {
+      window.location.href = 'login.html';
+    }
+    const username = localStorage.getItem('username');
+    document.querySelector('.user-name').textContent = username || 'Admin';
+    document.querySelector('.user-avatar').textContent = (username ? username.substring(0,2).toUpperCase() : 'AD');
+    
+    socket.on('activity', (activity) => {
+      addActivityItem(activity);
+    });
+    
+    socket.on('newRegistration', (reg) => {
+      loadRegistrations();
+    });
+    
+    function addActivityItem(activity) {
+      const list = document.getElementById('activityList');
+      if (!list) return;
+      const item = document.createElement('div');
+      item.className = 'activity-item';
+      item.innerHTML = '<span class="activity-type">' + activity.type + '</span>' +
+        '<span class="activity-details">' + JSON.stringify(activity.details) + '</span>' +
+        '<span class="activity-time">' + new Date(activity.timestamp).toLocaleTimeString() + '</span>';
+      list.insertBefore(item, list.firstChild);
+      if (list.children.length > 20) list.removeChild(list.lastChild);
+    }
+    
+    function loadRegistrations() {
+      fetch('/api/registrations', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success) {
+          renderRegistrations(d.registrations);
+        }
+      });
+    }
+    
+    function renderRegistrations(regs) {
+      const tbody = document.getElementById('registrationsTable');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      document.getElementById('totalCount').textContent = 'Showing ' + regs.length + ' records';
+      regs.forEach(reg => {
+        const name = (reg.firstName || '') + ' ' + (reg.middleName || '') + ' ' + (reg.lastName || '');
+        const date = reg.timestamp ? new Date(reg.timestamp).toLocaleDateString() : '-';
+        const statusClass = reg.status === 'Verified' ? 'confirmed' : 'pending';
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>${reg.reference || '-'}</strong></td>
+          <td><strong>${name.trim()}</strong><br><small>${reg.barangay || ''}</small></td>
+          <td>${reg.disabilityType || '-'}</td>
+          <td>${date}</td>
+          <td><span class="status ${statusClass}">${reg.status || 'Pending'}</span></td>
+          <td>
+            <a href="#" class="action-btn btn-view" onclick="viewRegistration(${reg.id})">View</a>
+            <a href="#" class="action-btn btn-edit" onclick="editRegistration(${reg.id})">Edit</a>
+            <a href="#" class="action-btn btn-delete" onclick="resetRegistration(${reg.id})" title="Reset"><i class="fas fa-redo"></i></a>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+    
+    function viewRegistration(id) {
+      fetch('/api/registrations', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success) {
+          const reg = d.registrations.find(r => r.id === id);
+          if (reg) {
+            const name = (reg.firstName || '') + ' ' + (reg.lastName || '');
+            alert('Reference: ' + (reg.reference || '-') + '\nName: ' + name + '\nDisability: ' + (reg.disabilityType || '-') + '\nStatus: ' + (reg.status || 'Pending') + '\nDate: ' + new Date(reg.timestamp).toLocaleString());
+          }
+        }
+      });
+    }
+    
+    function editRegistration(id) {
+      fetch('/api/registrations', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success) {
+          const reg = d.registrations.find(r => r.id === id);
+          if (reg) {
+            const newStatus = prompt('Enter new status (Verified/Pending):', reg.status || 'Pending');
+            if (newStatus) {
+              fetch('/api/registrations/' + id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+                body: JSON.stringify({ status: newStatus })
+              }).then(r => r.json()).then(result => {
+                if (result.success) {
+                  loadRegistrations();
+                  alert('Status updated successfully');
+                }
+              });
+            }
+          }
+        }
+      });
+    }
+    
+    function resetRegistration(id) {
+      if (confirm('Are you sure you want to reset this registration? This will set status back to Pending.')) {
+        fetch('/api/registrations/' + id, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+          body: JSON.stringify({ status: 'Pending' })
+        }).then(r => r.json()).then(result => {
+          if (result.success) {
+            loadRegistrations();
+            alert('Registration reset to Pending');
+          }
+        });
+      }
+    }
+    
+    function searchPWD() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const rows = document.querySelectorAll('#registrationsTable tr');
+      rows.forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(search) ? '' : 'none';
+      });
+    }
+    
+    function filterPWD() {
+      const status = document.getElementById('filterStatus').value;
+      fetch('/api/registrations', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success) {
+          const filtered = status ? d.registrations.filter(r => r.status === status) : d.registrations;
+          renderRegistrations(filtered);
+        }
+      });
+    }
+    
+    if (role === 'admin') {
+      loadRegistrations();
+      loadDirectory();
+      loadActivities();
+      loadStaff();
+      loadDashboardStats();
+      fetch('/api/activities', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success) {
+          d.activities.slice(-20).reverse().forEach(addActivityItem);
+        }
+      });
+    }
+    
+    function loadDashboardStats() {
+      fetch('/api/registrations', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success) {
+          const regs = d.registrations;
+          const totalPWDs = regs.length;
+          const thirtyDaysAgo = new Date();
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+          const newRegs = regs.filter(r => new Date(r.timestamp) >= thirtyDaysAgo).length;
+          const devices = regs.filter(r => r.assistiveDevice && r.assistiveDevice !== 'N/A').length;
+          const services = regs.filter(r => r.status === 'Verified').length;
+          
+          document.getElementById('totalPWDs').textContent = totalPWDs;
+          document.getElementById('newRegistrations').textContent = newRegs;
+          document.getElementById('devicesIssued').textContent = devices;
+          document.getElementById('servicesProvided').textContent = services;
+        }
+      });
+    }
+    
+    function resetAllData() {
+      if (confirm('Are you sure you want to reset all data? This will clear all registrations and activities.')) {
+        fetch('/api/reset', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+        }).then(r => r.json()).then(result => {
+          if (result.success) {
+            loadRegistrations();
+            loadDashboardStats();
+            alert('All data has been reset');
+          }
+        });
+      }
+    }
+    
+    function backupData() {
+      fetch('/api/registrations', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success && d.registrations.length > 0) {
+          const regs = d.registrations;
+          
+          // Create CSV headers
+          const headers = [
+            'Reference', 'Last Name', 'First Name', 'Middle Name', 'Suffix',
+            'Date of Birth', 'Sex', 'Civil Status', 'Blood Type', 'Contact',
+            'Region', 'Province', 'Municipality', 'Barangay', 'House Number',
+            'Disability Type', 'Cause', 'Cause Details', 'Other Disability',
+            'Membership', 'Assistive Device', 'Education', 'Employment Status',
+            'Employer Nature', 'Occupation', 'Skills', 'Trainings',
+            'Father Name', 'Mother Name', 'Guardian Name',
+            'Status', 'Date Registered'
+          ];
+          
+          // Create CSV rows
+          const rows = regs.map(reg => [
+            reg.reference || '',
+            reg.lastName || '',
+            reg.firstName || '',
+            reg.middleName || '',
+            reg.suffix || '',
+            reg.dob || '',
+            reg.sex || '',
+            reg.civilStatus || '',
+            reg.bloodType || '',
+            reg.contact || '',
+            reg.region || '',
+            reg.province || '',
+            reg.municipality || '',
+            reg.barangay || '',
+            reg.houseNumber || '',
+            reg.disabilityType || '',
+            reg.cause || '',
+            reg.causeDetails || '',
+            reg.otherDisability || '',
+            reg.membership || '',
+            reg.assistiveDevice || '',
+            reg.education || '',
+            reg.employmentType || '',
+            reg.employerNature || '',
+            reg.occupation || '',
+            reg.skills || '',
+            reg.trainings || '',
+            reg.fatherName || '',
+            reg.motherName || '',
+            reg.guardianName || '',
+            reg.status || '',
+            reg.timestamp ? new Date(reg.timestamp).toLocaleDateString() : ''
+          ].map(field => '"' + (field || '').replace(/"/g, '""') + '"').join(','));
+          
+          const csv = headers.join(',') + '\n' + rows.join('\n');
+          
+          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'PWD_Registrations_' + new Date().toISOString().slice(0,10) + '.csv';
+          a.click();
+          URL.revokeObjectURL(url);
+          alert('Excel/CSV file downloaded successfully! Total records: ' + regs.length);
+        } else {
+          alert('No registrations found to export.');
+        }
+      });
+    }
+    
+    function loadDirectory() {
+      fetch('/api/registrations', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success) {
+          renderDirectory(d.registrations);
+        }
+      });
+    }
+    
+    function renderDirectory(regs) {
+      const tbody = document.getElementById('directoryTable');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      document.getElementById('directoryCount').textContent = 'Showing ' + regs.length + ' records';
+      regs.forEach(reg => {
+        const name = (reg.firstName || '') + ' ' + (reg.middleName || '').charAt(0) + '. ' + (reg.lastName || '');
+        const address = (reg.barangay ? reg.barangay + ', ' : '') + (reg.municipality || '');
+        const date = reg.timestamp ? new Date(reg.timestamp).toLocaleDateString() : '-';
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>${reg.reference || '-'}</strong></td>
+          <td><strong>${name.trim()}</strong></td>
+          <td>${reg.disabilityType || '-'}</td>
+          <td>${address}</td>
+          <td>${date}</td>
+          <td>
+            <a href="#" class="action-btn btn-view" onclick="viewPWDDetails(${reg.id})">View</a>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+    
+    function viewPWDDetails(id) {
+      fetch('/api/registrations', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success) {
+          const reg = d.registrations.find(r => r.id === id);
+          if (reg) {
+            const content = document.getElementById('pwdDetailsContent');
+            content.innerHTML = `
+              <div class="detail-grid">
+                <div class="detail-item"><strong>Reference:</strong> ${reg.reference || '-'}</div>
+                <div class="detail-item"><strong>Name:</strong> ${reg.firstName || ''} ${reg.middleName || ''} ${reg.lastName || ''}</div>
+                <div class="detail-item"><strong>Suffix:</strong> ${reg.suffix || 'N/A'}</div>
+                <div class="detail-item"><strong>Date of Birth:</strong> ${reg.dob || '-'}</div>
+                <div class="detail-item"><strong>Sex:</strong> ${reg.sex || '-'}</div>
+                <div class="detail-item"><strong>Blood Type:</strong> ${reg.bloodType || '-'}</div>
+                <div class="detail-item"><strong>Civil Status:</strong> ${reg.civilStatus || '-'}</div>
+                <div class="detail-item"><strong>Membership:</strong> ${reg.membership || '-'}</div>
+                <div class="detail-item"><strong>Region:</strong> ${reg.region || '-'}</div>
+                <div class="detail-item"><strong>Province:</strong> ${reg.province || '-'}</div>
+                <div class="detail-item"><strong>Municipality:</strong> ${reg.municipality || '-'}</div>
+                <div class="detail-item"><strong>Barangay:</strong> ${reg.barangay || '-'}</div>
+                <div class="detail-item"><strong>House #:</strong> ${reg.houseNumber || '-'}</div>
+                <div class="detail-item"><strong>Disability Type:</strong> ${reg.disabilityType || '-'}</div>
+                <div class="detail-item"><strong>Cause:</strong> ${reg.cause || '-'}</div>
+                <div class="detail-item"><strong>Specific Cause Details:</strong> ${reg.causeDetails || '-'}</div>
+                <div class="detail-item"><strong>Education:</strong> ${reg.education || '-'}</div>
+                <div class="detail-item"><strong>Employment Status:</strong> ${reg.employmentType || '-'}</div>
+                <div class="detail-item"><strong>Employer Nature:</strong> ${reg.employerNature || '-'}</div>
+                <div class="detail-item"><strong>Occupation:</strong> ${reg.occupation || '-'}</div>
+                <div class="detail-item"><strong>Skills:</strong> ${reg.skills || '-'}</div>
+                <div class="detail-item"><strong>Trainings:</strong> ${reg.trainings || '-'}</div>
+                <div class="detail-item"><strong>Assistive Device:</strong> ${reg.assistiveDevice || '-'}</div>
+                <div class="detail-item"><strong>Father:</strong> ${reg.fatherName || '-'}</div>
+                <div class="detail-item"><strong>Mother:</strong> ${reg.motherName || '-'}</div>
+                <div class="detail-item"><strong>Guardian:</strong> ${reg.guardianName || '-'}</div>
+                <div class="detail-item"><strong>Accomplished By:</strong> ${reg.accomplishedBy || '-'}</div>
+                <div class="detail-item"><strong>Status:</strong> ${reg.status || 'Pending'}</div>
+                <div class="detail-item"><strong>Date Registered:</strong> ${reg.timestamp ? new Date(reg.timestamp).toLocaleString() : '-'}</div>
+              </div>
+            `;
+            document.getElementById('viewPWDModal').classList.add('show');
+          }
+        }
+      });
+    }
+    
+    function showAddPWDModal() {
+      document.getElementById('addPWDModal').classList.add('show');
+    }
+    
+    function closeAddPWDModal() {
+      document.getElementById('addPWDModal').classList.remove('show');
+      document.getElementById('addPWDForm').reset();
+    }
+    
+    function closeViewPWDModal() {
+      document.getElementById('viewPWDModal').classList.remove('show');
+    }
+    
+    function submitNewPWD(e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      data.status = 'Pending';
+      
+      fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).then(r => r.json()).then(result => {
+        if (result.success) {
+          alert('PWD registered successfully! Reference: ' + result.reference);
+          closeAddPWDModal();
+          loadDirectory();
+          loadRegistrations();
+          loadDashboardStats();
+        } else {
+          alert('Error registering PWD');
+        }
+      });
+    }
+    
+    function searchDirectory() {
+      const search = document.getElementById('searchDirectory').value.toLowerCase();
+      const rows = document.querySelectorAll('#directoryTable tr');
+      rows.forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(search) ? '' : 'none';
+      });
+    }
+    
+    function filterDirectory() {
+      const disability = document.getElementById('filterDisability').value;
+      fetch('/api/registrations', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success) {
+          const filtered = disability ? d.registrations.filter(r => r.disabilityType === disability) : d.registrations;
+          renderDirectory(filtered);
+        }
+      });
+    }
+    
+    function showAddActivityModal() {
+      document.getElementById('addActivityModal').classList.add('show');
+    }
+    
+    function closeAddActivityModal() {
+      document.getElementById('addActivityModal').classList.remove('show');
+      document.getElementById('addActivityForm').reset();
+    }
+    
+    function submitActivity(e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      fetch('/api/add-activity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+        body: JSON.stringify(data)
+      }).then(r => r.json()).then(result => {
+        if (result.success) {
+          alert('Activity added successfully!');
+          closeAddActivityModal();
+          loadActivities();
+        } else {
+          alert('Error adding activity');
+        }
+      });
+    }
+    
+    function loadActivities() {
+      fetch('/api/activities', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success) {
+          renderActivities(d.activities);
+        }
+      });
+    }
+    
+    function renderActivities(activities) {
+      const list = document.getElementById('activityList');
+      if (!list) return;
+      list.innerHTML = '';
+      activities.slice().reverse().forEach(act => {
+        const item = document.createElement('div');
+        item.className = 'activity-item';
+        item.innerHTML = `
+          <span class="activity-type">${act.type}</span>
+          <span class="activity-details">${typeof act.details === 'object' ? JSON.stringify(act.details) : act.details}</span>
+          <span class="activity-time">${new Date(act.timestamp).toLocaleString()}</span>
+        `;
+        list.appendChild(item);
+      });
+    }
+    
+    function searchActivity() {
+      const search = document.getElementById('searchActivity').value.toLowerCase();
+      const items = document.querySelectorAll('#activityList .activity-item');
+      items.forEach(item => {
+        item.style.display = item.textContent.toLowerCase().includes(search) ? '' : 'none';
+      });
+    }
+    
+    function filterActivity() {
+      const type = document.getElementById('filterActivityType').value;
+      fetch('/api/activities', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success) {
+          const filtered = type ? d.activities.filter(a => a.type === type) : d.activities;
+          renderActivities(filtered);
+        }
+      });
+    }
+    
+    function loadStaff() {
+      fetch('/api/staff', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success) {
+          renderStaff(d.staff);
+        }
+      });
+    }
+    
+    function renderStaff(staff) {
+      const tbody = document.getElementById('staffTable');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      document.getElementById('staffCount').textContent = 'Showing ' + staff.length + ' staff';
+      staff.forEach(s => {
+        const statusClass = s.status === 'Active' ? 'active' : 'inactive';
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>${s.name || '-'}</strong></td>
+          <td>${s.role || '-'}</td>
+          <td>${s.contact || '-'}</td>
+          <td>${s.email || '-'}</td>
+          <td><span class="status ${statusClass}">${s.status || 'Active'}</span></td>
+          <td>
+            <a href="#" class="action-btn btn-edit" onclick="editStaff(${s.id})">Edit</a>
+            <a href="#" class="action-btn btn-delete" onclick="deleteStaff(${s.id})"><i class="fas fa-trash"></i></a>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+    
+    function showAddStaffModal() {
+      document.getElementById('addStaffModal').classList.add('show');
+    }
+    
+    function closeAddStaffModal() {
+      document.getElementById('addStaffModal').classList.remove('show');
+      document.getElementById('addStaffForm').reset();
+    }
+    
+    function submitStaff(e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      data.status = 'Active';
+      
+      const token = localStorage.getItem('token');
+      console.log('Token exists:', !!token);
+      console.log('Token value:', token ? token.substring(0, 20) + '...' : 'none');
+      
+      if (!token) {
+        alert('Please log in again');
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      fetch('/api/staff', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json', 
+          'Authorization': 'Bearer ' + token 
+        },
+        body: JSON.stringify(data)
+      }).then(r => {
+        console.log('Response status:', r.status);
+        return r.json();
+      }).then(result => {
+        console.log('Result:', result);
+        if (result.success) {
+          alert('Staff added successfully!');
+          closeAddStaffModal();
+          loadStaff();
+        } else {
+          alert('Error adding staff: ' + (result.message || 'Unknown error'));
+        }
+      }).catch(err => {
+        console.error('Error:', err);
+        alert('Error adding staff');
+      });
+    }
+    
+    function editStaff(id) {
+      fetch('/api/staff', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      }).then(r => r.json()).then(d => {
+        if (d.success) {
+          const staff = d.staff.find(s => s.id === id);
+          if (staff) {
+            document.getElementById('editStaffId').value = staff.id;
+            document.getElementById('editStaffName').value = staff.name || '';
+            document.getElementById('editStaffRole').value = staff.role || '';
+            document.getElementById('editStaffContact').value = staff.contact || '';
+            document.getElementById('editStaffEmail').value = staff.email || '';
+            document.getElementById('editStaffAddress').value = staff.address || '';
+            document.getElementById('editStaffStatus').value = staff.status || 'Active';
+            document.getElementById('editStaffModal').classList.add('show');
+          }
+        }
+      });
+    }
+    
+    function closeEditStaffModal() {
+      document.getElementById('editStaffModal').classList.remove('show');
+    }
+    
+    function updateStaff(e) {
+      e.preventDefault();
+      const id = document.getElementById('editStaffId').value;
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      fetch('/api/staff/' + id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+        body: JSON.stringify(data)
+      }).then(r => r.json()).then(result => {
+        if (result.success) {
+          alert('Staff updated successfully!');
+          closeEditStaffModal();
+          loadStaff();
+        } else {
+          alert('Error updating staff');
+        }
+      });
+    }
+    
+    function deleteStaff(id) {
+      if (confirm('Are you sure you want to delete this staff?')) {
+        fetch('/api/staff/' + id, {
+          method: 'DELETE',
+          headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+        }).then(r => r.json()).then(result => {
+          if (result.success) {
+            loadStaff();
+            alert('Staff deleted');
+          }
+        });
+      }
+    }
+    
+    function searchStaff() {
+      const search = document.getElementById('searchStaff').value.toLowerCase();
+      const rows = document.querySelectorAll('#staffTable tr');
+      rows.forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(search) ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

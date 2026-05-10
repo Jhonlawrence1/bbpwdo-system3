@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PWD Registration - PWD Center</title>
+  <link rel="stylesheet" href="loginform.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="473272238_122103207818723961_8786608800743349044_n.jpg">
+  <style>
+    .registration-container { max-width: 700px; margin: 40px auto; padding: 30px; }
+    .form-section { margin-bottom: 25px; padding: 20px; background: #f9f9f9; border-radius: 8px; }
+    .form-section h3 { margin-top: 0; color: #2c7a7b; border-bottom: 2px solid #2c7a7b; padding-bottom: 10px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+    .form-group textarea { resize: vertical; height: 80px; }
+    .checkbox-group { display: flex; flex-wrap: wrap; gap: 15px; }
+    .checkbox-group label { display: flex; align-items: center; gap: 5px; font-weight: normal; }
+    .btn-submit { background: #2c7a7b; color: white; padding: 12px 30px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+    .btn-submit:hover { background: #234d52; }
+    .required { color: red; }
+  </style>
+</head>
+<body>
+  <div class="login-form">
+    <div class="container">
+      <div class="main">
+        <div class="content">
+          <h2><i class="fas fa-id-card"></i> PWD Registration</h2>
+          <form id="registrationForm">
+            <div class="form-section">
+              <h3>Personal Information</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Last Name <span class="required">*</span></label>
+                  <input type="text" id="lastName" name="lastName" required>
+                </div>
+                <div class="form-group">
+                  <label>First Name <span class="required">*</span></label>
+                  <input type="text" id="firstName" name="firstName" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Middle Name</label>
+                  <input type="text" id="middleName" name="middleName">
+                </div>
+                <div class="form-group">
+                  <label>Suffix</label>
+                  <select id="suffix" name="suffix">
+                    <option value="">None</option>
+                    <option value="Jr.">Jr.</option>
+                    <option value="Sr.">Sr.</option>
+                    <option value="III">III</option>
+                    <option value="IV">IV</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Date of Birth <span class="required">*</span></label>
+                  <input type="date" id="dob" name="dob" required>
+                </div>
+                <div class="form-group">
+                  <label>Sex <span class="required">*</span></label>
+                  <select id="sex" name="sex" required>
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Civil Status <span class="required">*</span></label>
+                  <select id="civilStatus" name="civilStatus" required>
+                    <option value="">Select</option>
+                    <option value="Single">Single</option>
+                    <option value="Married">Married</option>
+                    <option value="Widowed">Widowed</option>
+                    <option value="Separated">Separated</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Contact Number</label>
+                  <input type="tel" id="contact" name="contact" placeholder="0912-345-6789">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Address</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>House No./Street <span class="required">*</span></label>
+                  <input type="text" id="address" name="address" required>
+                </div>
+                <div class="form-group">
+                  <label>Barangay <span class="required">*</span></label>
+                  <input type="text" id="barangay" name="barangay" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Municipality/City <span class="required">*</span></label>
+                  <input type="text" id="municipality" name="municipality" required>
+                </div>
+                <div class="form-group">
+                  <label>Province <span class="required">*</span></label>
+                  <input type="text" id="province" name="province" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Disability Information</h3>
+              <div class="form-group">
+                <label>Type of Disability <span class="required">*</span></label>
+                <select id="disabilityType" name="disabilityType" required>
+                  <option value="">Select</option>
+                  <option value="Visual Disability">Visual Disability</option>
+                  <option value="Hearing Disability">Hearing Disability</option>
+                  <option value="Speech/Language Disability">Speech/Language Disability</option>
+                  <option value="Physical Disability">Physical Disability</option>
+                  <option value="Intellectual Disability">Intellectual Disability</option>
+                  <option value="Psychosocial Disability">Psychosocial Disability</option>
+                  <option value="Multiple Disability">Multiple Disability</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Causes of Disability</label>
+                <div class="checkbox-group">
+                  <label><input type="checkbox" name="cause" value="Congenital"> Congenital (Birth)</label>
+                  <label><input type="checkbox" name="cause" value="Illness"> Illness</label>
+                  <label><input type="checkbox" name="cause" value="Injury"> Injury/Accident</label>
+                  <label><input type="checkbox" name="cause" value="Aging"> Aging</label>
+                  <label><input type="checkbox" name="cause" value="Other"> Other</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Specify Cause (if Illness/Injury/Other)</label>
+                <input type="text" id="causeDetails" name="causeDetails" placeholder="e.g., Diabetes, Car accident, Stroke, etc.">
+              </div>
+              <div class="form-group">
+                <label>Other Disability Details</label>
+                <textarea id="otherDisability" name="otherDisability" placeholder="If other, please specify..."></textarea>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Employment & Skills</h3>
+              <div class="form-group">
+                <label>Employment Status</label>
+                <select id="employmentType" name="employmentType">
+                  <option value="">Select</option>
+                  <option value="Employed">Employed</option>
+                  <option value="Self-Employed">Self-Employed</option>
+                  <option value="Unemployed">Unemployed</option>
+                  <option value="Student">Student</option>
+                  <option value="Housewife/Home Maker">Housewife/Home Maker</option>
+                  <option value="Pensioner">Pensioner</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Occupation/Job Title</label>
+                <input type="text" id="occupation" name="occupation" placeholder="e.g., Teacher, Farmer, Carpenter, etc.">
+              </div>
+              <div class="form-group">
+                <label>Skills & Abilities</label>
+                <textarea id="skills" name="skills" placeholder="List your skills, talents, or abilities..."></textarea>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Guardian/Representative (if minor or with guardian)</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Full Name</label>
+                  <input type="text" id="guardianName" name="guardianName">
+                </div>
+                <div class="form-group">
+                  <label>Relationship</label>
+                  <input type="text" id="guardianRelation" name="guardianRelation">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Contact Number</label>
+                <input type="tel" id="guardianContact" name="guardianContact">
+              </div>
+            </div>
+
+            <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit Registration</button>
+          </form>
+          <div class="back">
+            <a href="index.html"><i class="fas fa-arrow-left"></i> Back to home</a>
+          </div>
+        </div>
+        <div class="form-img">
+          <img src="7933.jpg" alt="Health Center">
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    const socket = io();
+    document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const causes = Array.from(document.querySelectorAll('input[name="cause"]:checked')).map(c => c.value);
+      const formData = {
+        lastName: form.lastName.value,
+        firstName: form.firstName.value,
+        middleName: form.middleName.value,
+        suffix: form.suffix.value,
+        dob: form.dob.value,
+        sex: form.sex.value,
+        civilStatus: form.civilStatus.value,
+        contact: form.contact.value,
+        address: form.address.value,
+        barangay: form.barangay.value,
+        municipality: form.municipality.value,
+        province: form.province.value,
+        disabilityType: form.disabilityType.value,
+        cause: causes.join(', '),
+        causeDetails: form.causeDetails.value,
+        otherDisability: form.otherDisability.value,
+        employmentType: form.employmentType.value,
+        occupation: form.occupation.value,
+        skills: form.skills.value,
+        guardianName: form.guardianName.value,
+        guardianRelation: form.guardianRelation.value,
+        guardianContact: form.guardianContact.value,
+        status: 'Pending'
+      };
+      console.log('Form data to submit:', JSON.stringify(formData, null, 2));
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        const data = await res.json();
+        console.log('Server response:', data);
+        if (data.success) {
+          const details = `
+PWD Registration Submitted Successfully!
+
+Reference Number: ${data.reference}
+
+=== PERSONAL INFORMATION ===
+Name: ${formData.firstName} ${formData.middleName} ${formData.lastName}
+Suffix: ${formData.suffix}
+Date of Birth: ${formData.dob}
+Sex: ${formData.sex}
+Civil Status: ${formData.civilStatus}
+Contact: ${formData.contact}
+
+=== ADDRESS ===
+Address: ${formData.address}
+Barangay: ${formData.barangay}
+Municipality: ${formData.municipality}
+Province: ${formData.province}
+
+=== DISABILITY INFORMATION ===
+Type of Disability: ${formData.disabilityType}
+Cause of Disability: ${formData.cause || 'None selected'}
+${formData.causeDetails ? 'Specific Cause: ' + formData.causeDetails : ''}
+Other Disability: ${formData.otherDisability || 'N/A'}
+
+=== EMPLOYMENT & SKILLS ===
+Employment Status: ${formData.employmentType || 'Not specified'}
+Occupation: ${formData.occupation || 'Not specified'}
+Skills & Abilities: ${formData.skills || 'Not specified'}
+
+=== GUARDIAN INFORMATION ===
+Guardian Name: ${formData.guardianName || 'N/A'}
+Relationship: ${formData.guardianRelation || 'N/A'}
+Contact: ${formData.guardianContact || 'N/A'}
+
+=== STATUS ===
+Status: Pending (For Verification)
+
+Please save your Reference Number: ${data.reference}
+You will need it for tracking your registration.
+          `;
+
+=== PERSONAL INFORMATION ===
+Name: ${formData.firstName} ${formData.middleName} ${formData.lastName}
+Suffix: ${formData.suffix}
+Date of Birth: ${formData.dob}
+Sex: ${formData.sex}
+Civil Status: ${formData.civilStatus}
+Contact: ${formData.contact}
+
+=== ADDRESS ===
+Address: ${formData.address}
+Barangay: ${formData.barangay}
+Municipality: ${formData.municipality}
+Province: ${formData.province}
+
+=== DISABILITY INFORMATION ===
+Type of Disability: ${formData.disabilityType}
+Cause of Disability: ${formData.cause || 'None selected'}
+Other Disability: ${formData.otherDisability || 'N/A'}
+
+=== GUARDIAN INFORMATION ===
+Guardian Name: ${formData.guardianName || 'N/A'}
+Relationship: ${formData.guardianRelation || 'N/A'}
+Contact: ${formData.guardianContact || 'N/A'}
+
+=== STATUS ===
+Status: Pending (For Verification)
+
+Please save your Reference Number: ${data.reference}
+You will need it for tracking your registration.
+          `;
+          alert(details);
+          if (confirm('Do you want to download a copy of your registration details?')) {
+            const blob = new Blob([details], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'PWD_Registration_' + data.reference + '.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+          }
+          window.location.href = 'index.html';
+        } else {
+          alert('Registration failed: ' + data.message);
+        }
+      } catch (err) {
+        alert('Error submitting registration');
+      }
+    });
+  </script>
+</body>
+</html>
