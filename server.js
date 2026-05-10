@@ -21,10 +21,25 @@ const JWT_SECRET = process.env.JWT_SECRET || 'pwd_secret_key_2024';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  max: 5,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000
+});
+
+pool.on('error', (err) => {
+  console.error('Unexpected database error:', err);
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 async function initDatabase() {
+  if (!process.env.DATABASE_URL) {
+    console.log('DATABASE_URL not set, skipping database initialization');
+    return;
+  }
   const client = await pool.connect();
   try {
     await client.query(`
@@ -365,11 +380,15 @@ io.on('connection', (socket) => {
   });
 });
 
-initDatabase().then(() => {
-  server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+initDatabase()
+  .then(() => {
+    server.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Database initialization failed:', err.message);
+    server.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on port ${PORT} (without database)`);
+    });
   });
-}).catch(err => {
-  console.error('Failed to initialize database:', err);
-  process.exit(1);
-});
