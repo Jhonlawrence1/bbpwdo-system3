@@ -1,21 +1,10 @@
-databases:
-  - name: pwdwebsite
-    plan: free
-
 services:
   - type: web
-    name: pwd-website
-    region: oregon
-    plan: free
-    runtime: node
-    buildCommand: npm install
-    startCommand: npm start
+    name: bbpwdo-system
+    env: docker
+    buildCommand: docker build -t bbpwdo-system .
+    startCommand: ""
+    autoDeploy: true
     envVars:
-      - key: NODE_ENV
-        value: production
-      - key: JWT_SECRET
-        generateValue: true
       - key: DATABASE_URL
-        fromDatabase:
-          name: pwdwebsite
-          property: connectionString
+        value: "mysql://root:pzdNeueBLTcXStUoORVFzhwxtAgJUDtO@monorail.proxy.rlwy.net:22047/railway"
