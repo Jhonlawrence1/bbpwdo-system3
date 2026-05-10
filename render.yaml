@@ -1,7 +1,7 @@
 database:
   name: pwdwebsite
-  ipAllowList: []
   plan: free
+
 services:
   - type: web
     name: pwd-website
@@ -10,8 +10,6 @@ services:
     runtime: node
     buildCommand: npm install
     startCommand: npm start
-    staticPublishPath: .
-    healthCheckPath: /
     envVars:
       - key: NODE_ENV
         value: production
