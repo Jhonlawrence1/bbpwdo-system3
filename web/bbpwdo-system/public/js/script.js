@@ -148,14 +148,15 @@ function initPWDForm() {
         e.preventDefault();
         
         const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
         
         const familyMembers = getFamilyMembersData();
-        console.log('Family Members Data:', familyMembers);
-        formData.append('family_members', JSON.stringify(familyMembers));
+        data.familyMembers = familyMembers;
         
-        fetch('backend/submit.php', {
+        fetch('/api/register', {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
         })
         .then(response => {
             if (!response.ok) throw new Error('Network error');
