@@ -231,8 +231,14 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, 'web/bbpwdo-system/public/index.html'));
+app.use((req, res, next) => {
+  const filePath = path.join(__dirname, 'web/bbpwdo-system/public', req.path);
+  const fs = require('fs');
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+    res.sendFile(filePath);
+  } else {
+    res.sendFile(path.join(__dirname, 'web/bbpwdo-system/public/index.html'));
+  }
 });
 
 initDB().then(() => {
