@@ -1,28 +1,14 @@
 {
-  "dependencies": {
-    "@supabase/supabase-js": "^2.103.0",
-    "better-sqlite3": "^12.9.0",
-    "express": "^5.2.1",
-    "mysql2": "^3.6.0"
-  },
-  "name": "httml",
+  "name": "bbpwdo-system",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "PWD Website with PostgreSQL",
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Jhonlawrence1/bbpwdo-system3.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/Jhonlawrence1/bbpwdo-system3/issues"
-  },
-  "homepage": "https://github.com/Jhonlawrence1/bbpwdo-system3#readme"
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.11.3",
+    "dotenv": "^16.3.1"
+  }
 }

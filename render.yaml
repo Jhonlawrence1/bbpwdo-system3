@@ -1,10 +1,21 @@
+databases:
+  - name: bbpwdo
+    plan: free
+
 services:
   - type: web
     name: bbpwdo-system
-    env: docker
-    buildCommand: docker build -t bbpwdo-system .
-    startCommand: ""
-    autoDeploy: true
+    region: oregon
+    plan: free
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
     envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
       - key: DATABASE_URL
-        value: "mysql://root:pzdNeueBLTcXStUoORVFzhwxtAgJUDtO@monorail.proxy.rlwy.net:22047/railway"
+        fromDatabase:
+          name: bbpwdo
+          property: connectionString

@@ -1,52 +1,61 @@
+require('dotenv').config();
 const express = require('express');
-const mysql = require('mysql2/promise');
+const { Pool } = require('pg');
 const path = require('path');
-
-function parseDatabaseUrl(url) {
-  if (!url) return { host: 'localhost', port: 3306, user: 'root', password: '', database: 'bbpwdo' };
-  const match = url.match(/mysql:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/);
-  if (match) {
-    return { user: match[1], password: match[2], host: match[3], port: parseInt(match[4]), database: match[5] };
-  }
-  return { host: 'localhost', port: 3306, user: 'root', password: '', database: 'bbpwdo' };
-}
-
-const dbConfig = parseDatabaseUrl(process.env.DATABASE_URL);
-
-const pool = mysql.createPool({
-  host: dbConfig.host,
-  port: dbConfig.port,
-  user: dbConfig.user,
-  password: dbConfig.password,
-  database: dbConfig.database,
-});
 
 const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'web/bbpwdo-system/public')));
 
+const PORT = process.env.PORT || 3000;
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+});
+
 async function initDB() {
+  if (!process.env.DATABASE_URL) {
+    console.log('DATABASE_URL not set, skipping database initialization');
+    return;
+  }
+  const client = await pool.connect();
   try {
-    const conn = await pool.getConnection();
-    await conn.query(`
+    await client.query(`
       CREATE TABLE IF NOT EXISTS users (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        id SERIAL PRIMARY KEY,
         name TEXT,
         email VARCHAR(255) UNIQUE
       )
     `);
-    conn.release();
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS registrations (
+        id SERIAL PRIMARY KEY,
+        reference VARCHAR(100),
+        data JSONB,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS activities (
+        id SERIAL PRIMARY KEY,
+        type VARCHAR(100),
+        details JSONB,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
     console.log('Database initialized');
   } catch (err) {
     console.error('DB init error:', err.message);
+  } finally {
+    client.release();
   }
 }
-initDB();
 
 app.get('/api/users', async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM users');
-    res.json(rows);
+    const result = await pool.query('SELECT * FROM users');
+    res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -55,21 +64,54 @@ app.get('/api/users', async (req, res) => {
 app.post('/api/users', async (req, res) => {
   try {
     const { name, email } = req.body;
-    const [result] = await pool.query(
-      'INSERT INTO users (name, email) VALUES (?, ?)',
+    const result = await pool.query(
+      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
       [name, email]
     );
-    res.json({ id: result.insertId, name, email });
+    res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+app.get('/api/registrations', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM registrations ORDER BY timestamp DESC');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/register', async (req, res) => {
+  const reg = req.body;
+  const reference = 'PWD-' + Date.now();
+  try {
+    await pool.query(
+      'INSERT INTO registrations (reference, data) VALUES ($1, $2)',
+      [reference, JSON.stringify(reg)]
+    );
+    res.json({ success: true, reference });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'web/bbpwdo-system/public/index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+initDB().then(() => {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}).catch(err => {
+  console.error('Database initialization failed:', err.message);
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT} (without database)`);
+  });
 });
