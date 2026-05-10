@@ -1,6 +1,6 @@
-database:
-  name: pwdwebsite
-  plan: free
+databases:
+  - name: pwdwebsite
+    plan: free
 
 services:
   - type: web
