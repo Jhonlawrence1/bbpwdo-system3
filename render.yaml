@@ -2,9 +2,9 @@ database:
   name: pwdwebsite
   ipAllowList: []
   plan: free
-
 services:
-  - name: pwd-website
+  - type: web
+    name: pwd-website
     region: oregon
     plan: free
     runtime: node
