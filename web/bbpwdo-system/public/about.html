@@ -171,19 +171,20 @@
 
     <script src="js/script.js"></script>
     <script>
-        fetch('backend/team-cards-api.php?skip_auth=1')
+        fetch('/api/team')
             .then(res => res.json())
             .then(data => {
-                if (data.success && data.data.length > 0) {
+                if (data.length > 0) {
                     const grid = document.getElementById('teamGrid');
                     grid.innerHTML = '';
-                    data.data.forEach(card => {
+                    data.forEach(card => {
                         const div = document.createElement('div');
                         div.className = 'team-card';
                         div.innerHTML = `
                             <div class="team-avatar"><i class="fa-solid fa-user"></i></div>
                             <h3>${card.name}</h3>
-                            <p>${card.position}</p>
+                            <p>${card.title}</p>
+                            ${card.position ? `<span class="team-position">${card.position}</span>` : ''}
                         `;
                         grid.appendChild(div);
                     });

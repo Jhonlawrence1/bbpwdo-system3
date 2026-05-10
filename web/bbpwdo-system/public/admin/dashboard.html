@@ -362,7 +362,7 @@
         </div>
         
         <div id="settingsPage" style="display: none;">
-            <div class="table-card">
+            <div class="table-card" style="margin-bottom: 30px;">
                 <div class="table-header">
                     <h2><i class="fa-solid fa-gear"></i> Admin Settings</h2>
                 </div>
@@ -373,6 +373,29 @@
                     </div>
                     <button class="btn-save" onclick="alert('Contact developer to change password')">Change Password</button>
                 </div>
+            </div>
+            
+            <div class="table-card">
+                <div class="table-header">
+                    <h2><i class="fa-solid fa-users"></i> Team Cards (About Page)</h2>
+                    <button class="btn-save" onclick="showAddTeamModal()">
+                        <i class="fa-solid fa-plus"></i> Add Team Member
+                    </button>
+                </div>
+                <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 20px;">Edit the team member cards displayed on the About page.</p>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Name</th>
+                            <th>Title</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teamTable">
+                        <tr><td colspan="4">Loading...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -386,6 +409,37 @@
             <div id="modalBody"></div>
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="teamModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="teamModalTitle"><i class="fa-solid fa-user-plus"></i> Add Team Member</h2>
+                <button class="modal-close" onclick="closeTeamModal()">&times;</button>
+            </div>
+            <div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label>Position</label>
+                    <input type="text" id="teamPosition" placeholder="e.g., Chairman" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label>Name</label>
+                    <input type="text" id="teamName" placeholder="Full Name" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label>Title</label>
+                    <input type="text" id="teamTitle" placeholder="e.g., PWD President" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label>Bio</label>
+                    <textarea id="teamBio" placeholder="Short biography" rows="3" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px;"></textarea>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeTeamModal()">Cancel</button>
+                <button class="btn-save" onclick="saveTeamMember()">Save</button>
             </div>
         </div>
     </div>
@@ -647,7 +701,122 @@
             window.location.href = 'login.html';
         }
         
+        let teamMembers = [];
+        let editingTeamId = null;
+        
+        async function loadTeamMembers() {
+            try {
+                const res = await fetch('/api/admin/team', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    teamMembers = data.team;
+                    renderTeamTable();
+                }
+            } catch (err) {
+                console.error('Error loading team:', err);
+            }
+        }
+        
+        function renderTeamTable() {
+            const tbody = document.getElementById('teamTable');
+            tbody.innerHTML = teamMembers.map(m => `
+                <tr>
+                    <td><strong>${m.position}</strong></td>
+                    <td>${m.name}</td>
+                    <td>${m.title}</td>
+                    <td class="action-btns" style="justify-content: flex-end;">
+                        <button class="btn-view" onclick="editTeamMember(${m.id})" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-delete" onclick="deleteTeamMember(${m.id})" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function showAddTeamModal() {
+            editingTeamId = null;
+            document.getElementById('teamModalTitle').innerHTML = '<i class="fa-solid fa-user-plus"></i> Add Team Member';
+            document.getElementById('teamPosition').value = '';
+            document.getElementById('teamName').value = '';
+            document.getElementById('teamTitle').value = '';
+            document.getElementById('teamBio').value = '';
+            document.getElementById('teamModal').classList.add('active');
+        }
+        
+        function editTeamMember(id) {
+            const member = teamMembers.find(m => m.id === id);
+            if (!member) return;
+            editingTeamId = id;
+            document.getElementById('teamModalTitle').innerHTML = '<i class="fa-solid fa-pen"></i> Edit Team Member';
+            document.getElementById('teamPosition').value = member.position || '';
+            document.getElementById('teamName').value = member.name || '';
+            document.getElementById('teamTitle').value = member.title || '';
+            document.getElementById('teamBio').value = member.bio || '';
+            document.getElementById('teamModal').classList.add('active');
+        }
+        
+        function closeTeamModal() {
+            document.getElementById('teamModal').classList.remove('active');
+            editingTeamId = null;
+        }
+        
+        async function saveTeamMember() {
+            const position = document.getElementById('teamPosition').value;
+            const name = document.getElementById('teamName').value;
+            const title = document.getElementById('teamTitle').value;
+            const bio = document.getElementById('teamBio').value;
+            
+            if (!position || !name || !title) {
+                alert('Please fill all required fields');
+                return;
+            }
+            
+            try {
+                const url = editingTeamId ? `/api/admin/team/${editingTeamId}` : '/api/admin/team';
+                const method = editingTeamId ? 'PUT' : 'POST';
+                
+                const res = await fetch(url, {
+                    method: method,
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ position, name, title, bio })
+                });
+                
+                const data = await res.json();
+                if (data.success) {
+                    closeTeamModal();
+                    loadTeamMembers();
+                } else {
+                    alert('Error saving team member');
+                }
+            } catch (err) {
+                alert('Error saving team member');
+            }
+        }
+        
+        async function deleteTeamMember(id) {
+            if (!confirm('Are you sure you want to delete this team member?')) return;
+            try {
+                const res = await fetch(`/api/admin/team/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    loadTeamMembers();
+                } else {
+                    alert('Error deleting team member');
+                }
+            } catch (err) {
+                alert('Error deleting team member');
+            }
+        }
+        
         loadData();
+        loadTeamMembers();
     </script>
 </body>
 </html>

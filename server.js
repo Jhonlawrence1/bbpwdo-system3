@@ -61,6 +61,29 @@ async function initDB() {
         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
+    
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS team_cards (
+        id SERIAL PRIMARY KEY,
+        position VARCHAR(100),
+        name VARCHAR(255),
+        title VARCHAR(255),
+        bio TEXT,
+        order_num INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    
+    const teamExists = await client.query('SELECT COUNT(*) as count FROM team_cards');
+    if (parseInt(teamExists.rows[0].count) === 0) {
+      await client.query(`
+        INSERT INTO team_cards (position, name, title, order_num) VALUES 
+        ('Chairman', 'Ronie C. Cabalbun', 'PWD President', 1),
+        ('Vice Chairman', 'Marlon B. Dayo', 'Vice President', 2),
+        ('Secretary', 'Catherine P. Pabillaran', 'Secretary', 3),
+        ('Treasurer', 'Reynan B. Pabillaran', 'Treasurer', 4)
+      `);
+    }
 
     const adminExists = await client.query("SELECT id FROM users WHERE role = 'admin'");
     if (adminExists.rows.length === 0) {
@@ -229,6 +252,63 @@ app.get('/api/admin/stats', authenticate, async (req, res) => {
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+app.get('/api/team', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM team_cards ORDER BY order_num ASC');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/admin/team', authenticate, async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM team_cards ORDER BY order_num ASC');
+    res.json({ success: true, team: result.rows });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/admin/team', authenticate, async (req, res) => {
+  const { position, name, title, bio } = req.body;
+  try {
+    const maxOrder = await pool.query('SELECT MAX(order_num) as max FROM team_cards');
+    const order = (maxOrder.rows[0].max || 0) + 1;
+    const result = await pool.query(
+      'INSERT INTO team_cards (position, name, title, bio, order_num) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [position, name, title, bio || '', order]
+    );
+    res.json({ success: true, member: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put('/api/admin/team/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  const { position, name, title, bio } = req.body;
+  try {
+    await pool.query(
+      'UPDATE team_cards SET position = $1, name = $2, title = $3, bio = $4 WHERE id = $5',
+      [position, name, title, bio || '', id]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete('/api/admin/team/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query('DELETE FROM team_cards WHERE id = $1', [id]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.use((req, res, next) => {
