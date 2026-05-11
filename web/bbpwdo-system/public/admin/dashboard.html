@@ -511,6 +511,7 @@
         let teamMembers = [];
         let currentRegId = null;
         let editingTeamId = null;
+        let charts = {};
         
         // Sidebar navigation
         document.querySelectorAll('.menu-link').forEach(btn => {
@@ -598,7 +599,11 @@
         function renderRecords() {
             document.getElementById('recordsTable').innerHTML = allRegs.map(r => {
                 const d = getRegData(r);
-                const dis = d.disabilityType ? (Array.isArray(d.disabilityType)?d.disabilityType.join(', '):d.disabilityType) : '-';
+                let dis = '-';
+                if (d.disabilityType) {
+                    if (Array.isArray(d.disabilityType)) dis = d.disabilityType.join(', ');
+                    else if (typeof d.disabilityType === 'string') dis = d.disabilityType;
+                }
                 return `<tr>
                     <td><b>${r.reference}</b></td>
                     <td>${d.firstName||''} ${d.lastName||''}</td>
@@ -641,30 +646,81 @@
         }
         
         function renderCharts() {
+            // Destroy old charts first
+            if (charts.disability) charts.disability.destroy();
+            if (charts.gender) charts.gender.destroy();
+            if (charts.employment) charts.employment.destroy();
+            
             const dis={}, gen={Male:0,Female:0}, emp={};
             allRegs.forEach(r => {
                 const d = getRegData(r);
+                // Fix disability type parsing
                 if (d.disabilityType) {
-                    let ts = Array.isArray(d.disabilityType) ? d.disabilityType : [d.disabilityType];
-                    ts.forEach(t => { if(t) dis[t.split(' - ')[0].trim()] = (dis[t.split(' - ')[0].trim()]||0)+1; });
+                    let ts = d.disabilityType;
+                    if (typeof ts === 'string') ts = [ts];
+                    if (Array.isArray(ts)) {
+                        ts.forEach(t => { 
+                            if (t && t.trim()) {
+                                const cat = t.includes(' - ') ? t.split(' - ')[0].trim() : t.trim();
+                                dis[cat] = (dis[cat] || 0) + 1;
+                            }
+                        });
+                    }
                 }
-                if(d.sex==='Male') gen.Male++; if(d.sex==='Female') gen.Female++;
+                if(d.sex==='Male') gen.Male++; 
+                if(d.sex==='Female') gen.Female++;
                 if(d.employmentStatus) emp[d.employmentStatus] = (emp[d.employmentStatus]||0)+1;
             });
             
             const dc = Object.keys(dis).length ? dis : {'No Data':1};
-            new Chart(document.getElementById('disabilityChart'), {type:'doughnut',data:{labels:Object.keys(dc),datasets:[{data:Object.values(dc),backgroundColor:['#4f46e5','#7c3aed','#059669','#d97706','#dc2626','#6366f1']}]}});
-            new Chart(document.getElementById('genderChart'), {type:'pie',data:{labels:['Male','Female'],datasets:[{data:[gen.Male,gen.Female],backgroundColor:['#4f46e5','#ec4899']}]}});
+            charts.disability = new Chart(document.getElementById('disabilityChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(dc),
+                    datasets: [{ data: Object.values(dc), backgroundColor: ['#4f46e5','#7c3aed','#059669','#d97706','#dc2626','#6366f1','#ec4899','#14b8a6'] }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+            
+            charts.gender = new Chart(document.getElementById('genderChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['Male', 'Female'],
+                    datasets: [{ data: [gen.Male, gen.Female], backgroundColor: ['#4f46e5', '#ec4899'] }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+            
             const ec = Object.keys(emp).length ? emp : {'No Data':1};
-            new Chart(document.getElementById('employmentChart'), {type:'bar',data:{labels:Object.keys(ec),datasets:[{data:Object.values(ec),backgroundColor:'#4f46e5'}]}});
+            charts.employment = new Chart(document.getElementById('employmentChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(ec),
+                    datasets: [{ label: 'Count', data: Object.values(ec), backgroundColor: '#4f46e5' }]
+                },
+                options: { responsive: true, plugins: { legend: { display: false } } }
+            });
         }
         
         function viewReg(id) {
             currentRegId = id;
             const r = allRegs.find(x => x.id === id);
             const d = getRegData(r);
-            let html = Object.keys(d).filter(k=>k!=='disabilityType').map(k=>`<div class="form-group"><label>${k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())}</label><span>${Array.isArray(d[k])?d[k].join(', '):d[k]||'-'}</span></div>`).join('');
-            if(d.disabilityType) html += `<div class="form-group"><label>Disability Type</label><span>${Array.isArray(d.disabilityType)?d.disabilityType.join(', '):d.disabilityType}</span></div>`;
+            
+            // Filter out non-essential fields
+            const excludeKeys = ['disabilityType', 'assistiveDevice', 'familyMembers'];
+            let html = Object.keys(d).filter(k => !excludeKeys.includes(k)).map(k => {
+                let val = d[k];
+                if (Array.isArray(val)) val = val.join(', ');
+                return `<div class="form-group"><label>${k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())}</label><span>${val || '-'}</span></div>`;
+            }).join('');
+            
+            // Add disability type separately
+            if (d.disabilityType) {
+                let disType = d.disabilityType;
+                if (Array.isArray(disType)) disType = disType.join(', ');
+                html += `<div class="form-group"><label>Disability Type</label><span>${disType}</span></div>`;
+            }
             html += `<div class="form-group"><label>Status</label><span class="badge badge-${r.status}">${r.status}</span></div>`;
             document.getElementById('modalBody').innerHTML = '<div class="form-grid">'+html+'</div>';
             document.getElementById('viewModal').classList.add('show');
