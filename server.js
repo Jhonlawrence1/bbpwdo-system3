@@ -69,10 +69,16 @@ async function initDB() {
         id SERIAL PRIMARY KEY,
         name VARCHAR(255),
         email VARCHAR(255),
+        phone VARCHAR(50),
+        subject VARCHAR(100),
         message TEXT,
         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
+    
+    // Add missing columns if they exist
+    try { await client.query(`ALTER TABLE messages ADD COLUMN IF NOT EXISTS phone VARCHAR(50)`); } catch(e) {}
+    try { await client.query(`ALTER TABLE messages ADD COLUMN IF NOT EXISTS subject VARCHAR(100)`); } catch(e) {}
     
     await client.query(`
       CREATE TABLE IF NOT EXISTS team_cards (
@@ -258,11 +264,11 @@ app.delete('/api/admin/messages/:id', authenticate, async (req, res) => {
 });
 
 app.post('/api/contact', async (req, res) => {
-  const { name, email, message } = req.body;
+  const { name, email, phone, subject, message } = req.body;
   try {
     await pool.query(
-      'INSERT INTO messages (name, email, message) VALUES ($1, $2, $3)',
-      [name, email, message]
+      'INSERT INTO messages (name, email, phone, subject, message) VALUES ($1, $2, $3, $4, $5)',
+      [name, email, phone || '', subject || '', message]
     );
     res.json({ success: true });
   } catch (err) {

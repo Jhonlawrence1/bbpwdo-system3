@@ -452,12 +452,13 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Subject</th>
                                 <th>Message</th>
                                 <th>Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="msgTable"><tr><td colspan="5"><tr><td colspan="7"><div class="loading">Loading...</div></td></tr></td></tr></tbody>
+                        <tbody id="msgTable"></tbody>
                     </table>
                 </div>
             </div>
@@ -668,10 +669,11 @@
             document.getElementById('msgTable').innerHTML = allMsgs.map(m => `<tr>
                 <td>${m.name}</td>
                 <td>${m.email}</td>
-                <td>${(m.message||'').substring(0,50)}...</td>
+                <td>${m.subject || '-'}</td>
+                <td>${(m.message||'').substring(0,40)}...</td>
                 <td>${new Date(m.timestamp).toLocaleDateString()}</td>
                 <td>
-                    <button class="btn btn-view" onclick="alert('From: ${m.name}\\nEmail: ${m.email}\\nMessage: ${m.message||'-'}')">View</button>
+                    <button class="btn btn-view" onclick="alert('From: ${m.name}\\nEmail: ${m.email}\\nPhone: ${m.phone||'N/A'}\\nSubject: ${m.subject||'N/A'}\\n\\nMessage:\\n${m.message||'-'}')">View</button>
                     <button class="btn btn-del" onclick="deleteMessage(${m.id})">Del</button>
                 </td>
             </tr>`).join('');
@@ -711,7 +713,7 @@
                 if (charts.employment) charts.employment.destroy();
             } catch(e) {}
             
-            const dis={}, gen={Male:0,Female:0}, emp={};
+            const dis={}, gen={Male:0,Female:0,'LGBTQIA+':0}, emp={};
             
             if (!allRegs || allRegs.length === 0) {
                 charts.disability = new Chart(document.getElementById('disabilityChart'), {type:'doughnut',data:{labels:['No Data'],datasets:[{data:[1],backgroundColor:['#e5e7eb']}]}});
@@ -732,7 +734,8 @@
                         else if (typeof ts === 'object' && ts !== null) Object.values(ts).forEach(t => { if(t && t.trim()) dis[t.trim()] = (dis[t.trim()]||0)+1; });
                     }
                     if (d.sex === 'Male') gen.Male++;
-                    if (d.sex === 'Female') gen.Female++;
+                    else if (d.sex === 'Female') gen.Female++;
+                    else if (d.sex === 'LGBTQIA+') gen['LGBTQIA+']++;
                     if (d.employmentStatus) emp[d.employmentStatus] = (emp[d.employmentStatus]||0)+1;
                 } catch(e) { continue; }
             }
@@ -750,8 +753,8 @@
             charts.gender = new Chart(document.getElementById('genderChart'), {
                 type: 'pie',
                 data: {
-                    labels: ['Male', 'Female'],
-                    datasets: [{ data: [gen.Male, gen.Female], backgroundColor: ['#4f46e5', '#ec4899'] }]
+                    labels: ['Male', 'Female', 'LGBTQIA+'],
+                    datasets: [{ data: [gen.Male, gen.Female, gen['LGBTQIA+']], backgroundColor: ['#4f46e5', '#ec4899', '#8b5cf6'] }]
                 },
                 options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
             });
