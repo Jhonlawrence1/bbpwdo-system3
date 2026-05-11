@@ -751,14 +751,43 @@
         function closeModal() { document.getElementById('viewModal').classList.remove('show'); }
         
         async function updateCurrentStatus(status) {
-            await fetch(`/api/admin/registrations/${currentRegId}`, {method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({status})});
-            closeModal(); loadData();
+            try {
+                const res = await fetch(`/api/admin/registrations/${currentRegId}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token},
+                    body: JSON.stringify({status: status})
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Status updated to ' + status);
+                    closeModal();
+                    loadData();
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch(e) {
+                alert('Error updating status: ' + e.message);
+            }
         }
         
         async function deleteCurrentReg() {
             if(confirm('Delete this registration?')) {
-                await fetch(`/api/admin/registrations/${currentRegId}`, {method:'DELETE',headers:{Authorization:'Bearer '+token}});
-                closeModal(); loadData();
+                try {
+                    const res = await fetch(`/api/admin/registrations/${currentRegId}`, {
+                        method: 'DELETE',
+                        headers: {'Authorization': 'Bearer ' + token}
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        alert('Deleted successfully');
+                        closeModal();
+                        loadData();
+                    } else {
+                        alert('Error: ' + (data.error || 'Unknown error'));
+                    }
+                } catch(e) {
+                    alert('Error deleting: ' + e.message);
+                }
             }
         }
         
@@ -789,9 +818,38 @@
         }
         
         function exportData() {
-            let csv = 'Ref,FirstName,LastName,Age,Sex,Status,Date\n';
-            allRegs.forEach(r => { const d=getRegData(r); csv+=`${r.reference},${d.firstName||''},${d.lastName||''},${d.age||''},${d.sex||''},${r.status},${new Date(r.timestamp).toLocaleDateString()}\n`; });
-            const a=document.createElement('a'); a.href='data:text/csv,'+encodeURIComponent(csv); a.download='pwd_records.csv'; a.click();
+            // Get all unique headers from all registrations
+            const allFields = new Set(['Reference','Status','Date']);
+            allRegs.forEach(r => {
+                const d = getRegData(r);
+                if (d) {
+                    Object.keys(d).forEach(k => allFields.add(k));
+                }
+            });
+            
+            const headers = Array.from(allFields);
+            let csv = headers.join(',') + '\n';
+            
+            allRegs.forEach(r => {
+                const d = getRegData(r);
+                const row = headers.map(h => {
+                    if (h === 'Reference') return r.reference || '';
+                    if (h === 'Status') return r.status || '';
+                    if (h === 'Date') return r.timestamp ? new Date(r.timestamp).toLocaleDateString() : '';
+                    let val = d ? d[h] : '';
+                    if (Array.isArray(val)) val = val.join('; ');
+                    return '"' + String(val).replace(/"/g, '""') + '"';
+                });
+                csv += row.join(',') + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'pwd_registrations_' + new Date().toISOString().split('T')[0] + '.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
         }
         
         function logout() { localStorage.removeItem('adminToken'); window.location.href='login.html'; }
