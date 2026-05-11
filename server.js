@@ -74,6 +74,17 @@ async function initDB() {
       )
     `);
     
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS homepage_stats (
+        id SERIAL PRIMARY KEY,
+        stat_key VARCHAR(50) UNIQUE NOT NULL,
+        stat_value INTEGER DEFAULT 0,
+        stat_label VARCHAR(100),
+        stat_icon VARCHAR(50),
+        sort_order INTEGER DEFAULT 0
+      )
+    `);
+    
     const teamExists = await client.query('SELECT COUNT(*) as count FROM team_cards');
     if (parseInt(teamExists.rows[0].count) === 0) {
       await client.query(`
@@ -82,6 +93,16 @@ async function initDB() {
         ('Vice Chairman', 'Marlon B. Dayo', 'Vice President', 2),
         ('Secretary', 'Catherine P. Pabillaran', 'Secretary', 3),
         ('Treasurer', 'Reynan B. Pabillaran', 'Treasurer', 4)
+      `);
+    }
+    
+    const statsExists = await client.query('SELECT COUNT(*) as count FROM homepage_stats');
+    if (parseInt(statsExists.rows[0].count) === 0) {
+      await client.query(`
+        INSERT INTO homepage_stats (stat_key, stat_value, stat_label, stat_icon, sort_order) VALUES 
+        ('programs', 50, 'Programs This Year', 'fa-calendar-check', 2),
+        ('partners', 25, 'Partner Organizations', 'fa-hand-holding-heart', 3),
+        ('success_stories', 100, 'Success Stories', 'fa-award', 4)
       `);
     }
 
@@ -258,6 +279,49 @@ app.get('/api/team', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM team_cards ORDER BY order_num ASC');
     res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/stats/homepage', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM homepage_stats ORDER BY sort_order ASC');
+    const totalPWD = await pool.query("SELECT COUNT(*) as count FROM registrations WHERE status = 'approved'");
+    const stats = result.rows;
+    stats.unshift({
+      id: 0,
+      stat_key: 'registered',
+      stat_value: parseInt(totalPWD.rows[0].count) || 0,
+      stat_label: 'Registered PWDs',
+      stat_icon: 'fa-users',
+      sort_order: 1,
+      auto: true
+    });
+    res.json(stats);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/admin/stats/homepage', authenticate, async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM homepage_stats ORDER BY sort_order ASC');
+    res.json({ success: true, stats: result.rows });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put('/api/admin/stats/homepage/:key', authenticate, async (req, res) => {
+  const { key } = req.params;
+  const { stat_value } = req.body;
+  try {
+    await pool.query(
+      'UPDATE homepage_stats SET stat_value = $1 WHERE stat_key = $2',
+      [stat_value, key]
+    );
+    res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

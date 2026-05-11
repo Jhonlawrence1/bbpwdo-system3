@@ -183,22 +183,30 @@
             }, 30);
         }
         
-        fetch('backend/stats-api.php')
+fetch('/api/stats/homepage')
             .then(res => res.json())
             .then(data => {
-                if (data.success) {
+                if (data.length > 0) {
                     const grid = document.getElementById('statsGrid');
                     grid.innerHTML = '';
-                    data.data.forEach(stat => {
+                    data.forEach(stat => {
                         const card = document.createElement('div');
                         card.className = 'stat-card';
+                        const value = stat.auto ? stat.stat_value : stat.stat_value;
                         card.innerHTML = `
                             <div class="stat-icon"><i class="fa-solid ${stat.stat_icon || 'fa-chart-bar'}"></i></div>
-                            <div class="stat-number" data-count="${stat.stat_value}">0</div>
+                            <div class="stat-number" data-count="${value}">0</div>
                             <div class="stat-label">${stat.stat_label}</div>
                         `;
                         grid.appendChild(card);
                     });
+                    document.querySelectorAll('.stat-number').forEach(el => {
+                        const target = parseInt(el.dataset.count);
+                        updateStatNumber(el, target);
+                    });
+                }
+            })
+            .catch(err => console.log('Stats not available:', err));
                     document.querySelectorAll('.stat-number').forEach(el => {
                         const target = parseInt(el.dataset.count);
                         updateStatNumber(el, target);

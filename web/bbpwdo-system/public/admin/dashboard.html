@@ -364,6 +364,26 @@
         <div id="settingsPage" style="display: none;">
             <div class="table-card" style="margin-bottom: 30px;">
                 <div class="table-header">
+                    <h2><i class="fa-solid fa-chart-line"></i> Homepage Stats</h2>
+                </div>
+                <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 20px;">Edit the statistics displayed on the homepage. Registered PWDs is automatically counted from registrations.</p>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Icon</th>
+                            <th>Label</th>
+                            <th>Value</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="statsTable">
+                        <tr><td colspan="4">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="table-card" style="margin-bottom: 30px;">
+                <div class="table-header">
                     <h2><i class="fa-solid fa-gear"></i> Admin Settings</h2>
                 </div>
                 <div style="max-width: 500px;">
@@ -817,6 +837,57 @@
         
         loadData();
         loadTeamMembers();
+        loadHomepageStats();
+        
+        async function loadHomepageStats() {
+            try {
+                const res = await fetch('/api/admin/stats/homepage', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    renderStatsTable(data.stats);
+                }
+            } catch (err) {
+                console.error('Error loading stats:', err);
+            }
+        }
+        
+        function renderStatsTable(stats) {
+            const tbody = document.getElementById('statsTable');
+            tbody.innerHTML = stats.map(s => `
+                <tr>
+                    <td><i class="fa-solid ${s.stat_icon}"></i></td>
+                    <td><strong>${s.stat_label}</strong></td>
+                    <td>
+                        ${s.stat_key === 'registered' 
+                            ? `<span style="font-size: 1.5rem; font-weight: bold;">${s.stat_value}+</span> (Auto)` 
+                            : `<input type="number" value="${s.stat_value}" 
+                                onchange="updateStat('${s.stat_key}', this.value)"
+                                style="width: 100px; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">+`}
+                    </td>
+                    <td style="text-align: right;">
+                        ${s.stat_key !== 'registered' ? `<span style="color: #6b7280; font-size: 0.8rem;">Editable</span>` : '<span style="color: #6b7280; font-size: 0.8rem;">Automatic</span>'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        async function updateStat(key, value) {
+            try {
+                await fetch(`/api/admin/stats/homepage/${key}`, {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ stat_value: parseInt(value) })
+                });
+                alert('Stat updated!');
+            } catch (err) {
+                alert('Error updating stat');
+            }
+        }
     </script>
 </body>
 </html>
