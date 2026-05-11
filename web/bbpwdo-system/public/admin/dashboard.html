@@ -177,11 +177,11 @@
             <span>BBPWDO</span>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="#" class="active" onclick="showPage(event, 'dashboard')"><i class="fa-solid fa-house"></i> Dashboard</a></li>
-            <li><a href="#" onclick="showPage(event, 'records')"><i class="fa-solid fa-folder-open"></i> Records</a></li>
-            <li><a href="#" onclick="showPage(event, 'messages')"><i class="fa-solid fa-envelope"></i> Messages</a></li>
-            <li><a href="#" onclick="showPage(event, 'reports')"><i class="fa-solid fa-chart-pie"></i> Reports</a></li>
-            <li><a href="#" onclick="showPage(event, 'settings')"><i class="fa-solid fa-gear"></i> Settings</a></li>
+            <li><a href="javascript:void(0)" class="active" data-page="dashboard"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="javascript:void(0)" data-page="records"><i class="fa-solid fa-folder-open"></i> Records</a></li>
+            <li><a href="javascript:void(0)" data-page="messages"><i class="fa-solid fa-envelope"></i> Messages</a></li>
+            <li><a href="javascript:void(0)" data-page="reports"><i class="fa-solid fa-chart-pie"></i> Reports</a></li>
+            <li><a href="javascript:void(0)" data-page="settings"><i class="fa-solid fa-gear"></i> Settings</a></li>
         </ul>
     </div>
     
@@ -989,6 +989,39 @@ let currentRegId = null;
                 alert('Error updating stat');
             }
         }
+        
+        // Sidebar click handler using event delegation
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const pageId = this.getAttribute('data-page');
+                
+                // Update active state
+                document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Hide all pages
+                document.getElementById('dashboardPage').style.display = 'none';
+                document.getElementById('recordsPage').style.display = 'none';
+                document.getElementById('messagesPage').style.display = 'none';
+                document.getElementById('reportsPage').style.display = 'none';
+                document.getElementById('settingsPage').style.display = 'none';
+                
+                // Show selected page
+                const page = document.getElementById(pageId + 'Page');
+                if (page) page.style.display = 'block';
+                
+                // Update title
+                const titles = {
+                    'dashboard': 'Dashboard',
+                    'records': 'PWD Records',
+                    'messages': 'Messages',
+                    'reports': 'Reports',
+                    'settings': 'Settings'
+                };
+                document.getElementById('pageTitle').textContent = titles[pageId];
+            });
+        });
     </script>
 </body>
 </html>
