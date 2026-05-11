@@ -177,11 +177,11 @@
             <span>BBPWDO</span>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="#" class="active" onclick="showPage('dashboard')"><i class="fa-solid fa-house"></i> Dashboard</a></li>
-            <li><a href="#" onclick="showPage('records')"><i class="fa-solid fa-folder-open"></i> Records</a></li>
-            <li><a href="#" onclick="showPage('messages')"><i class="fa-solid fa-envelope"></i> Messages</a></li>
-            <li><a href="#" onclick="showPage('reports')"><i class="fa-solid fa-chart-pie"></i> Reports</a></li>
-            <li><a href="#" onclick="showPage('settings')"><i class="fa-solid fa-gear"></i> Settings</a></li>
+            <li><a href="#" class="active" onclick="showPage(event, 'dashboard')"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="#" onclick="showPage(event, 'records')"><i class="fa-solid fa-folder-open"></i> Records</a></li>
+            <li><a href="#" onclick="showPage(event, 'messages')"><i class="fa-solid fa-envelope"></i> Messages</a></li>
+            <li><a href="#" onclick="showPage(event, 'reports')"><i class="fa-solid fa-chart-pie"></i> Reports</a></li>
+            <li><a href="#" onclick="showPage(event, 'settings')"><i class="fa-solid fa-gear"></i> Settings</a></li>
         </ul>
     </div>
     
@@ -489,9 +489,13 @@
         let allRegistrations = [];
         let allMessages = [];
         
-        function showPage(pageId) {
+        function showPage(e, pageId) {
+            if (e) e.preventDefault();
             document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
-            event.target.closest('a').classList.add('active');
+            if (e && e.target) {
+                const link = e.target.closest('a');
+                if (link) link.classList.add('active');
+            }
             
             document.getElementById('dashboardPage').style.display = 'none';
             document.getElementById('recordsPage').style.display = 'none';
