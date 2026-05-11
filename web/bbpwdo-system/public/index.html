@@ -186,48 +186,27 @@
 fetch('/api/stats/homepage')
             .then(res => res.json())
             .then(data => {
-                if (data.length > 0) {
+                if (data && data.length > 0) {
                     const grid = document.getElementById('statsGrid');
                     grid.innerHTML = '';
                     data.forEach(stat => {
                         const card = document.createElement('div');
                         card.className = 'stat-card';
-                        const value = stat.auto ? stat.stat_value : stat.stat_value;
+                        const value = stat.stat_value || 0;
                         card.innerHTML = `
                             <div class="stat-icon"><i class="fa-solid ${stat.stat_icon || 'fa-chart-bar'}"></i></div>
                             <div class="stat-number" data-count="${value}">0</div>
-                            <div class="stat-label">${stat.stat_label}</div>
+                            <div class="stat-label">${stat.stat_label || 'Stats'}</div>
                         `;
                         grid.appendChild(card);
                     });
                     document.querySelectorAll('.stat-number').forEach(el => {
-                        const target = parseInt(el.dataset.count);
+                        const target = parseInt(el.dataset.count) || 0;
                         updateStatNumber(el, target);
                     });
                 }
             })
-            .catch(err => console.log('Stats not available:', err));
-                    document.querySelectorAll('.stat-number').forEach(el => {
-                        const target = parseInt(el.dataset.count);
-                        updateStatNumber(el, target);
-                    });
-                }
-            })
-            .catch(() => {
-                fetch('backend/stats.php')
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success && data.stats) {
-                            const registered = data.stats.registered || 0;
-                            const cards = document.querySelectorAll('.stat-card');
-                            if (cards[0]) {
-                                cards[0].querySelector('.stat-number').dataset.count = registered;
-                                cards[0].querySelector('.stat-number').textContent = '0';
-                                updateStatNumber(cards[0].querySelector('.stat-number'), registered);
-                            }
-                        }
-                    });
-            });
+            .catch(err => console.log('Stats error:', err));
     </script>
 </body>
 </html>
