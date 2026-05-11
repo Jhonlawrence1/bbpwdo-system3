@@ -221,48 +221,80 @@
             background: white;
             padding: 25px;
             border-radius: 16px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
+            width: 95%;
+            max-width: 800px;
+            max-height: 85vh;
             overflow-y: auto;
         }
         
         .modal-header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
         }
         
-        .modal-header h2 { font-size: 1.2rem; }
+        .modal-header h2 { font-size: 1.3rem; color: #1e1b4b; }
         
         .modal-close {
             background: none;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
+            color: #6b7280;
         }
         
-        .form-grid {
+        .detail-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 10px;
+        }
+        
+        .detail-section h3 {
+            font-size: 1rem;
+            color: #4f46e5;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .detail-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
         }
         
-        .form-group { margin-bottom: 10px; }
-        
-        .form-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #374151;
-            margin-bottom: 5px;
+        .detail-item {
+            display: flex;
+            flex-direction: column;
         }
         
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
+        .detail-item label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .detail-item span {
+            font-size: 0.9rem;
+            color: #1e1b4b;
+            padding: 6px 10px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .detail-item.full {
+            grid-column: 1 / -1;
+        }
+        
+        .detail-item.full span {
+            min-height: 60px;
         }
         
         .btn-group { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
@@ -729,22 +761,81 @@
             const r = allRegs.find(x => x.id === id);
             const d = getRegData(r);
             
-            // Filter out non-essential fields
-            const excludeKeys = ['disabilityType', 'assistiveDevice', 'familyMembers'];
-            let html = Object.keys(d).filter(k => !excludeKeys.includes(k)).map(k => {
-                let val = d[k];
-                if (Array.isArray(val)) val = val.join(', ');
-                return `<div class="form-group"><label>${k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())}</label><span>${val || '-'}</span></div>`;
-            }).join('');
+            // Organize data by sections
+            const personal = ['firstName', 'lastName', 'middleName', 'suffix', 'sex', 'age', 'birthdate', 'civilStatus', 'contactNumber'];
+            const address = ['address', 'bloodType'];
+            const pwd = ['pwdIdNumber', 'issuedDate', 'expiryDate', 'isRegistered'];
+            const employment = ['employmentStatus', 'employmentType'];
+            const education = ['educationElementary', 'educationHighschool', 'educationCollege', 'educationVocational'];
+            const skills = ['skills', 'trainings'];
             
-            // Add disability type separately
+            function renderFields(fields) {
+                return fields.filter(f => d[f] !== undefined && d[f] !== '').map(k => {
+                    let val = d[k];
+                    if (Array.isArray(val)) val = val.join(', ');
+                    const label = k.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+                    return `<div class="detail-item"><label>${label}</label><span>${val || '-'}</span></div>`;
+                }).join('');
+            }
+            
+            let html = `
+                <div class="detail-section">
+                    <h3><i class="fa-solid fa-user"></i> Personal Information</h3>
+                    <div class="detail-grid">${renderFields(personal)}</div>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fa-solid fa-location-dot"></i> Address</h3>
+                    <div class="detail-grid">${renderFields(address)}</div>
+                </div>`;
+            
+            // Disability Type
             if (d.disabilityType) {
                 let disType = d.disabilityType;
                 if (Array.isArray(disType)) disType = disType.join(', ');
-                html += `<div class="form-group"><label>Disability Type</label><span>${disType}</span></div>`;
+                html += `
+                <div class="detail-section">
+                    <h3><i class="fa-solid fa-wheelchair"></i> Disability Information</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item full"><label>Type of Disability</label><span>${disType}</span></div>
+                    </div>
+                </div>`;
             }
-            html += `<div class="form-group"><label>Status</label><span class="badge badge-${r.status}">${r.status}</span></div>`;
-            document.getElementById('modalBody').innerHTML = '<div class="form-grid">'+html+'</div>';
+            
+            // Assistive Devices
+            if (d.assistiveDevice) {
+                let devices = Array.isArray(d.assistiveDevice) ? d.assistiveDevice.join(', ') : d.assistiveDevice;
+                html += `
+                <div class="detail-section">
+                    <h3><i class="fa-solid fa-crutch"></i> Assistive Devices</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item full"><span>${devices}</span></div>
+                    </div>
+                </div>`;
+            }
+            
+            html += `
+                <div class="detail-section">
+                    <h3><i class="fa-solid fa-briefcase"></i> Employment</h3>
+                    <div class="detail-grid">${renderFields(employment)}</div>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fa-solid fa-graduation-cap"></i> Education</h3>
+                    <div class="detail-grid">${renderFields(education)}</div>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fa-solid fa-certificate"></i> Skills & Trainings</h3>
+                    <div class="detail-grid">${renderFields(skills)}</div>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fa-solid fa-info-circle"></i> Registration Info</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item"><label>Reference No.</label><span>${r.reference || '-'}</span></div>
+                        <div class="detail-item"><label>Status</label><span class="badge badge-${r.status}">${r.status.toUpperCase()}</span></div>
+                        <div class="detail-item"><label>Date Registered</label><span>${new Date(r.timestamp).toLocaleString()}</span></div>
+                    </div>
+                </div>`;
+            
+            document.getElementById('modalBody').innerHTML = html;
             document.getElementById('viewModal').classList.add('show');
         }
         
