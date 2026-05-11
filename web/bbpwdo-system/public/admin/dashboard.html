@@ -200,7 +200,8 @@
         </div>
         
         <div id="dashboardPage">
-            <div class="stats-grid">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div class="stats-grid" style="margin-bottom: 0; flex: 1;">
                 <div class="stat-card">
                     <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
                     <div class="stat-info">
@@ -228,6 +229,15 @@
                         <h3 id="statMessages">0</h3>
                         <p>Messages</p>
                     </div>
+                </div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-save" onclick="exportRegistrations('csv')" style="background: #059669;">
+                        <i class="fa-solid fa-file-csv"></i> Export CSV
+                    </button>
+                    <button class="btn-save" onclick="exportRegistrations('excel')" style="background: #4f46e5;">
+                        <i class="fa-solid fa-file-excel"></i> Export Excel
+                    </button>
                 </div>
             </div>
             
@@ -428,6 +438,9 @@
             </div>
             <div id="modalBody"></div>
             <div class="modal-actions">
+                <button class="btn-cancel" style="background: #dc2626; color: white;" onclick="deleteReg(currentRegId); closeModal();">Delete</button>
+                <button class="btn-cancel" style="background: #f59e0b; color: white;" onclick="updateStatus(currentRegId, 'rejected'); closeModal();">Reject</button>
+                <button class="btn-save" style="background: #059669;" onclick="updateStatus(currentRegId, 'approved'); closeModal();">Approve</button>
                 <button class="btn-cancel" onclick="closeModal()">Close</button>
             </div>
         </div>
@@ -616,59 +629,143 @@
         
         function renderCharts(regs) {
             const disabilityTypes = {};
-            const genders = { Male: 0, Female: 0, 'LGBTQIA+': 0 };
+            const genders = { Male: 0, Female: 0 };
             const employment = {};
             
             regs.forEach(r => {
                 const data = typeof r.data === 'string' ? JSON.parse(r.data) : r.data;
+                
+                // Count disability types
                 if (data.disabilityType) {
-                    const types = Array.isArray(data.disabilityType) ? data.disabilityType : [data.disabilityType];
-                    types.forEach(t => {
-                        const cat = t.split(' - ')[0];
-                        disabilityTypes[cat] = (disabilityTypes[cat] || 0) + 1;
-                    });
+                    let types = data.disabilityType;
+                    if (typeof types === 'string') {
+                        types = [types];
+                    }
+                    if (Array.isArray(types)) {
+                        types.forEach(t => {
+                            if (t && t.trim()) {
+                                const cat = t.includes(' - ') ? t.split(' - ')[0] : t;
+                                disabilityTypes[cat.trim()] = (disabilityTypes[cat.trim()] || 0) + 1;
+                            }
+                        });
+                    }
                 }
-                if (data.sex) genders[data.sex] = (genders[data.sex] || 0) + 1;
-                if (data.employmentStatus) employment[data.employmentStatus] = (employment[data.employmentStatus] || 0) + 1;
+                
+                // Count genders
+                if (data.sex === 'Male') genders.Male++;
+                if (data.sex === 'Female') genders.Female++;
+                if (data.sex === 'LGBTQIA+') genders['LGBTQIA+'] = (genders['LGBTQIA+'] || 0) + 0;
+                
+                // Count employment
+                if (data.employmentStatus) {
+                    employment[data.employmentStatus] = (employment[data.employmentStatus] || 0) + 1;
+                }
             });
+            
+            const disabilityLabels = Object.keys(disabilityTypes);
+            const disabilityValues = Object.values(disabilityTypes);
+            
+            if (disabilityLabels.length === 0) {
+                disabilityLabels.push('No Data');
+                disabilityValues.push(1);
+            }
             
             new Chart(document.getElementById('disabilityChart'), {
                 type: 'doughnut',
                 data: {
-                    labels: Object.keys(disabilityTypes),
-                    datasets: [{ data: Object.values(disabilityTypes), backgroundColor: ['#4f46e5', '#7c3aed', '#059669', '#d97706', '#dc2626', '#6366f1'] }]
+                    labels: disabilityLabels,
+                    datasets: [{ data: disabilityValues, backgroundColor: ['#4f46e5', '#7c3aed', '#059669', '#d97706', '#dc2626', '#6366f1', '#ec4899', '#14b8a6'] }]
                 }
             });
             
             new Chart(document.getElementById('genderChart'), {
                 type: 'pie',
                 data: {
-                    labels: Object.keys(genders),
-                    datasets: [{ data: Object.values(genders), backgroundColor: ['#4f46e5', '#ec4899', '#8b5cf6'] }]
+                    labels: ['Male', 'Female', 'LGBTQIA+'],
+                    datasets: [{ data: [genders.Male, genders.Female, genders['LGBTQIA+'] || 0], backgroundColor: ['#4f46e5', '#ec4899', '#8b5cf6'] }]
                 }
             });
+            
+            const empLabels = Object.keys(employment);
+            const empValues = Object.values(employment);
+            
+            if (empLabels.length === 0) {
+                empLabels.push('No Data');
+                empValues.push(1);
+            }
             
             new Chart(document.getElementById('employmentChart'), {
                 type: 'bar',
                 data: {
-                    labels: Object.keys(employment),
-                    datasets: [{ label: 'Count', data: Object.values(employment), backgroundColor: '#4f46e5' }]
+                    labels: empLabels,
+                    datasets: [{ label: 'Count', data: empValues, backgroundColor: '#4f46e5' }]
                 },
                 options: { plugins: { legend: { display: false } } }
             });
         }
         
+        function exportRegistrations(type) {
+            if (!allRegistrations.length) {
+                alert('No data to export');
+                return;
+            }
+            
+            let csv = 'Reference,First Name,Last Name,Age,Sex,Disability Type,Status,Date\n';
+            
+            allRegistrations.forEach(r => {
+                const data = typeof r.data === 'string' ? JSON.parse(r.data) : r.data;
+                const disability = data.disabilityType ? (Array.isArray(data.disabilityType) ? data.disabilityType.join('; ') : data.disabilityType) : '';
+                csv += `${r.reference},"${data.firstName || ''}","${data.lastName || ''}","${data.age || ''}","${data.sex || ''}","${disability}","${r.status}","${new Date(r.timestamp).toLocaleDateString()}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `pwd_registrations_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+let currentRegId = null;
+        
         function viewRegistration(id) {
             const reg = allRegistrations.find(r => r.id === id);
             if (!reg) return;
+            currentRegId = id;
             const data = typeof reg.data === 'string' ? JSON.parse(reg.data) : reg.data;
             
             let html = '';
             for (let key in data) {
+                if (key === 'disabilityType' || key === 'assistiveDevice' || key === 'familyMembers') continue;
                 let value = data[key];
                 if (Array.isArray(value)) value = value.join(', ');
-                html += `<div class="form-group"><label>${key}</label><span>${value || '-'}</span></div>`;
+                if (value) {
+                    html += `<div class="form-group"><label>${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</label><span>${value}</span></div>`;
+                }
             }
+            
+            // Show disability type
+            if (data.disabilityType) {
+                const types = Array.isArray(data.disabilityType) ? data.disabilityType : [data.disabilityType];
+                html += `<div class="form-group"><label>Disability Type</label><span>${types.join(', ')}</span></div>`;
+            }
+            
+            // Show current status
+            html += `<div class="form-group"><label>Status</label><span class="badge badge-${reg.status}">${reg.status.toUpperCase()}</span></div>`;
+            html += `<div class="form-group"><label>Reference</label><span>${reg.reference}</span></div>`;
+            html += `<div class="form-group"><label>Registered Date</label><span>${new Date(reg.timestamp).toLocaleString()}</span></div>`;
+            
+            document.getElementById('modalBody').innerHTML = `
+                <div class="form-section">
+                    <h3>Registration Details</h3>
+                    <div class="form-grid">
+                        ${html}
+                    </div>
+                </div>
+            `;
+            document.getElementById('viewModal').classList.add('active');
+        }
             
             document.getElementById('modalBody').innerHTML = `
                 <div class="form-section">

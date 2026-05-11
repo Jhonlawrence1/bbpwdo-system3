@@ -95,27 +95,38 @@ function animateCounter(element, target) {
     }, 30);
 }
 
-function initContactForm() {}
+function initContactForm() {
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleContactSubmit);
+    }
+}
 
 function handleContactSubmit(e) {
     e.preventDefault();
     
-    const formData = new FormData(document.getElementById('contactForm'));
+    const form = document.getElementById('contactForm');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
     
-    fetch('backend/submit.php', {
+    fetch('/api/contact', {
         method: 'POST',
-        body: formData
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
     })
     .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            document.getElementById('contactForm').reset();
-            document.getElementById('contactSuccess').style.display = 'block';
+    .then(result => {
+        if (result.success) {
+            form.reset();
+            const successMsg = document.getElementById('contactSuccess');
+            if (successMsg) successMsg.style.display = 'block';
+            alert('Message sent successfully!');
         } else {
-            alert(data.message);
+            alert(result.message || 'Error sending message');
         }
     })
     .catch(err => {
+        console.error('Contact error:', err);
         alert('Error sending message. Please try again.');
     });
 }
