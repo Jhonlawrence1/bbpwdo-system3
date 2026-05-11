@@ -529,6 +529,8 @@
         
         async function loadData() {
             try {
+                document.getElementById('regTable').innerHTML = '<tr><td colspan="7"><div class="loading">Loading data...</div></td></tr>';
+                
                 const r1 = await fetch('/api/admin/registrations', {headers:{Authorization:'Bearer '+token}});
                 const d1 = await r1.json();
                 if (d1.success) {
@@ -537,6 +539,8 @@
                     renderRegs();
                     renderRecords();
                     renderCharts();
+                } else {
+                    document.getElementById('regTable').innerHTML = '<tr><td colspan="7" style="color:red">Failed to load registrations</td></tr>';
                 }
                 
                 const r2 = await fetch('/api/admin/messages', {headers:{Authorization:'Bearer '+token}});
@@ -557,7 +561,10 @@
                 const r4 = await fetch('/api/admin/stats/homepage', {headers:{Authorization:'Bearer '+token}});
                 const d4 = await r4.json();
                 if (d4.success) renderStats(d4.stats);
-            } catch(e) { console.error(e); }
+            } catch(e) { 
+                console.error(e);
+                document.getElementById('regTable').innerHTML = '<tr><td colspan="7" style="color:red">Error: '+e.message+'</td></tr>';
+            }
         }
         
         function updateStats() {
