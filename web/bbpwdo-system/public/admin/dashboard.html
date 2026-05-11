@@ -406,12 +406,14 @@
                                 <th>Name</th>
                                 <th>Age</th>
                                 <th>Sex</th>
+                                <th>Disability</th>
+                                <th>Contact</th>
                                 <th>Status</th>
                                 <th>Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="regTable"><tr><td colspan="7"><tr><td colspan="7"><div class="loading">Loading...</div></td></tr></td></tr></tbody>
+                        <tbody id="regTable"></tbody>
                     </table>
                 </div>
             </div>
@@ -426,13 +428,16 @@
                             <tr>
                                 <th>Ref</th>
                                 <th>Name</th>
+                                <th>Age</th>
+                                <th>Sex</th>
                                 <th>Contact</th>
                                 <th>Disability</th>
                                 <th>Status</th>
+                                <th>Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="recordsTable"><tr><td colspan="6"><tr><td colspan="7"><div class="loading">Loading...</div></td></tr></td></tr></tbody>
+                        <tbody id="recordsTable"></tbody>
                     </table>
                 </div>
             </div>
@@ -619,13 +624,16 @@
         }
         
         function renderRegs() {
-            document.getElementById('regTable').innerHTML = allRegs.slice(0,10).map(r => {
+            document.getElementById('regTable').innerHTML = allRegs.slice(0,15).map(r => {
                 const d = getRegData(r);
+                const dis = d.disabilityType ? (Array.isArray(d.disabilityType) ? d.disabilityType[0] : d.disabilityType) : '-';
                 return `<tr>
                     <td><b>${r.reference}</b></td>
                     <td>${d.firstName||''} ${d.lastName||''}</td>
                     <td>${d.age||'-'}</td>
                     <td>${d.sex||'-'}</td>
+                    <td>${dis.substring(0, 20)}${(dis.length > 20 ? '...' : '')}</td>
+                    <td>${d.contactNumber || '-'}</td>
                     <td><span class="badge badge-${r.status}">${r.status}</span></td>
                     <td>${new Date(r.timestamp).toLocaleDateString()}</td>
                     <td><button class="btn btn-view" onclick="viewReg(${r.id})">View</button></td>
@@ -761,22 +769,62 @@
             const r = allRegs.find(x => x.id === id);
             const d = getRegData(r);
             
-            // Organize data by sections
-            const personal = ['firstName', 'lastName', 'middleName', 'suffix', 'sex', 'age', 'birthdate', 'civilStatus', 'contactNumber'];
+            // All registration form fields
+            const personal = ['lastName', 'firstName', 'middleName', 'suffix', 'sex', 'age', 'birthdate', 'civilStatus', 'contactNumber'];
             const address = ['address', 'bloodType'];
-            const pwd = ['pwdIdNumber', 'issuedDate', 'expiryDate', 'isRegistered'];
+            const pwdInfo = ['pwdIdNumber', 'issuedDate', 'expiryDate', 'isRegistered'];
             const employment = ['employmentStatus', 'employmentType'];
             const education = ['educationElementary', 'educationHighschool', 'educationCollege', 'educationVocational'];
-            const skills = ['skills', 'trainings'];
             
-            function renderFields(fields) {
-                return fields.filter(f => d[f] !== undefined && d[f] !== '').map(k => {
+            function renderFields(fields, addFullWidth = false) {
+                const items = fields.filter(f => d[f] !== undefined && d[f] !== '');
+                if (items.length === 0) return '<div class="detail-item"><span>No data</span></div>';
+                return items.map(k => {
                     let val = d[k];
                     if (Array.isArray(val)) val = val.join(', ');
-                    const label = k.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
-                    return `<div class="detail-item"><label>${label}</label><span>${val || '-'}</span></div>`;
+                    // Format label nicely
+                    let label = k.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+                    if (k === 'pwdIdNumber') label = 'PWD ID Number';
+                    if (k === 'issuedDate') label = 'Date Issued';
+                    if (k === 'expiryDate') label = 'Expiry Date';
+                    if (k === 'isRegistered') label = 'Registered in Barangay';
+                    if (k === 'educationElementary') label = 'Elementary School';
+                    if (k === 'educationHighschool') label = 'High School';
+                    if (k === 'educationCollege') label = 'College/University';
+                    if (k === 'educationVocational') label = 'Vocational/Training';
+                    return `<div class="detail-item${addFullWidth ? ' full' : ''}"><label>${label}</label><span>${val || '-'}</span></div>`;
                 }).join('');
             }
+            
+            // Build disability type display
+            let disabilityHtml = '';
+            if (d.disabilityType) {
+                let disTypes = d.disabilityType;
+                if (typeof disTypes === 'string') disTypes = [disTypes];
+                if (Array.isArray(disTypes)) disTypes = disTypes.join(', ');
+                if (d.otherDisability && d.otherDisability.trim()) disTypes += (disTypes ? ', ' : '') + d.otherDisability;
+                disabilityHtml = `<div class="detail-item full"><label>Type of Disability</label><span>${disTypes || '-'}</span></div>`;
+            }
+            if (d.otherDisability && d.otherDisability.trim()) {
+                disabilityHtml += `<div class="detail-item full"><label>Other Disability</label><span>${d.otherDisability}</span></div>`;
+            }
+            
+            // Build assistive devices display
+            let assistiveHtml = '';
+            if (d.assistiveDevice) {
+                let devices = d.assistiveDevice;
+                if (typeof devices === 'string') devices = [devices];
+                if (Array.isArray(devices)) devices = devices.join(', ');
+                assistiveHtml = `<div class="detail-item full"><span>${devices}</span></div>`;
+            } else {
+                assistiveHtml = `<div class="detail-item full"><span>None</span></div>`;
+            }
+            
+            // Skills and trainings
+            let skillsHtml = '';
+            if (d.skills) skillsHtml += `<div class="detail-item full"><label>Skills</label><span>${d.skills}</span></div>`;
+            if (d.trainings) skillsHtml += `<div class="detail-item full"><label>Trainings Attended</label><span>${d.trainings}</span></div>`;
+            if (!skillsHtml) skillsHtml = '<div class="detail-item"><span>No data</span></div>';
             
             let html = `
                 <div class="detail-section">
@@ -784,52 +832,37 @@
                     <div class="detail-grid">${renderFields(personal)}</div>
                 </div>
                 <div class="detail-section">
-                    <h3><i class="fa-solid fa-location-dot"></i> Address</h3>
+                    <h3><i class="fa-solid fa-location-dot"></i> Address & Contact</h3>
                     <div class="detail-grid">${renderFields(address)}</div>
-                </div>`;
-            
-            // Disability Type
-            if (d.disabilityType) {
-                let disType = d.disabilityType;
-                if (Array.isArray(disType)) disType = disType.join(', ');
-                html += `
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fa-solid fa-id-card"></i> PWD Information</h3>
+                    <div class="detail-grid">${renderFields(pwdInfo)}</div>
+                </div>
                 <div class="detail-section">
                     <h3><i class="fa-solid fa-wheelchair"></i> Disability Information</h3>
-                    <div class="detail-grid">
-                        <div class="detail-item full"><label>Type of Disability</label><span>${disType}</span></div>
-                    </div>
-                </div>`;
-            }
-            
-            // Assistive Devices
-            if (d.assistiveDevice) {
-                let devices = Array.isArray(d.assistiveDevice) ? d.assistiveDevice.join(', ') : d.assistiveDevice;
-                html += `
+                    <div class="detail-grid">${disabilityHtml || '<div class="detail-item"><span>No disability data</span></div>'}</div>
+                </div>
                 <div class="detail-section">
-                    <h3><i class="fa-solid fa-crutch"></i> Assistive Devices</h3>
-                    <div class="detail-grid">
-                        <div class="detail-item full"><span>${devices}</span></div>
-                    </div>
-                </div>`;
-            }
-            
-            html += `
+                    <h3><i class="fa-solid fa-medical"></i> Assistive Devices</h3>
+                    <div class="detail-grid">${assistiveHtml}</div>
+                </div>
                 <div class="detail-section">
-                    <h3><i class="fa-solid fa-briefcase"></i> Employment</h3>
+                    <h3><i class="fa-solid fa-briefcase"></i> Employment Information</h3>
                     <div class="detail-grid">${renderFields(employment)}</div>
                 </div>
                 <div class="detail-section">
-                    <h3><i class="fa-solid fa-graduation-cap"></i> Education</h3>
+                    <h3><i class="fa-solid fa-graduation-cap"></i> Educational Background</h3>
                     <div class="detail-grid">${renderFields(education)}</div>
                 </div>
                 <div class="detail-section">
                     <h3><i class="fa-solid fa-certificate"></i> Skills & Trainings</h3>
-                    <div class="detail-grid">${renderFields(skills)}</div>
+                    <div class="detail-grid">${skillsHtml}</div>
                 </div>
                 <div class="detail-section">
-                    <h3><i class="fa-solid fa-info-circle"></i> Registration Info</h3>
+                    <h3><i class="fa-solid fa-info-circle"></i> Registration Details</h3>
                     <div class="detail-grid">
-                        <div class="detail-item"><label>Reference No.</label><span>${r.reference || '-'}</span></div>
+                        <div class="detail-item"><label>Reference No.</label><span><b>${r.reference || '-'}</b></span></div>
                         <div class="detail-item"><label>Status</label><span class="badge badge-${r.status}">${r.status.toUpperCase()}</span></div>
                         <div class="detail-item"><label>Date Registered</label><span>${new Date(r.timestamp).toLocaleString()}</span></div>
                     </div>
