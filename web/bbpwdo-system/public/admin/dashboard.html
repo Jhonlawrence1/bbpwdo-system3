@@ -572,14 +572,17 @@
             document.getElementById('statApproved').textContent = allRegs.filter(r=>r.status==='approved').length;
             document.getElementById('statPending').textContent = allRegs.filter(r=>r.status==='pending').length;
             document.getElementById('repTotal').textContent = allRegs.length;
-            document.getElementById('repMale').textContent = allRegs.filter(r=>(JSON.parse(r.data).sex==='Male')).length;
-            document.getElementById('repFemale').textContent = allRegs.filter(r=>(JSON.parse(r.data).sex==='Female')).length;
-            document.getElementById('repWithId').textContent = allRegs.filter(r=>JSON.parse(r.data).pwdIdNumber).length;
+            const getData = (r) => typeof r.data === 'string' ? JSON.parse(r.data) : r.data;
+            document.getElementById('repMale').textContent = allRegs.filter(r=>getData(r).sex==='Male').length;
+            document.getElementById('repFemale').textContent = allRegs.filter(r=>getData(r).sex==='Female').length;
+            document.getElementById('repWithId').textContent = allRegs.filter(r=>getData(r).pwdIdNumber).length;
         }
+        
+        function getRegData(r) { return typeof r.data === 'string' ? JSON.parse(r.data) : r.data; }
         
         function renderRegs() {
             document.getElementById('regTable').innerHTML = allRegs.slice(0,10).map(r => {
-                const d = JSON.parse(r.data);
+                const d = getRegData(r);
                 return `<tr>
                     <td><b>${r.reference}</b></td>
                     <td>${d.firstName||''} ${d.lastName||''}</td>
@@ -594,7 +597,7 @@
         
         function renderRecords() {
             document.getElementById('recordsTable').innerHTML = allRegs.map(r => {
-                const d = JSON.parse(r.data);
+                const d = getRegData(r);
                 const dis = d.disabilityType ? (Array.isArray(d.disabilityType)?d.disabilityType.join(', '):d.disabilityType) : '-';
                 return `<tr>
                     <td><b>${r.reference}</b></td>
@@ -640,7 +643,7 @@
         function renderCharts() {
             const dis={}, gen={Male:0,Female:0}, emp={};
             allRegs.forEach(r => {
-                const d = JSON.parse(r.data);
+                const d = getRegData(r);
                 if (d.disabilityType) {
                     let ts = Array.isArray(d.disabilityType) ? d.disabilityType : [d.disabilityType];
                     ts.forEach(t => { if(t) dis[t.split(' - ')[0].trim()] = (dis[t.split(' - ')[0].trim()]||0)+1; });
@@ -659,7 +662,7 @@
         function viewReg(id) {
             currentRegId = id;
             const r = allRegs.find(x => x.id === id);
-            const d = JSON.parse(r.data);
+            const d = getRegData(r);
             let html = Object.keys(d).filter(k=>k!=='disabilityType').map(k=>`<div class="form-group"><label>${k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())}</label><span>${Array.isArray(d[k])?d[k].join(', '):d[k]||'-'}</span></div>`).join('');
             if(d.disabilityType) html += `<div class="form-group"><label>Disability Type</label><span>${Array.isArray(d.disabilityType)?d.disabilityType.join(', '):d.disabilityType}</span></div>`;
             html += `<div class="form-group"><label>Status</label><span class="badge badge-${r.status}">${r.status}</span></div>`;
@@ -709,7 +712,7 @@
         
         function exportData() {
             let csv = 'Ref,FirstName,LastName,Age,Sex,Status,Date\n';
-            allRegs.forEach(r => { const d=JSON.parse(r.data); csv+=`${r.reference},${d.firstName||''},${d.lastName||''},${d.age||''},${d.sex||''},${r.status},${new Date(r.timestamp).toLocaleDateString()}\n`; });
+            allRegs.forEach(r => { const d=getRegData(r); csv+=`${r.reference},${d.firstName||''},${d.lastName||''},${d.age||''},${d.sex||''},${r.status},${new Date(r.timestamp).toLocaleDateString()}\n`; });
             const a=document.createElement('a'); a.href='data:text/csv,'+encodeURIComponent(csv); a.download='pwd_records.csv'; a.click();
         }
         
