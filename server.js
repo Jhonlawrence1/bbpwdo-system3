@@ -51,6 +51,11 @@ async function initDB() {
         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
+    
+    // Add status column if it doesn't exist (migration)
+    try {
+      await client.query(`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'pending'`);
+    } catch(e) {}
     await client.query(`
       CREATE TABLE IF NOT EXISTS activities (
         id SERIAL PRIMARY KEY,
