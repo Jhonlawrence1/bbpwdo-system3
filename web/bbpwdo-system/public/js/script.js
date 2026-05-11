@@ -159,10 +159,41 @@ function initPWDForm() {
         e.preventDefault();
         
         const formData = new FormData(this);
-        const data = Object.fromEntries(formData);
+        const data = {};
+        
+        // Get regular fields
+        for (let [key, value] of formData.entries()) {
+            data[key] = value;
+        }
+        
+        // Get disability type checkboxes
+        const disabilityCheckboxes = pwdForm.querySelectorAll('input[name="disabilityType[]"]:checked');
+        const disabilityTypes = [];
+        disabilityCheckboxes.forEach(cb => disabilityTypes.push(cb.value));
+        
+        // Get other disability
+        const otherDisability = pwdForm.querySelector('input[name="otherDisability"]');
+        if (otherDisability && otherDisability.value.trim()) {
+            disabilityTypes.push(otherDisability.value);
+        }
+        
+        if (disabilityTypes.length > 0) {
+            data.disabilityType = disabilityTypes;
+        }
+        
+        // Get assistive device checkboxes
+        const deviceCheckboxes = pwdForm.querySelectorAll('input[name="assistiveDevice[]"]:checked');
+        const assistiveDevices = [];
+        deviceCheckboxes.forEach(cb => assistiveDevices.push(cb.value));
+        
+        if (assistiveDevices.length > 0) {
+            data.assistiveDevice = assistiveDevices;
+        }
         
         const familyMembers = getFamilyMembersData();
         data.familyMembers = familyMembers;
+        
+        console.log('Submitting data:', JSON.stringify(data));
         
         fetch('/api/register', {
             method: 'POST',
