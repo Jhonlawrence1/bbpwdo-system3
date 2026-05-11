@@ -171,6 +171,27 @@
         .btn-reject { background: #fee2e2; color: #dc2626; }
         .btn-del { background: #f3f4f6; color: #6b7280; }
         
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+        
+        .loading::after {
+            content: '';
+            width: 24px;
+            height: 24px;
+            border: 3px solid #e5e7eb;
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
         .btn-export {
             background: #4f46e5;
             color: white;
@@ -358,7 +379,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="regTable"><tr><td colspan="7">Loading...</td></tr></tbody>
+                        <tbody id="regTable"><tr><td colspan="7"><tr><td colspan="7"><div class="loading">Loading...</div></td></tr></td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -379,7 +400,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="recordsTable"><tr><td colspan="6">Loading...</td></tr></tbody>
+                        <tbody id="recordsTable"><tr><td colspan="6"><tr><td colspan="7"><div class="loading">Loading...</div></td></tr></td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -399,7 +420,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="msgTable"><tr><td colspan="5">Loading...</td></tr></tbody>
+                        <tbody id="msgTable"><tr><td colspan="5"><tr><td colspan="7"><div class="loading">Loading...</div></td></tr></td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -421,7 +442,7 @@
                 <div class="table-wrap">
                     <table>
                         <thead><tr><th>Label</th><th>Value</th><th>Action</th></tr></thead>
-                        <tbody id="statsTable"><tr><td colspan="3">Loading...</td></tr></tbody>
+                        <tbody id="statsTable"><tr><td colspan="3"><tr><td colspan="7"><div class="loading">Loading...</div></td></tr></td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -431,7 +452,7 @@
                 <div class="table-wrap">
                     <table>
                         <thead><tr><th>Position</th><th>Name</th><th>Title</th><th>Action</th></tr></thead>
-                        <tbody id="teamTable"><tr><td colspan="4">Loading...</td></tr></tbody>
+                        <tbody id="teamTable"><tr><td colspan="4"><tr><td colspan="7"><div class="loading">Loading...</div></td></tr></td></tr></tbody>
                     </table>
                 </div>
             </div>
