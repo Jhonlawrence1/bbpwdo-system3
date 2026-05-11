@@ -242,6 +242,16 @@ app.get('/api/admin/messages', authenticate, async (req, res) => {
   }
 });
 
+app.delete('/api/admin/messages/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query('DELETE FROM messages WHERE id = $1', [id]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body;
   try {

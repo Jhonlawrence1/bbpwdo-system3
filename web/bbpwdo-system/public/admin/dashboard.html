@@ -603,6 +603,7 @@
                 if (d.disabilityType) {
                     if (Array.isArray(d.disabilityType)) dis = d.disabilityType.join(', ');
                     else if (typeof d.disabilityType === 'string') dis = d.disabilityType;
+                    else if (typeof d.disabilityType === 'object') dis = Object.values(d.disabilityType).join(', ');
                 }
                 return `<tr>
                     <td><b>${r.reference}</b></td>
@@ -621,8 +622,18 @@
                 <td>${m.email}</td>
                 <td>${(m.message||'').substring(0,50)}...</td>
                 <td>${new Date(m.timestamp).toLocaleDateString()}</td>
-                <td><button class="btn btn-view" onclick="alert('From: ${m.name}\\nEmail: ${m.email}\\nMessage: ${m.message||'-'}')">View</button></td>
+                <td>
+                    <button class="btn btn-view" onclick="alert('From: ${m.name}\\nEmail: ${m.email}\\nMessage: ${m.message||'-'}')">View</button>
+                    <button class="btn btn-del" onclick="deleteMessage(${m.id})">Del</button>
+                </td>
             </tr>`).join('');
+        }
+        
+        async function deleteMessage(id) {
+            if(confirm('Delete this message?')) {
+                await fetch(`/api/admin/messages/${id}`, {method:'DELETE',headers:{Authorization:'Bearer '+token}});
+                loadData();
+            }
         }
         
         function renderTeam() {
@@ -651,26 +662,46 @@
             if (charts.gender) charts.gender.destroy();
             if (charts.employment) charts.employment.destroy();
             
-            const dis={}, gen={Male:0,Female:0}, emp={};
+            const dis={}, gen={Male:0,Female:0,LGBTQIA+:0}, emp={};
+            console.log('Rendering charts, total regs:', allRegs.length);
+            
             allRegs.forEach(r => {
                 const d = getRegData(r);
-                // Fix disability type parsing
+                console.log('Reg data:', d);
+                
+                // Fix disability type parsing - handle all possible formats
                 if (d.disabilityType) {
                     let ts = d.disabilityType;
                     if (typeof ts === 'string') ts = [ts];
                     if (Array.isArray(ts)) {
                         ts.forEach(t => { 
-                            if (t && t.trim()) {
+                            if (t && typeof t === 'string' && t.trim()) {
+                                const cat = t.includes(' - ') ? t.split(' - ')[0].trim() : t.trim();
+                                dis[cat] = (dis[cat] || 0) + 1;
+                            }
+                        });
+                    } else if (typeof ts === 'object') {
+                        Object.values(ts).forEach(t => {
+                            if (t && typeof t === 'string' && t.trim()) {
                                 const cat = t.includes(' - ') ? t.split(' - ')[0].trim() : t.trim();
                                 dis[cat] = (dis[cat] || 0) + 1;
                             }
                         });
                     }
                 }
-                if(d.sex==='Male') gen.Male++; 
-                if(d.sex==='Female') gen.Female++;
-                if(d.employmentStatus) emp[d.employmentStatus] = (emp[d.employmentStatus]||0)+1;
+                
+                // Gender
+                if (d.sex === 'Male') gen.Male++;
+                else if (d.sex === 'Female') gen.Female++;
+                else if (d.sex === 'LGBTQIA+') gen['LGBTQIA+']++;
+                
+                // Employment
+                if (d.employmentStatus) emp[d.employmentStatus] = (emp[d.employmentStatus] || 0) + 1;
             });
+            
+            console.log('Disability counts:', dis);
+            console.log('Gender counts:', gen);
+            console.log('Employment counts:', emp);
             
             const dc = Object.keys(dis).length ? dis : {'No Data':1};
             charts.disability = new Chart(document.getElementById('disabilityChart'), {
