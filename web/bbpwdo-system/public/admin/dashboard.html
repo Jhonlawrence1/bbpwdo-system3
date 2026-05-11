@@ -653,9 +653,12 @@
                 return `<tr>
                     <td><b>${r.reference}</b></td>
                     <td>${d.firstName||''} ${d.lastName||''}</td>
+                    <td>${d.age||'-'}</td>
+                    <td>${d.sex||'-'}</td>
                     <td>${d.contactNumber||'-'}</td>
-                    <td>${dis}</td>
+                    <td>${dis.substring(0,25)}${dis.length > 25 ? '...' : ''}</td>
                     <td><span class="badge badge-${r.status}">${r.status}</span></td>
+                    <td>${new Date(r.timestamp).toLocaleDateString()}</td>
                     <td><button class="btn btn-view" onclick="viewReg(${r.id})">View</button></td>
                 </tr>`;
             }).join('');
